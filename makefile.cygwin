@@ -15,7 +15,7 @@ $(ZIPFILE): bin/pdfcrowd.dll
 	mkdir -p dist
 	rm -rf $(ZIPFILE)
 	rm -rf $(ZIPSTEM) && mkdir $(ZIPSTEM)
-	cp -r --parents bin/*.dll src/*.cs make.bat README.txt $(ZIPSTEM)
+	cp -r --parents bin/*.dll src/*.cs make.bat FILES.txt $(ZIPSTEM)
 	zip -r $(ZIPFILE) $(ZIPSTEM)
 	rm -rf $(ZIPSTEM)
 
