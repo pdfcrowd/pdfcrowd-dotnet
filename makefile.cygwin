@@ -1,0 +1,28 @@
+# -*- mode: makefile -*-
+
+VERSION = 2.6
+ZIPSTEM = pdfcrowd-$(VERSION)-dotnet
+ZIPFILE = dist/$(ZIPSTEM).zip
+
+all: bin/pdfcrowd.dll
+
+bin/pdfcrowd.dll: src/Client.cs src/Error.cs tests/*.cs
+	cmd.exe /C make.bat 'c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\csc.exe'
+
+dist: $(ZIPFILE)
+
+$(ZIPFILE): bin/pdfcrowd.dll
+	mkdir -p dist
+	rm -rf $(ZIPFILE)
+	rm -rf $(ZIPSTEM) && mkdir $(ZIPSTEM)
+	cp -r --parents bin/*.dll src/*.cs make.bat README.txt $(ZIPSTEM)
+	zip -r $(ZIPFILE) $(ZIPSTEM)
+	rm -rf $(ZIPSTEM)
+
+PHONY: test
+test: bin/pdfcrowd.dll
+	cd bin && ./tests.exe $(API_USERNAME) $(API_TOKEN) $(API_HOSTNAME) $(API_HTTP_PORT) $(API_HTTPS_PORT)
+
+clean:
+	rm -rf bin/* dist/*
+
