@@ -161,24 +161,36 @@ namespace pdfcrowd
       fields["height"] = value.ToString();
     }
 
-    public void setHorizontalMargin(string value)
+    public void setHorizontalMargin(double value) 
     {
-      fields["hmargin"] = value;
-    }
-          
-    public void setHorizontalMargin(double value)
-    {
-      fields["hmargin"] = value.ToString();
+      fields["margin_right"] = value.ToString();
+      fields["margin_left"] = value.ToString();
     }
 
-    public void setVerticalMargin(string value)
+    public void setHorizontalMargin(string value) 
     {
-      fields["vmargin"] = value;
+      fields["margin_right"] = value;
+      fields["margin_left"] = value;
     }
-          
-    public void setVerticalMargin(double value)
+
+    public void setVerticalMargin(double value) 
     {
-      fields["vmargin"] = value.ToString();
+      fields["margin_top"] = value.ToString();
+      fields["margin_bottom"] = value.ToString();
+    }
+    
+    public void setVerticalMargin(string value) 
+    {
+      fields["margin_top"] = value;
+      fields["margin_bottom"] = value;
+    }
+
+    public void setPageMargins(string top, string right, string bottom, string left) 
+    {
+      fields["margin_top"] = top;
+      fields["margin_right"] = right;
+      fields["margin_bottom"] = bottom;
+      fields["margin_left"] = left;
     }
 
     public void setEncrypted(bool value)
