@@ -36,22 +36,18 @@ namespace tests
   public class Tests
   {
     public Client client;
+    private string[] m_args;
     
     public Tests(string[] args)
     {
+      m_args = args;
 
       if (args.Length == 5) {
         Client.HTTP_PORT = int.Parse(args[3]);
         Client.HTTPS_PORT = int.Parse(args[4]);
       }
 
-      if (args.Length > 2) {
-         client = new Client(args[0], args[1], args[2]);
-      }
-      else
-      {
-         client = new Client(args[0], args[1]);
-      }
+      client = getClient(false);
 
       client.setNoPrint();
       client.setPageMode( Client.FULLSCREEN );
@@ -75,6 +71,24 @@ namespace tests
             }  
 
       return new FileStream(fname, FileMode.CreateNew);
+    }
+
+    private Client getClient(bool use_ssl)
+    {
+      Client client;
+      if (m_args.Length > 2) 
+        {
+          client = new Client(m_args[0], m_args[1], m_args[2]);
+        }
+      else
+        {
+          client = new Client(m_args[0], m_args[1]);
+        }
+      
+      if (use_ssl)
+        client.useSSL(use_ssl);
+      
+      return client;
     }
     
     public void TestConvertByURI(bool use_ssl)
@@ -100,13 +114,13 @@ namespace tests
         }
     }
 
-    public void TestStreams(bool ignore)
+    public void TestStreams(bool use_ssl)
     {
       try
         {
           MemoryStream memStream = new MemoryStream();
           client.convertHtml( "some html",  memStream);
-          FileStream fileStream = new FileStream("../test_files/out/cs_client_from_memstream.pdf", FileMode.CreateNew);
+          FileStream fileStream = prepare_file("from_memstream", use_ssl);
           CopyStream(memStream, fileStream);
           fileStream.Close();
         }
@@ -192,5 +206,26 @@ namespace tests
           Environment.ExitCode = 1;
         }
     }
+
+    public void TestMore(bool use_ssl)
+    {
+      // 4 margins
+      try
+        {
+          Client c = getClient(use_ssl);
+
+          c.setPageMargins("0.25in", "0.5in", "0.75in", "1.0in");
+          FileStream stream = prepare_file("4margins", use_ssl);
+          c.convertHtml("<div style='background-color:red;height:100%'>4 margins</div>", stream);
+          stream.Close();
+        }
+      catch(pdfcrowd.Error why)
+        {
+          System.Console.WriteLine(why.ToString());
+          Environment.ExitCode = 1;
+        }
+      
+    }
+
   }
 }

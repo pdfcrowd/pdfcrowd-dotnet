@@ -35,29 +35,32 @@ namespace tests
                                     string name,
                                     bool use_ssl)
       {
-          System.Console.WriteLine(name);
-          MethodInfo method = typeof(Tests).GetMethod(name);
-          object[] args = new object[1];
-          args[0] = use_ssl;
-          method.Invoke( test_obj, args);
+        System.Console.WriteLine(name + ", ssl:" + (use_ssl ? "yes" : "no"));
+        MethodInfo method = typeof(Tests).GetMethod(name);
+        object[] args = new object[1];
+        args[0] = use_ssl;
+        method.Invoke( test_obj, args);
       }
       
       static void Main(string[] args)
       {
+        string[] test_functions = 
+          { 
+            "TestConvertByURI",
+            "TestConvertFile",
+            "TestConvertHtml",
+            "TestTokens",
+            "TestStreams",
+            "TestMore"
+          };
+        
         Tests t = new Tests(args);
-        run_test(t, "TestConvertByURI", false);
-        run_test(t, "TestConvertFile", false);
-        run_test(t, "TestConvertHtml", false);
-        run_test(t, "TestTokens", false);
-        run_test(t, "TestStreams", false);
-
-        if (t.client.HOST == "pdfcrowd.com")
-        {
-            run_test(t, "TestConvertByURI", true);
-            run_test(t, "TestConvertFile", true);
-            run_test(t, "TestConvertHtml", true);
-            run_test(t, "TestTokens", true);
-        }
+        for(int i=0; i<test_functions.Length; i++)
+          {
+            run_test(t, test_functions[i], false);
+            if (t.client.HOST == "pdfcrowd.com")
+              run_test(t, test_functions[i], true);
+          }
       }
     }
 }
