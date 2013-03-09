@@ -18,13 +18,13 @@ endif
 endif
 
 
-.PHONY: all dist test clean
+.PHONY: all dist test init clean
 
 ifeq (1,$(do_nothing))
 $(warning WARNING: .NET makefile does nothing)
 else
 
-RSYNC_ARGS := -avz --cvs-exclude --exclude "bin/*" --exclude "dist/*" .
+RSYNC_ARGS := -avz --cvs-exclude --exclude "bin/*" --exclude "dist/*" --exclude "test_files" .
 
 all: test
 
@@ -43,10 +43,15 @@ dist:
 	mkdir -p dist
 	rsync $(WIN_HOST):/tmp/csharp_client_build/dist/*.zip dist/
 
+init:
+	test -d ../test_files/out || mkdir -p ../test_files/out
+	test -e test_files || ln -s ../test_files/ test_files
+
+
 clean:
 	rsync $(RSYNC_ARGS) $(WIN_HOST):/tmp/csharp_client_build
 	ssh $(WIN_HOST) make $@ -f makefile.cygwin -C /tmp/csharp_client_build
-	rm -rf dist/*
+	rm -rf dist/* test_files/out/cs_*.pdf
 
 endif
 
