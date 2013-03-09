@@ -63,12 +63,12 @@ namespace pdfcrowd
     // 
     public Client(string username, string api_key, string hostname)
     {
-      useSSL(false);
       fields.Add("username", username);
       fields.Add("key", api_key);
       fields.Add("pdf_scaling_factor", "1");
       fields.Add("html_zoom", "200");
       HOST = hostname;
+      useSSL(false);
     }
           
 
