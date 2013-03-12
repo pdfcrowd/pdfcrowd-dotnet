@@ -49,7 +49,6 @@ namespace tests
 
       client = getClient(false);
 
-      client.setNoPrint();
       client.setPageMode( Client.FULLSCREEN );
 
       string this_dir = 
@@ -103,7 +102,7 @@ namespace tests
           client.setHorizontalMargin(72.0);
           client.setVerticalMargin(2*72);                 
           
-          client.convertURI( "http://www.jagpdf.org/", stream );
+          client.convertURI( "http://www.web-to-pdf.com", stream );
           stream.Close();
           
         }
