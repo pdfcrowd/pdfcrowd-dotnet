@@ -1,6 +1,6 @@
 # -*- mode: makefile -*-
 
-VERSION = 2.6
+VERSION = 2.7
 ZIPSTEM = pdfcrowd-$(VERSION)-dotnet
 ZIPFILE = dist/$(ZIPSTEM).zip
 
