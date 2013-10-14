@@ -24,6 +24,12 @@ ifeq (1,$(do_nothing))
 $(warning WARNING: .NET makefile does nothing)
 else
 
+ifeq (,$(WIN_USERNAME))
+WIN_CONN := $(WIN_HOST)
+else
+WIN_CONN := $(WIN_USERNAME)@$(WIN_HOST)
+endif
+
 RSYNC_ARGS := -avz --cvs-exclude --exclude "bin/*" --exclude "dist/*" --exclude "test_files" .
 
 all: test
