@@ -31,33 +31,35 @@ WIN_CONN := $(WIN_USERNAME)@$(WIN_HOST)
 endif
 
 RSYNC_ARGS := -avz --cvs-exclude --exclude "bin/*" --exclude "dist/*" --exclude "test_files" .
+CMDENV = API_USERNAME=$(API_USERNAME) API_TOKEN=$(API_TOKEN) API_HOSTNAME=$(API_HOSTNAME) API_HTTP_PORT=$(API_HTTP_PORT) API_HTTPS_PORT=$(API_HTTPS_PORT)
 
 all: test
 
+
 test:
-	rsync $(RSYNC_ARGS) $(WIN_HOST):/tmp/csharp_client_build
-	rsync -avz --cvs-exclude ../test_files/in/ $(WIN_HOST):/tmp/csharp_client_build/test_files/in/
-	ssh $(WIN_HOST) rm -f /tmp/csharp_client_build/test_files/out/*
-	test -f ~/crowdenv/$(API_ENV_FILE) || echo "API_ENV_FILE not defined"
-	ssh $(WIN_HOST)	'test -f ~/crowdenv/$(API_ENV_FILE) || (echo "API_ENV_FILE not found" && false)' 
-	ssh $(WIN_HOST) 'source ~/crowdenv/$(API_ENV_FILE) && make $@ -f makefile.cygwin -C /tmp/csharp_client_build'
-	rsync -avz --cvs-exclude "$(WIN_HOST):/tmp/csharp_client_build/test_files/out/cs_client*" ../test_files/out/
+	rsync $(RSYNC_ARGS) $(WIN_CONN):/tmp/csharp_client_build
+	rsync -avz --cvs-exclude ../test_files/in/ $(WIN_CONN):/tmp/csharp_client_build/test_files/in/
+	ssh $(WIN_CONN) rm -f /tmp/csharp_client_build/test_files/out/*
+	ssh $(WIN_CONN) $(CMDENV) 'make $@ -f makefile.cygwin -C /tmp/csharp_client_build'
+	rsync -avz --cvs-exclude "$(WIN_CONN):/tmp/csharp_client_build/test_files/out/cs_client*" ../test_files/out/
 
 dist:
-	rsync $(RSYNC_ARGS) $(WIN_HOST):/tmp/csharp_client_build
-	ssh $(WIN_HOST) make $@ -f makefile.cygwin -C /tmp/csharp_client_build
+	rsync $(RSYNC_ARGS) $(WIN_CONN):/tmp/csharp_client_build
+	ssh $(WIN_CONN) make $@ -f makefile.cygwin -C /tmp/csharp_client_build
 	mkdir -p dist
-	rsync $(WIN_HOST):/tmp/csharp_client_build/dist/*.zip dist/
+	rsync $(WIN_CONN):/tmp/csharp_client_build/dist/*.zip dist/
 
 init:
 	test -d ../test_files/out || mkdir -p ../test_files/out
 	test -e test_files || ln -s ../test_files/ test_files
 
-
 clean:
-	rsync $(RSYNC_ARGS) $(WIN_HOST):/tmp/csharp_client_build
-	ssh $(WIN_HOST) make $@ -f makefile.cygwin -C /tmp/csharp_client_build
+	rsync $(RSYNC_ARGS) $(WIN_CONN):/tmp/csharp_client_build
+	ssh $(WIN_CONN) make $@ -f makefile.cygwin -C /tmp/csharp_client_build
 	rm -rf dist/* test_files/out/cs_*.pdf
 
 endif
+
+
+
 
