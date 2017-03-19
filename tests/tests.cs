@@ -102,7 +102,7 @@ namespace tests
           client.setHorizontalMargin(72.0);
           client.setVerticalMargin(2*72);                 
           
-          client.convertURI( "http://dl.dropboxusercontent.com/u/9346438/tests/webtopdfcom.html", stream );
+          client.convertURI( "https://storage.googleapis.com/pdfcrowd-legacy-tests/tests/webtopdfcom.html", stream );
           stream.Close();
           
         }
