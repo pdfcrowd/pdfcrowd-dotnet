@@ -58,8 +58,9 @@ namespace tests
         for(int i=0; i<test_functions.Length; i++)
           {
             run_test(t, test_functions[i], false);
-            if (t.client.HOST == "pdfcrowd.com")
-              run_test(t, test_functions[i], true);
+            // do not run with ssl
+            //if (t.client.HOST == "pdfcrowd.com")
+            //  run_test(t, test_functions[i], true);
           }
       }
     }
