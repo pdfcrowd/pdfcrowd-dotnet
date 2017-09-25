@@ -28,28 +28,44 @@ using System.Net;
 
 namespace pdfcrowd
 {
-  public class Error : Exception
-  
-  {
-    string error = "";
-    HttpStatusCode http_code = HttpStatusCode.Unused;
-    
-    public Error( string _error, HttpStatusCode _http_code )
+    public class Error: Exception
     {
-      error = _error;
-      http_code = _http_code;
-    }
-    
-    public override string  ToString()
-    {
-      if( http_code != HttpStatusCode.Unused )
+        string error = "";
+        int http_code = 0;
+
+        public Error(string _error)
         {
-          return String.Format( "{0} - {1}", (int)http_code, error );
+            error = _error;
         }
-      else
+        
+        public Error(string _error, int _http_code)
         {
-          return error;
+            error = _error;
+            http_code = (int) _http_code;
+        }
+
+        public Error(string _error, HttpStatusCode _http_code)
+            : this(_error, (int) _http_code)
+        {
+        }
+
+        public override string ToString()
+        {
+            if( http_code != 0 )
+            {
+                return String.Format( "{0} - {1}", http_code, error );
+            }
+            return error;
+        }
+
+        public int getCode()
+        {
+            return http_code;
+        }
+
+        public string getMessage()
+        {
+            return error;
         }
     }
-  }
 }
