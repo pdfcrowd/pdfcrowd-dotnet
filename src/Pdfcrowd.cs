@@ -483,9 +483,7 @@ namespace pdfcrowd
         /**
         * Convert a local file.
         * 
-        * @param file The path to a local file to convert.
-        * The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip). Specifying an archive allows sending external assets such as images, stylesheets, etc.
- The file must exist and not be empty. The file name must have valid extension.
+        * @param file The path to a local file to convert.<br> The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip).<br> If the HTML document refers to local external assets (images, style sheets, javascript), zip the document together with the assets. The file must exist and not be empty. The file name must have a valid extension.
         * @return Byte array containing the conversion output.
         */
         public byte[] convertFile(string file)
@@ -494,7 +492,7 @@ namespace pdfcrowd
                 throw new Error(ConnectionHelper.createInvalidValueMessage(file, "file", "html-to-pdf", "The file must exist and not be empty.", "convert_file"), 470);
             
             if (!(File.Exists(file) && new FileInfo(file).Length > 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(file, "file", "html-to-pdf", "The file name must have valid extension.", "convert_file"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(file, "file", "html-to-pdf", "The file name must have a valid extension.", "convert_file"), 470);
             
             files["file"] = file;
             return helper.post(fields, files, rawData, null);
@@ -503,9 +501,7 @@ namespace pdfcrowd
         /**
         * Convert a local file and write the result to an output stream.
         * 
-        * @param file The path to a local file to convert.
-        * The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip). Specifying an archive allows sending external assets such as images, stylesheets, etc.
- The file must exist and not be empty. The file name must have valid extension.
+        * @param file The path to a local file to convert.<br> The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip).<br> If the HTML document refers to local external assets (images, style sheets, javascript), zip the document together with the assets. The file must exist and not be empty. The file name must have a valid extension.
         * @param outStream The output stream that will contain the conversion output.
         */
         public void convertFileToStream(string file, Stream outStream)
@@ -514,7 +510,7 @@ namespace pdfcrowd
                 throw new Error(ConnectionHelper.createInvalidValueMessage(file, "file", "html-to-pdf", "The file must exist and not be empty.", "convert_file_to_stream"), 470);
             
             if (!(File.Exists(file) && new FileInfo(file).Length > 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(file, "file", "html-to-pdf", "The file name must have valid extension.", "convert_file_to_stream"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(file, "file", "html-to-pdf", "The file name must have a valid extension.", "convert_file_to_stream"), 470);
             
             files["file"] = file;
             helper.post(fields, files, rawData, outStream);
@@ -523,9 +519,7 @@ namespace pdfcrowd
         /**
         * Convert a local file and write the result to a local file.
         * 
-        * @param file The path to a local file to convert.
-        * The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip). Specifying an archive allows sending external assets such as images, stylesheets, etc.
- The file must exist and not be empty. The file name must have valid extension.
+        * @param file The path to a local file to convert.<br> The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip).<br> If the HTML document refers to local external assets (images, style sheets, javascript), zip the document together with the assets. The file must exist and not be empty. The file name must have a valid extension.
         * @param filePath The output file path. The string must not be empty.
         */
         public void convertFileToFile(string file, string filePath)
@@ -727,10 +721,8 @@ namespace pdfcrowd
         }
 
         /**
-        * Load an HTML code from the specified URL and use it as a page header. The following classnames can be used in the HTML. The content of the respective elements will be set as follows: <ul> <li><span class='field-value'>pdfcrowd-page-count</span> - the total page count of printed pages</li> <li><span class='field-value'>pdfcrowd-page-number</span> - the current page number</li> <li><span class='field-value'>pdfcrowd-source-url</span> - the source URL of a converted document</li> </ul> The following attributes can be used: <ul> <li><span class='field-value'>data-pdfcrowd-number-format</span> - specifies the type of used numerals. Arabic numerals are used by default.
-        * Roman numerals can be generated by <span class='field-value'>roman</span> and <span class='field-value'>roman-lowercase</span> value. E.g. &lt;span class='pdfcrowd-page-number' data-pdfcrowd-number-format='roman'&gt;&lt;/span&gt;</li> <li><span class='field-value'>data-pdfcrowd-placement</span> - specifies the placement of source URL. The URL is placed as the content of the desired element by default.
-        * The URL can be set to href attribute by using the value <span class='field-value'>href</span>. E.g. &lt;a class='pdfcrowd-source-url' data-pdfcrowd-placement='href'&gt;Link to source&lt;/a&gt;
-        * The URL can be set to the href attribute and to the content by using the value <span class='field-value'>href-and-content</span>. E.g. &lt;a class='pdfcrowd-source-url' data-pdfcrowd-placement='href-and-content'&gt;&lt;/a&gt;</li> </ul>
+        * Load an HTML code from the specified URL and use it as the page header. The following classes can be used in the HTML. The content of the respective elements will be expanded as follows: <ul> <li><span class='field-value'>pdfcrowd-page-count</span> - the total page count of printed pages</li> <li><span class='field-value'>pdfcrowd-page-number</span> - the current page number</li> <li><span class='field-value'>pdfcrowd-source-url</span> - the source URL of a converted document</li> </ul> The following attributes can be used: <ul> <li><span class='field-value'>data-pdfcrowd-number-format</span> - specifies the type of the used numerals <ul> <li>Arabic numerals are used by default.</li> <li>Roman numerals can be generated by the <span class='field-value'>roman</span> and <span class='field-value'>roman-lowercase</span> values</li> <li>Example: &lt;span class='pdfcrowd-page-number' data-pdfcrowd-number-format='roman'&gt;&lt;/span&gt;</li> </ul> </li> <li><span class='field-value'>data-pdfcrowd-placement</span> - specifies where to place the source URL, allowed values: <ul> <li>The URL is inserted to the content <ul> <li> Example: &lt;span class='pdfcrowd-source-url'&gt;&lt;/span&gt;<br> will produce &lt;span&gt;http://example.com&lt;/span&gt; </li> </ul>
+</li> <li><span class='field-value'>href</span> - the URL is set to the href attribute <ul> <li> Example: &lt;a class='pdfcrowd-source-url' data-pdfcrowd-placement='href'&gt;Link to source&lt;/a&gt;<br> will produce &lt;a href='http://example.com'&gt;Link to source&lt;/a&gt; </li> </ul> </li> <li><span class='field-value'>href-and-content</span> - the URL is set to the href attribute and to the content <ul> <li> Example: &lt;a class='pdfcrowd-source-url' data-pdfcrowd-placement='href-and-content'&gt;&lt;/a&gt;<br> will produce &lt;a href='http://example.com'&gt;http://example.com&lt;/a&gt; </li> </ul> </li> </ul> </li> </ul>
         * 
         * @param headerUrl The supported protocols are http:// and https://.
         */
@@ -743,10 +735,8 @@ namespace pdfcrowd
         }
 
         /**
-        * Use the specified HTML code as a page header. The following classnames can be used in the HTML. The content of the respective elements will be set as follows: <ul> <li><span class='field-value'>pdfcrowd-page-count</span> - the total page count of printed pages</li> <li><span class='field-value'>pdfcrowd-page-number</span> - the current page number</li> <li><span class='field-value'>pdfcrowd-source-url</span> - the source URL of a converted document</li> </ul> The following attributes can be used: <ul> <li><span class='field-value'>data-pdfcrowd-number-format</span> - specifies the type of used numerals. Arabic numerals are used by default.
-        * Roman numerals can be generated by <span class='field-value'>roman</span> and <span class='field-value'>roman-lowercase</span> value. E.g. &lt;span class='pdfcrowd-page-number' data-pdfcrowd-number-format='roman'&gt;&lt;/span&gt;</li> <li><span class='field-value'>data-pdfcrowd-placement</span> - specifies the placement of source URL. The URL is placed as the content of the desired element by default.
-        * The URL can be set to href attribute by using the value <span class='field-value'>href</span>. E.g. &lt;a class='pdfcrowd-source-url' data-pdfcrowd-placement='href'&gt;Link to source&lt;/a&gt;
-        * The URL can be set to the href attribute and to the content by using the value <span class='field-value'>href-and-content</span>. E.g. &lt;a class='pdfcrowd-source-url' data-pdfcrowd-placement='href-and-content'&gt;&lt;/a&gt;</li> </ul>
+        * Use the specified HTML code as the page header. The following classes can be used in the HTML. The content of the respective elements will be expanded as follows: <ul> <li><span class='field-value'>pdfcrowd-page-count</span> - the total page count of printed pages</li> <li><span class='field-value'>pdfcrowd-page-number</span> - the current page number</li> <li><span class='field-value'>pdfcrowd-source-url</span> - the source URL of a converted document</li> </ul> The following attributes can be used: <ul> <li><span class='field-value'>data-pdfcrowd-number-format</span> - specifies the type of the used numerals <ul> <li>Arabic numerals are used by default.</li> <li>Roman numerals can be generated by the <span class='field-value'>roman</span> and <span class='field-value'>roman-lowercase</span> values</li> <li>Example: &lt;span class='pdfcrowd-page-number' data-pdfcrowd-number-format='roman'&gt;&lt;/span&gt;</li> </ul> </li> <li><span class='field-value'>data-pdfcrowd-placement</span> - specifies where to place the source URL, allowed values: <ul> <li>The URL is inserted to the content <ul> <li> Example: &lt;span class='pdfcrowd-source-url'&gt;&lt;/span&gt;<br> will produce &lt;span&gt;http://example.com&lt;/span&gt; </li> </ul>
+</li> <li><span class='field-value'>href</span> - the URL is set to the href attribute <ul> <li> Example: &lt;a class='pdfcrowd-source-url' data-pdfcrowd-placement='href'&gt;Link to source&lt;/a&gt;<br> will produce &lt;a href='http://example.com'&gt;Link to source&lt;/a&gt; </li> </ul> </li> <li><span class='field-value'>href-and-content</span> - the URL is set to the href attribute and to the content <ul> <li> Example: &lt;a class='pdfcrowd-source-url' data-pdfcrowd-placement='href-and-content'&gt;&lt;/a&gt;<br> will produce &lt;a href='http://example.com'&gt;http://example.com&lt;/a&gt; </li> </ul> </li> </ul> </li> </ul>
         * 
         * @param headerHtml The string must not be empty.
         */
@@ -772,10 +762,8 @@ namespace pdfcrowd
         }
 
         /**
-        * Load an HTML code from the specified URL and use it as a page footer. The following classnames can be used in the HTML. The content of the respective elements will be set as follows: <ul> <li><span class='field-value'>pdfcrowd-page-count</span> - the total page count of printed pages</li> <li><span class='field-value'>pdfcrowd-page-number</span> - the current page number</li> <li><span class='field-value'>pdfcrowd-source-url</span> - the source URL of a converted document</li> </ul> The following attributes can be used: <ul> <li><span class='field-value'>data-pdfcrowd-number-format</span> - specifies the type of used numerals. Arabic numerals are used by default.
-        * Roman numerals can be generated by <span class='field-value'>roman</span> and <span class='field-value'>roman-lowercase</span> value. E.g. &lt;span class='pdfcrowd-page-number' data-pdfcrowd-number-format='roman'&gt;&lt;/span&gt;</li> <li><span class='field-value'>data-pdfcrowd-placement</span> - specifies the placement of source URL. The URL is placed as the content of the desired element by default.
-        * The URL can be set to href attribute by using the value <span class='field-value'>href</span>. E.g. &lt;a class='pdfcrowd-source-url' data-pdfcrowd-placement='href'&gt;Link to source&lt;/a&gt;
-        * The URL can be set to the href attribute and to the content by using the value <span class='field-value'>href-and-content</span>. E.g. &lt;a class='pdfcrowd-source-url' data-pdfcrowd-placement='href-and-content'&gt;&lt;/a&gt;</li> </ul>
+        * Load an HTML code from the specified URL and use it as the page footer. The following classes can be used in the HTML. The content of the respective elements will be expanded as follows: <ul> <li><span class='field-value'>pdfcrowd-page-count</span> - the total page count of printed pages</li> <li><span class='field-value'>pdfcrowd-page-number</span> - the current page number</li> <li><span class='field-value'>pdfcrowd-source-url</span> - the source URL of a converted document</li> </ul> The following attributes can be used: <ul> <li><span class='field-value'>data-pdfcrowd-number-format</span> - specifies the type of the used numerals <ul> <li>Arabic numerals are used by default.</li> <li>Roman numerals can be generated by the <span class='field-value'>roman</span> and <span class='field-value'>roman-lowercase</span> values</li> <li>Example: &lt;span class='pdfcrowd-page-number' data-pdfcrowd-number-format='roman'&gt;&lt;/span&gt;</li> </ul> </li> <li><span class='field-value'>data-pdfcrowd-placement</span> - specifies where to place the source URL, allowed values: <ul> <li>The URL is inserted to the content <ul> <li> Example: &lt;span class='pdfcrowd-source-url'&gt;&lt;/span&gt;<br> will produce &lt;span&gt;http://example.com&lt;/span&gt; </li> </ul>
+</li> <li><span class='field-value'>href</span> - the URL is set to the href attribute <ul> <li> Example: &lt;a class='pdfcrowd-source-url' data-pdfcrowd-placement='href'&gt;Link to source&lt;/a&gt;<br> will produce &lt;a href='http://example.com'&gt;Link to source&lt;/a&gt; </li> </ul> </li> <li><span class='field-value'>href-and-content</span> - the URL is set to the href attribute and to the content <ul> <li> Example: &lt;a class='pdfcrowd-source-url' data-pdfcrowd-placement='href-and-content'&gt;&lt;/a&gt;<br> will produce &lt;a href='http://example.com'&gt;http://example.com&lt;/a&gt; </li> </ul> </li> </ul> </li> </ul>
         * 
         * @param footerUrl The supported protocols are http:// and https://.
         */
@@ -788,10 +776,8 @@ namespace pdfcrowd
         }
 
         /**
-        * Use the specified HTML as a page footer. The following classnames can be used in the HTML. The content of the respective elements will be set as follows: <ul> <li><span class='field-value'>pdfcrowd-page-count</span> - the total page count of printed pages</li> <li><span class='field-value'>pdfcrowd-page-number</span> - the current page number</li> <li><span class='field-value'>pdfcrowd-source-url</span> - the source URL of a converted document</li> </ul> The following attributes can be used: <ul> <li><span class='field-value'>data-pdfcrowd-number-format</span> - specifies the type of used numerals. Arabic numerals are used by default.
-        * Roman numerals can be generated by <span class='field-value'>roman</span> and <span class='field-value'>roman-lowercase</span> value. E.g. &lt;span class='pdfcrowd-page-number' data-pdfcrowd-number-format='roman'&gt;&lt;/span&gt;</li> <li><span class='field-value'>data-pdfcrowd-placement</span> - specifies the placement of source URL. The URL is placed as the content of the desired element by default.
-        * The URL can be set to href attribute by using the value <span class='field-value'>href</span>. E.g. &lt;a class='pdfcrowd-source-url' data-pdfcrowd-placement='href'&gt;Link to source&lt;/a&gt;
-        * The URL can be set to the href attribute and to the content by using the value <span class='field-value'>href-and-content</span>. E.g. &lt;a class='pdfcrowd-source-url' data-pdfcrowd-placement='href-and-content'&gt;&lt;/a&gt;</li> </ul>
+        * Use the specified HTML as the page footer. The following classes can be used in the HTML. The content of the respective elements will be expanded as follows: <ul> <li><span class='field-value'>pdfcrowd-page-count</span> - the total page count of printed pages</li> <li><span class='field-value'>pdfcrowd-page-number</span> - the current page number</li> <li><span class='field-value'>pdfcrowd-source-url</span> - the source URL of a converted document</li> </ul> The following attributes can be used: <ul> <li><span class='field-value'>data-pdfcrowd-number-format</span> - specifies the type of the used numerals <ul> <li>Arabic numerals are used by default.</li> <li>Roman numerals can be generated by the <span class='field-value'>roman</span> and <span class='field-value'>roman-lowercase</span> values</li> <li>Example: &lt;span class='pdfcrowd-page-number' data-pdfcrowd-number-format='roman'&gt;&lt;/span&gt;</li> </ul> </li> <li><span class='field-value'>data-pdfcrowd-placement</span> - specifies where to place the source URL, allowed values: <ul> <li>The URL is inserted to the content <ul> <li> Example: &lt;span class='pdfcrowd-source-url'&gt;&lt;/span&gt;<br> will produce &lt;span&gt;http://example.com&lt;/span&gt; </li> </ul>
+</li> <li><span class='field-value'>href</span> - the URL is set to the href attribute <ul> <li> Example: &lt;a class='pdfcrowd-source-url' data-pdfcrowd-placement='href'&gt;Link to source&lt;/a&gt;<br> will produce &lt;a href='http://example.com'&gt;Link to source&lt;/a&gt; </li> </ul> </li> <li><span class='field-value'>href-and-content</span> - the URL is set to the href attribute and to the content <ul> <li> Example: &lt;a class='pdfcrowd-source-url' data-pdfcrowd-placement='href-and-content'&gt;&lt;/a&gt;<br> will produce &lt;a href='http://example.com'&gt;http://example.com&lt;/a&gt; </li> </ul> </li> </ul> </li> </ul>
         * 
         * @param footerHtml The string must not be empty.
         */
@@ -1060,7 +1046,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Run a custom JavaScript after the document is loaded. The script is Intended for post-load DOM manipulation (add/remove elements, update CSS, ...).
+        * Run a custom JavaScript after the document is loaded. The script is intended for post-load DOM manipulation (add/remove elements, update CSS, ...).
         * 
         * @param customJavascript String containing a JavaScript code. The string must not be empty.
         */
@@ -1088,18 +1074,18 @@ namespace pdfcrowd
         /**
         * Wait the specified number of milliseconds to finish all JavaScript after the document is loaded. The maximum value is determined by your API license.
         * 
-        * @param javascriptDelay The number of milliseconds to wait. Must be positive integer number or 0.
+        * @param javascriptDelay The number of milliseconds to wait. Must be a positive integer number or 0.
         */
         public void setJavascriptDelay(int javascriptDelay)
         {
             if (!(javascriptDelay >= 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(javascriptDelay, "javascript_delay", "html-to-pdf", "Must be positive integer number or 0.", "set_javascript_delay"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(javascriptDelay, "javascript_delay", "html-to-pdf", "Must be a positive integer number or 0.", "set_javascript_delay"), 470);
             
             fields["javascript_delay"] = ConnectionHelper.intToString(javascriptDelay);
         }
 
         /**
-        * Convert only the wanted element and its children. The element is specified by one or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a>. If the element is not found, the conversion fails. If multiple elements are found, the first one is used.
+        * Convert only the specified element and its children. The element is specified by one or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a>. If the element is not found, the conversion fails. If multiple elements are found, the first one is used.
         * 
         * @param selectors One or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a> separated by commas. The string must not be empty.
         */
@@ -1153,12 +1139,12 @@ namespace pdfcrowd
         /**
         * Set the viewport height in pixels. The viewport is the user's visible area of the page.
         * 
-        * @param viewportHeight Must be positive integer number.
+        * @param viewportHeight Must be a positive integer number.
         */
         public void setViewportHeight(int viewportHeight)
         {
             if (!(viewportHeight > 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(viewportHeight, "viewport_height", "html-to-pdf", "Must be positive integer number.", "set_viewport_height"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(viewportHeight, "viewport_height", "html-to-pdf", "Must be a positive integer number.", "set_viewport_height"), 470);
             
             fields["viewport_height"] = ConnectionHelper.intToString(viewportHeight);
         }
@@ -1167,7 +1153,7 @@ namespace pdfcrowd
         * Set the viewport size. The viewport is the user's visible area of the page.
         * 
         * @param width Set the viewport width in pixels. The viewport is the user's visible area of the page. The value must be in a range 96-7680.
-        * @param height Set the viewport height in pixels. The viewport is the user's visible area of the page. Must be positive integer number.
+        * @param height Set the viewport height in pixels. The viewport is the user's visible area of the page. Must be a positive integer number.
         */
         public void setViewport(int width, int height)
         {
@@ -1176,7 +1162,7 @@ namespace pdfcrowd
         }
 
         /**
-        * TODO
+        * Sets the rendering mode.
         * 
         * @param renderingMode The rendering mode. Allowed values are default, viewport.
         */
@@ -1189,7 +1175,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Set the scaling factor (zoom) for main page area.
+        * Set the scaling factor (zoom) for the main page area.
         * 
         * @param scaleFactor The scale factor. The value must be in a range 10-500.
         */
@@ -1202,7 +1188,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Set the scaling factor (zoom) for header and footer.
+        * Set the scaling factor (zoom) for the header and footer.
         * 
         * @param headerFooterScaleFactor The scale factor. The value must be in a range 10-500.
         */
@@ -1304,9 +1290,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Get the number of available conversion credits in your <a href='/user/account/'>account</a>.
-        * This number might not be exact if you run parallel conversions.
-        * Special value <span class='field-value'>999999</span> is returned if the number is not accessible.
+        * Get the number of conversion credits available in your <a href='/user/account/'>account</a>.
+        * The returned value can differ from the actual count if you run parallel conversions.
+        * The special value <span class='field-value'>999999</span> is returned if the information is not available.
         * @return The number of credits.
         */
         public int getRemainingCreditCount()
@@ -1413,7 +1399,7 @@ namespace pdfcrowd
         }
 
         /**
-        * The format of output file.
+        * The format of the output file.
         * 
         * @param outputFormat Allowed values are png, jpg, gif, tiff, bmp, ico, ppm, pgm, pbm, pnm, psb, pct, ras, tga, sgi, sun, webp.
         */
@@ -1474,9 +1460,7 @@ namespace pdfcrowd
         /**
         * Convert a local file.
         * 
-        * @param file The path to a local file to convert.
-        * The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip). Specifying an archive allows sending external assets such as images, stylesheets, etc.
- The file must exist and not be empty. The file name must have valid extension.
+        * @param file The path to a local file to convert.<br> The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip).<br> If the HTML document refers to local external assets (images, style sheets, javascript), zip the document together with the assets. The file must exist and not be empty. The file name must have a valid extension.
         * @return Byte array containing the conversion output.
         */
         public byte[] convertFile(string file)
@@ -1485,7 +1469,7 @@ namespace pdfcrowd
                 throw new Error(ConnectionHelper.createInvalidValueMessage(file, "file", "html-to-image", "The file must exist and not be empty.", "convert_file"), 470);
             
             if (!(File.Exists(file) && new FileInfo(file).Length > 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(file, "file", "html-to-image", "The file name must have valid extension.", "convert_file"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(file, "file", "html-to-image", "The file name must have a valid extension.", "convert_file"), 470);
             
             files["file"] = file;
             return helper.post(fields, files, rawData, null);
@@ -1494,9 +1478,7 @@ namespace pdfcrowd
         /**
         * Convert a local file and write the result to an output stream.
         * 
-        * @param file The path to a local file to convert.
-        * The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip). Specifying an archive allows sending external assets such as images, stylesheets, etc.
- The file must exist and not be empty. The file name must have valid extension.
+        * @param file The path to a local file to convert.<br> The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip).<br> If the HTML document refers to local external assets (images, style sheets, javascript), zip the document together with the assets. The file must exist and not be empty. The file name must have a valid extension.
         * @param outStream The output stream that will contain the conversion output.
         */
         public void convertFileToStream(string file, Stream outStream)
@@ -1505,7 +1487,7 @@ namespace pdfcrowd
                 throw new Error(ConnectionHelper.createInvalidValueMessage(file, "file", "html-to-image", "The file must exist and not be empty.", "convert_file_to_stream"), 470);
             
             if (!(File.Exists(file) && new FileInfo(file).Length > 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(file, "file", "html-to-image", "The file name must have valid extension.", "convert_file_to_stream"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(file, "file", "html-to-image", "The file name must have a valid extension.", "convert_file_to_stream"), 470);
             
             files["file"] = file;
             helper.post(fields, files, rawData, outStream);
@@ -1514,9 +1496,7 @@ namespace pdfcrowd
         /**
         * Convert a local file and write the result to a local file.
         * 
-        * @param file The path to a local file to convert.
-        * The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip). Specifying an archive allows sending external assets such as images, stylesheets, etc.
- The file must exist and not be empty. The file name must have valid extension.
+        * @param file The path to a local file to convert.<br> The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip).<br> If the HTML document refers to local external assets (images, style sheets, javascript), zip the document together with the assets. The file must exist and not be empty. The file name must have a valid extension.
         * @param filePath The output file path. The string must not be empty.
         */
         public void convertFileToFile(string file, string filePath)
@@ -1718,7 +1698,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Run a custom JavaScript after the document is loaded. The script is Intended for post-load DOM manipulation (add/remove elements, update CSS, ...).
+        * Run a custom JavaScript after the document is loaded. The script is intended for post-load DOM manipulation (add/remove elements, update CSS, ...).
         * 
         * @param customJavascript String containing a JavaScript code. The string must not be empty.
         */
@@ -1746,18 +1726,18 @@ namespace pdfcrowd
         /**
         * Wait the specified number of milliseconds to finish all JavaScript after the document is loaded. The maximum value is determined by your API license.
         * 
-        * @param javascriptDelay The number of milliseconds to wait. Must be positive integer number or 0.
+        * @param javascriptDelay The number of milliseconds to wait. Must be a positive integer number or 0.
         */
         public void setJavascriptDelay(int javascriptDelay)
         {
             if (!(javascriptDelay >= 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(javascriptDelay, "javascript_delay", "html-to-image", "Must be positive integer number or 0.", "set_javascript_delay"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(javascriptDelay, "javascript_delay", "html-to-image", "Must be a positive integer number or 0.", "set_javascript_delay"), 470);
             
             fields["javascript_delay"] = ConnectionHelper.intToString(javascriptDelay);
         }
 
         /**
-        * Convert only the wanted element and its children. The element is specified by one or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a>. If the element is not found, the conversion fails. If multiple elements are found, the first one is used.
+        * Convert only the specified element and its children. The element is specified by one or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a>. If the element is not found, the conversion fails. If multiple elements are found, the first one is used.
         * 
         * @param selectors One or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a> separated by commas. The string must not be empty.
         */
@@ -1811,12 +1791,12 @@ namespace pdfcrowd
         /**
         * Set the output image height in pixels. If it's not specified, actual document height is used.
         * 
-        * @param screenshotHeight Must be positive integer number.
+        * @param screenshotHeight Must be a positive integer number.
         */
         public void setScreenshotHeight(int screenshotHeight)
         {
             if (!(screenshotHeight > 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(screenshotHeight, "screenshot_height", "html-to-image", "Must be positive integer number.", "set_screenshot_height"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(screenshotHeight, "screenshot_height", "html-to-image", "Must be a positive integer number.", "set_screenshot_height"), 470);
             
             fields["screenshot_height"] = ConnectionHelper.intToString(screenshotHeight);
         }
@@ -1841,9 +1821,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Get the number of available conversion credits in your <a href='/user/account/'>account</a>.
-        * This number might not be exact if you run parallel conversions.
-        * Special value <span class='field-value'>999999</span> is returned if the number is not accessible.
+        * Get the number of conversion credits available in your <a href='/user/account/'>account</a>.
+        * The returned value can differ from the actual count if you run parallel conversions.
+        * The special value <span class='field-value'>999999</span> is returned if the information is not available.
         * @return The number of credits.
         */
         public int getRemainingCreditCount()
@@ -1989,9 +1969,7 @@ namespace pdfcrowd
         /**
         * Convert a local file.
         * 
-        * @param file The path to a local file to convert.
-        * The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip). Specifying an archive allows sending external assets such as images, stylesheets, etc.
- The file must exist and not be empty.
+        * @param file The path to a local file to convert.<br> The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip). The file must exist and not be empty.
         * @return Byte array containing the conversion output.
         */
         public byte[] convertFile(string file)
@@ -2006,9 +1984,7 @@ namespace pdfcrowd
         /**
         * Convert a local file and write the result to an output stream.
         * 
-        * @param file The path to a local file to convert.
-        * The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip). Specifying an archive allows sending external assets such as images, stylesheets, etc.
- The file must exist and not be empty.
+        * @param file The path to a local file to convert.<br> The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip). The file must exist and not be empty.
         * @param outStream The output stream that will contain the conversion output.
         */
         public void convertFileToStream(string file, Stream outStream)
@@ -2023,9 +1999,7 @@ namespace pdfcrowd
         /**
         * Convert a local file and write the result to a local file.
         * 
-        * @param file The path to a local file to convert.
-        * The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip). Specifying an archive allows sending external assets such as images, stylesheets, etc.
- The file must exist and not be empty.
+        * @param file The path to a local file to convert.<br> The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip). The file must exist and not be empty.
         * @param filePath The output file path. The string must not be empty.
         */
         public void convertFileToFile(string file, string filePath)
@@ -2041,7 +2015,7 @@ namespace pdfcrowd
         /**
         * Convert raw data.
         * 
-        * @param data Raw content to be converted.
+        * @param data The raw content to be converted.
         * @return Byte array with the output.
         */
         public byte[] convertRawData(byte[] data)
@@ -2053,7 +2027,7 @@ namespace pdfcrowd
         /**
         * Convert raw data and write the result to an output stream.
         * 
-        * @param data Raw content to be converted.
+        * @param data The raw content to be converted.
         * @param outStream The output stream that will contain the conversion output.
         */
         public void convertRawDataToStream(byte[] data, Stream outStream)
@@ -2065,7 +2039,7 @@ namespace pdfcrowd
         /**
         * Convert raw data to a file.
         * 
-        * @param data Raw content to be converted.
+        * @param data The raw content to be converted.
         * @param filePath The output file path. The string must not be empty.
         */
         public void convertRawDataToFile(byte[] data, string filePath)
@@ -2079,7 +2053,7 @@ namespace pdfcrowd
         }
 
         /**
-        * The format of output file.
+        * The format of the output file.
         * 
         * @param outputFormat Allowed values are png, jpg, gif, tiff, bmp, ico, ppm, pgm, pbm, pnm, psb, pct, ras, tga, sgi, sun, webp.
         */
@@ -2092,7 +2066,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Resizes the image.
+        * Resize the image.
         * 
         * @param resize The resize percentage or new image dimensions.
         */
@@ -2102,7 +2076,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Rotates the image.
+        * Rotate the image.
         * 
         * @param rotate The rotation specified in degrees.
         */
@@ -2131,9 +2105,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Get the number of available conversion credits in your <a href='/user/account/'>account</a>.
-        * This number might not be exact if you run parallel conversions.
-        * Special value <span class='field-value'>999999</span> is returned if the number is not accessible.
+        * Get the number of conversion credits available in your <a href='/user/account/'>account</a>.
+        * The returned value can differ from the actual count if you run parallel conversions.
+        * The special value <span class='field-value'>999999</span> is returned if the information is not available.
         * @return The number of credits.
         */
         public int getRemainingCreditCount()
@@ -2325,9 +2299,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Get the number of available conversion credits in your <a href='/user/account/'>account</a>.
-        * This number might not be exact if you run parallel conversions.
-        * Special value <span class='field-value'>999999</span> is returned if the number is not accessible.
+        * Get the number of conversion credits available in your <a href='/user/account/'>account</a>.
+        * The returned value can differ from the actual count if you run parallel conversions.
+        * The special value <span class='field-value'>999999</span> is returned if the information is not available.
         * @return The number of credits.
         */
         public int getRemainingCreditCount()
@@ -2482,9 +2456,7 @@ namespace pdfcrowd
         /**
         * Convert a local file.
         * 
-        * @param file The path to a local file to convert.
-        * The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip). Specifying an archive allows sending external assets such as images, stylesheets, etc.
- The file must exist and not be empty.
+        * @param file The path to a local file to convert.<br> The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip). The file must exist and not be empty.
         * @return Byte array containing the conversion output.
         */
         public byte[] convertFile(string file)
@@ -2499,9 +2471,7 @@ namespace pdfcrowd
         /**
         * Convert a local file and write the result to an output stream.
         * 
-        * @param file The path to a local file to convert.
-        * The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip). Specifying an archive allows sending external assets such as images, stylesheets, etc.
- The file must exist and not be empty.
+        * @param file The path to a local file to convert.<br> The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip). The file must exist and not be empty.
         * @param outStream The output stream that will contain the conversion output.
         */
         public void convertFileToStream(string file, Stream outStream)
@@ -2516,9 +2486,7 @@ namespace pdfcrowd
         /**
         * Convert a local file and write the result to a local file.
         * 
-        * @param file The path to a local file to convert.
-        * The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip). Specifying an archive allows sending external assets such as images, stylesheets, etc.
- The file must exist and not be empty.
+        * @param file The path to a local file to convert.<br> The file can be either a single file or an archive (.tar.gz, .tar.bz2, or .zip). The file must exist and not be empty.
         * @param filePath The output file path. The string must not be empty.
         */
         public void convertFileToFile(string file, string filePath)
@@ -2534,7 +2502,7 @@ namespace pdfcrowd
         /**
         * Convert raw data.
         * 
-        * @param data Raw content to be converted.
+        * @param data The raw content to be converted.
         * @return Byte array with the output.
         */
         public byte[] convertRawData(byte[] data)
@@ -2546,7 +2514,7 @@ namespace pdfcrowd
         /**
         * Convert raw data and write the result to an output stream.
         * 
-        * @param data Raw content to be converted.
+        * @param data The raw content to be converted.
         * @param outStream The output stream that will contain the conversion output.
         */
         public void convertRawDataToStream(byte[] data, Stream outStream)
@@ -2558,7 +2526,7 @@ namespace pdfcrowd
         /**
         * Convert raw data to a file.
         * 
-        * @param data Raw content to be converted.
+        * @param data The raw content to be converted.
         * @param filePath The output file path. The string must not be empty.
         */
         public void convertRawDataToFile(byte[] data, string filePath)
@@ -2572,7 +2540,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Resizes the image.
+        * Resize the image.
         * 
         * @param resize The resize percentage or new image dimensions.
         */
@@ -2582,7 +2550,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Rotates the image.
+        * Rotate the image.
         * 
         * @param rotate The rotation specified in degrees.
         */
@@ -2611,9 +2579,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Get the number of available conversion credits in your <a href='/user/account/'>account</a>.
-        * This number might not be exact if you run parallel conversions.
-        * Special value <span class='field-value'>999999</span> is returned if the number is not accessible.
+        * Get the number of conversion credits available in your <a href='/user/account/'>account</a>.
+        * The returned value can differ from the actual count if you run parallel conversions.
+        * The special value <span class='field-value'>999999</span> is returned if the information is not available.
         * @return The number of credits.
         */
         public int getRemainingCreditCount()
