@@ -63,7 +63,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "4.1";
+        public static readonly string CLIENT_VERSION = "4.2";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -74,7 +74,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/4.1 (http://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/4.2 (http://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -2512,7 +2512,7 @@ namespace pdfcrowd
         * Perform an action on the input files.
         * @return Byte array containing the output PDF.
         */
-        public byte[] convertFiles()
+        public byte[] convert()
         {
             return helper.post(fields, files, rawData, null);
         }
@@ -2522,7 +2522,7 @@ namespace pdfcrowd
         * 
         * @param outStream The output stream that will contain the output PDF.
         */
-        public void convertFilesToStream(Stream outStream)
+        public void convertToStream(Stream outStream)
         {
             helper.post(fields, files, rawData, outStream);
         }
@@ -2532,13 +2532,13 @@ namespace pdfcrowd
         * 
         * @param filePath The output file path. The string must not be empty.
         */
-        public void convertFilesToFile(string filePath)
+        public void convertToFile(string filePath)
         {
             if (!(!String.IsNullOrEmpty(filePath)))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "file_path", "pdf-to-pdf", "The string must not be empty.", "convert_files_to_file"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "file_path", "pdf-to-pdf", "The string must not be empty.", "convert_to_file"), 470);
             
             FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
-            convertFilesToStream(outputFile);
+            convertToStream(outputFile);
             outputFile.Close();
         }
 
@@ -2559,7 +2559,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Add in-memory raw PDF data to the list of the input PDFs.
+        * Add in-memory raw PDF data to the list of the input PDFs.<br>Typical usage is for adding PDF created by another Pdfcrowd converter.<br><br> Example in PHP:<br> <b>$clientPdf2Pdf</b>-&gt;addPdfRawData(<b>$clientHtml2Pdf</b>-&gt;convertUrl('http://www.example.com'));
         * 
         * @param pdfRawData The raw PDF data. The input data must be PDF content.
         * @return The converter object.
