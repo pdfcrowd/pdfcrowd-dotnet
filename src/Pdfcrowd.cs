@@ -646,15 +646,15 @@ namespace pdfcrowd
         }
 
         /**
-        * Set the output page height.
+        * Set the output page height. Use <span class='field-value'>-1</span> for a single page PDF.
         * 
-        * @param pageHeight Can be specified in inches (in), millimeters (mm), centimeters (cm), or points (pt).
+        * @param pageHeight Can be -1 or specified in inches (in), millimeters (mm), centimeters (cm), or points (pt).
         * @return The converter object.
         */
         public HtmlToPdfClient setPageHeight(string pageHeight)
         {
-            if (!Regex.Match(pageHeight, "(?i)^[0-9]*(\\.[0-9]+)?(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(pageHeight, "page_height", "html-to-pdf", "Can be specified in inches (in), millimeters (mm), centimeters (cm), or points (pt).", "set_page_height"), 470);
+            if (!Regex.Match(pageHeight, "(?i)^\\-1$|^[0-9]*(\\.[0-9]+)?(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(pageHeight, "page_height", "html-to-pdf", "Can be -1 or specified in inches (in), millimeters (mm), centimeters (cm), or points (pt).", "set_page_height"), 470);
             
             fields["page_height"] = pageHeight;
             return this;
@@ -664,7 +664,7 @@ namespace pdfcrowd
         * Set the output page dimensions.
         * 
         * @param width Set the output page width. Can be specified in inches (in), millimeters (mm), centimeters (cm), or points (pt).
-        * @param height Set the output page height. Can be specified in inches (in), millimeters (mm), centimeters (cm), or points (pt).
+        * @param height Set the output page height. Use <span class='field-value'>-1</span> for a single page PDF. Can be -1 or specified in inches (in), millimeters (mm), centimeters (cm), or points (pt).
         * @return The converter object.
         */
         public HtmlToPdfClient setPageDimensions(string width, string height)
@@ -1543,7 +1543,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Specifies number of retries after HTTP status code 502 was received. The status 502 occurs seldom due to network problems. This feature can be disabled by setting to 0.
+        * Specifies the number of retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
         * 
         * @param retryCount Number of retries wanted.
         * @return The converter object.
@@ -2143,7 +2143,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Specifies number of retries after HTTP status code 502 was received. The status 502 occurs seldom due to network problems. This feature can be disabled by setting to 0.
+        * Specifies the number of retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
         * 
         * @param retryCount Number of retries wanted.
         * @return The converter object.
@@ -2453,7 +2453,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Specifies number of retries after HTTP status code 502 was received. The status 502 occurs seldom due to network problems. This feature can be disabled by setting to 0.
+        * Specifies the number of retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
         * 
         * @param retryCount Number of retries wanted.
         * @return The converter object.
@@ -2682,7 +2682,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Specifies number of retries after HTTP status code 502 was received. The status 502 occurs seldom due to network problems. This feature can be disabled by setting to 0.
+        * Specifies the number of retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
         * 
         * @param retryCount Number of retries wanted.
         * @return The converter object.
@@ -2977,7 +2977,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Specifies number of retries after HTTP status code 502 was received. The status 502 occurs seldom due to network problems. This feature can be disabled by setting to 0.
+        * Specifies the number of retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
         * 
         * @param retryCount Number of retries wanted.
         * @return The converter object.
