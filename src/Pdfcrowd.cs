@@ -63,7 +63,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "4.2";
+        public static readonly string CLIENT_VERSION = "4.3";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -74,7 +74,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/4.2 (http://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/4.3 (http://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -513,8 +513,17 @@ namespace pdfcrowd
                 throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "file_path", "html-to-pdf", "The string must not be empty.", "convert_url_to_file"), 470);
             
             FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
-            convertUrlToStream(url, outputFile);
-            outputFile.Close();
+            try
+            {
+                convertUrlToStream(url, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
         }
 
         /**
@@ -565,8 +574,17 @@ namespace pdfcrowd
                 throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "file_path", "html-to-pdf", "The string must not be empty.", "convert_file_to_file"), 470);
             
             FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
-            convertFileToStream(file, outputFile);
-            outputFile.Close();
+            try
+            {
+                convertFileToStream(file, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
         }
 
         /**
@@ -611,8 +629,17 @@ namespace pdfcrowd
                 throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "file_path", "html-to-pdf", "The string must not be empty.", "convert_string_to_file"), 470);
             
             FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
-            convertStringToStream(text, outputFile);
-            outputFile.Close();
+            try
+            {
+                convertStringToStream(text, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
         }
 
         /**
@@ -631,7 +658,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Set the output page width.
+        * Set the output page width. The safe maximum is <span class='field-value'>200in</span> otherwise some PDF viewers may be unable to open the PDF.
         * 
         * @param pageWidth Can be specified in inches (in), millimeters (mm), centimeters (cm), or points (pt).
         * @return The converter object.
@@ -646,7 +673,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Set the output page height. Use <span class='field-value'>-1</span> for a single page PDF.
+        * Set the output page height. Use <span class='field-value'>-1</span> for a single page PDF. The safe maximum is <span class='field-value'>200in</span> otherwise some PDF viewers may be unable to open the PDF.
         * 
         * @param pageHeight Can be -1 or specified in inches (in), millimeters (mm), centimeters (cm), or points (pt).
         * @return The converter object.
@@ -663,8 +690,8 @@ namespace pdfcrowd
         /**
         * Set the output page dimensions.
         * 
-        * @param width Set the output page width. Can be specified in inches (in), millimeters (mm), centimeters (cm), or points (pt).
-        * @param height Set the output page height. Use <span class='field-value'>-1</span> for a single page PDF. Can be -1 or specified in inches (in), millimeters (mm), centimeters (cm), or points (pt).
+        * @param width Set the output page width. The safe maximum is <span class='field-value'>200in</span> otherwise some PDF viewers may be unable to open the PDF. Can be specified in inches (in), millimeters (mm), centimeters (cm), or points (pt).
+        * @param height Set the output page height. Use <span class='field-value'>-1</span> for a single page PDF. The safe maximum is <span class='field-value'>200in</span> otherwise some PDF viewers may be unable to open the PDF. Can be -1 or specified in inches (in), millimeters (mm), centimeters (cm), or points (pt).
         * @return The converter object.
         */
         public HtmlToPdfClient setPageDimensions(string width, string height)
@@ -1218,7 +1245,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Convert only the specified element and its children. The element is specified by one or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a>. If the element is not found, the conversion fails. If multiple elements are found, the first one is used.
+        * Convert only the specified element from the main document and its children. The element is specified by one or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a>. If the element is not found, the conversion fails. If multiple elements are found, the first one is used.
         * 
         * @param selectors One or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a> separated by commas. The string must not be empty.
         * @return The converter object.
@@ -1248,7 +1275,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Wait for the specified element in a source document. The element is specified by one or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a>. If the element is not found, the conversion fails.
+        * Wait for the specified element in a source document. The element is specified by one or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a>. The element is searched for in the main document and all iframes. If the element is not found, the conversion fails.
         * 
         * @param selectors One or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a> separated by commas. The string must not be empty.
         * @return The converter object.
@@ -1436,7 +1463,214 @@ namespace pdfcrowd
         }
 
         /**
-        * Turn on the debug logging.
+        * Set the title of the PDF.
+        * 
+        * @param title The title.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setTitle(string title)
+        {
+            fields["title"] = title;
+            return this;
+        }
+
+        /**
+        * Set the subject of the PDF.
+        * 
+        * @param subject The subject.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setSubject(string subject)
+        {
+            fields["subject"] = subject;
+            return this;
+        }
+
+        /**
+        * Set the author of the PDF.
+        * 
+        * @param author The author.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setAuthor(string author)
+        {
+            fields["author"] = author;
+            return this;
+        }
+
+        /**
+        * Associate keywords with the document.
+        * 
+        * @param keywords The string with the keywords.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setKeywords(string keywords)
+        {
+            fields["keywords"] = keywords;
+            return this;
+        }
+
+        /**
+        * Specify the page layout to be used when the document is opened.
+        * 
+        * @param pageLayout Allowed values are single-page, one-column, two-column-left, two-column-right.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setPageLayout(string pageLayout)
+        {
+            if (!Regex.Match(pageLayout, "(?i)^(single-page|one-column|two-column-left|two-column-right)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(pageLayout, "page_layout", "html-to-pdf", "Allowed values are single-page, one-column, two-column-left, two-column-right.", "set_page_layout"), 470);
+            
+            fields["page_layout"] = pageLayout;
+            return this;
+        }
+
+        /**
+        * Specify how the document should be displayed when opened.
+        * 
+        * @param pageMode Allowed values are full-screen, thumbnails, outlines.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setPageMode(string pageMode)
+        {
+            if (!Regex.Match(pageMode, "(?i)^(full-screen|thumbnails|outlines)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(pageMode, "page_mode", "html-to-pdf", "Allowed values are full-screen, thumbnails, outlines.", "set_page_mode"), 470);
+            
+            fields["page_mode"] = pageMode;
+            return this;
+        }
+
+        /**
+        * Specify how the page should be displayed when opened.
+        * 
+        * @param initialZoomType Allowed values are fit-width, fit-height, fit-page.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setInitialZoomType(string initialZoomType)
+        {
+            if (!Regex.Match(initialZoomType, "(?i)^(fit-width|fit-height|fit-page)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(initialZoomType, "initial_zoom_type", "html-to-pdf", "Allowed values are fit-width, fit-height, fit-page.", "set_initial_zoom_type"), 470);
+            
+            fields["initial_zoom_type"] = initialZoomType;
+            return this;
+        }
+
+        /**
+        * Display the specified page when the document is opened.
+        * 
+        * @param initialPage Must be a positive integer number.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setInitialPage(int initialPage)
+        {
+            if (!(initialPage > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(initialPage, "initial_page", "html-to-pdf", "Must be a positive integer number.", "set_initial_page"), 470);
+            
+            fields["initial_page"] = ConnectionHelper.intToString(initialPage);
+            return this;
+        }
+
+        /**
+        * Specify the initial page zoom in percents when the document is opened.
+        * 
+        * @param initialZoom Must be a positive integer number.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setInitialZoom(int initialZoom)
+        {
+            if (!(initialZoom > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(initialZoom, "initial_zoom", "html-to-pdf", "Must be a positive integer number.", "set_initial_zoom"), 470);
+            
+            fields["initial_zoom"] = ConnectionHelper.intToString(initialZoom);
+            return this;
+        }
+
+        /**
+        * Specify whether to hide the viewer application's tool bars when the document is active.
+        * 
+        * @param hideToolbar Set to <span class='field-value'>true</span> to hide tool bars.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setHideToolbar(bool hideToolbar)
+        {
+            fields["hide_toolbar"] = hideToolbar ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Specify whether to hide the viewer application's menu bar when the document is active.
+        * 
+        * @param hideMenubar Set to <span class='field-value'>true</span> to hide the menu bar.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setHideMenubar(bool hideMenubar)
+        {
+            fields["hide_menubar"] = hideMenubar ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Specify whether to hide user interface elements in the document's window (such as scroll bars and navigation controls), leaving only the document's contents displayed.
+        * 
+        * @param hideWindowUi Set to <span class='field-value'>true</span> to hide ui elements.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setHideWindowUi(bool hideWindowUi)
+        {
+            fields["hide_window_ui"] = hideWindowUi ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Specify whether to resize the document's window to fit the size of the first displayed page.
+        * 
+        * @param fitWindow Set to <span class='field-value'>true</span> to resize the window.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setFitWindow(bool fitWindow)
+        {
+            fields["fit_window"] = fitWindow ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Specify whether to position the document's window in the center of the screen.
+        * 
+        * @param centerWindow Set to <span class='field-value'>true</span> to center the window.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setCenterWindow(bool centerWindow)
+        {
+            fields["center_window"] = centerWindow ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Specify whether the window's title bar should display the document title. If false , the title bar should instead display the name of the PDF file containing the document.
+        * 
+        * @param displayTitle Set to <span class='field-value'>true</span> to display the title.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setDisplayTitle(bool displayTitle)
+        {
+            fields["display_title"] = displayTitle ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Set the predominant reading order for text to right-to-left. This option has no direct effect on the document's contents or page numbering but can be used to determine the relative positioning of pages when displayed side by side or printed n-up
+        * 
+        * @param rightToLeft Set to <span class='field-value'>true</span> to set right-to-left reading order.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setRightToLeft(bool rightToLeft)
+        {
+            fields["right_to_left"] = rightToLeft ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Turn on the debug logging. Details about the conversion are stored in the debug log. The URL of the log can be obtained from the <a href='#get_debug_log_url'>getDebugLogUrl</a> method.
         * 
         * @param debugLog Set to <span class='field-value'>true</span> to enable the debug logging.
         * @return The converter object.
@@ -1640,8 +1874,17 @@ namespace pdfcrowd
                 throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "file_path", "html-to-image", "The string must not be empty.", "convert_url_to_file"), 470);
             
             FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
-            convertUrlToStream(url, outputFile);
-            outputFile.Close();
+            try
+            {
+                convertUrlToStream(url, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
         }
 
         /**
@@ -1692,8 +1935,17 @@ namespace pdfcrowd
                 throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "file_path", "html-to-image", "The string must not be empty.", "convert_file_to_file"), 470);
             
             FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
-            convertFileToStream(file, outputFile);
-            outputFile.Close();
+            try
+            {
+                convertFileToStream(file, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
         }
 
         /**
@@ -1738,8 +1990,17 @@ namespace pdfcrowd
                 throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "file_path", "html-to-image", "The string must not be empty.", "convert_string_to_file"), 470);
             
             FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
-            convertStringToStream(text, outputFile);
-            outputFile.Close();
+            try
+            {
+                convertStringToStream(text, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
         }
 
         /**
@@ -1970,7 +2231,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Convert only the specified element and its children. The element is specified by one or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a>. If the element is not found, the conversion fails. If multiple elements are found, the first one is used.
+        * Convert only the specified element from the main document and its children. The element is specified by one or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a>. If the element is not found, the conversion fails. If multiple elements are found, the first one is used.
         * 
         * @param selectors One or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a> separated by commas. The string must not be empty.
         * @return The converter object.
@@ -2000,7 +2261,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Wait for the specified element in a source document. The element is specified by one or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a>. If the element is not found, the conversion fails.
+        * Wait for the specified element in a source document. The element is specified by one or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a>. The element is searched for in the main document and all iframes. If the element is not found, the conversion fails.
         * 
         * @param selectors One or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a> separated by commas. The string must not be empty.
         * @return The converter object.
@@ -2045,7 +2306,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Turn on the debug logging.
+        * Turn on the debug logging. Details about the conversion are stored in the debug log. The URL of the log can be obtained from the <a href='#get_debug_log_url'>getDebugLogUrl</a> method.
         * 
         * @param debugLog Set to <span class='field-value'>true</span> to enable the debug logging.
         * @return The converter object.
@@ -2225,8 +2486,17 @@ namespace pdfcrowd
                 throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "file_path", "image-to-image", "The string must not be empty.", "convert_url_to_file"), 470);
             
             FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
-            convertUrlToStream(url, outputFile);
-            outputFile.Close();
+            try
+            {
+                convertUrlToStream(url, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
         }
 
         /**
@@ -2271,8 +2541,17 @@ namespace pdfcrowd
                 throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "file_path", "image-to-image", "The string must not be empty.", "convert_file_to_file"), 470);
             
             FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
-            convertFileToStream(file, outputFile);
-            outputFile.Close();
+            try
+            {
+                convertFileToStream(file, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
         }
 
         /**
@@ -2311,8 +2590,17 @@ namespace pdfcrowd
                 throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "file_path", "image-to-image", "The string must not be empty.", "convert_raw_data_to_file"), 470);
             
             FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
-            convertRawDataToStream(data, outputFile);
-            outputFile.Close();
+            try
+            {
+                convertRawDataToStream(data, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
         }
 
         /**
@@ -2355,7 +2643,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Turn on the debug logging.
+        * Turn on the debug logging. Details about the conversion are stored in the debug log. The URL of the log can be obtained from the <a href='#get_debug_log_url'>getDebugLogUrl</a> method.
         * 
         * @param debugLog Set to <span class='field-value'>true</span> to enable the debug logging.
         * @return The converter object.
@@ -2575,7 +2863,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Turn on the debug logging.
+        * Turn on the debug logging. Details about the conversion are stored in the debug log. The URL of the log can be obtained from the <a href='#get_debug_log_url'>getDebugLogUrl</a> method.
         * 
         * @param debugLog Set to <span class='field-value'>true</span> to enable the debug logging.
         * @return The converter object.
@@ -2764,8 +3052,17 @@ namespace pdfcrowd
                 throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "file_path", "image-to-pdf", "The string must not be empty.", "convert_url_to_file"), 470);
             
             FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
-            convertUrlToStream(url, outputFile);
-            outputFile.Close();
+            try
+            {
+                convertUrlToStream(url, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
         }
 
         /**
@@ -2810,8 +3107,17 @@ namespace pdfcrowd
                 throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "file_path", "image-to-pdf", "The string must not be empty.", "convert_file_to_file"), 470);
             
             FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
-            convertFileToStream(file, outputFile);
-            outputFile.Close();
+            try
+            {
+                convertFileToStream(file, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
         }
 
         /**
@@ -2850,8 +3156,17 @@ namespace pdfcrowd
                 throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "file_path", "image-to-pdf", "The string must not be empty.", "convert_raw_data_to_file"), 470);
             
             FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
-            convertRawDataToStream(data, outputFile);
-            outputFile.Close();
+            try
+            {
+                convertRawDataToStream(data, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
         }
 
         /**
@@ -2879,7 +3194,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Turn on the debug logging.
+        * Turn on the debug logging. Details about the conversion are stored in the debug log. The URL of the log can be obtained from the <a href='#get_debug_log_url'>getDebugLogUrl</a> method.
         * 
         * @param debugLog Set to <span class='field-value'>true</span> to enable the debug logging.
         * @return The converter object.
