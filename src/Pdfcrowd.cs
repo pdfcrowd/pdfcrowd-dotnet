@@ -63,7 +63,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "4.3";
+        public static readonly string CLIENT_VERSION = "4.3.1";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -74,7 +74,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/4.3 (http://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/4.3.1 (http://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -263,22 +263,6 @@ namespace pdfcrowd
             }
         }
 
-        private static string encodePostData(Dictionary<string, string> fields)
-        {
-            string result = "";
-
-            foreach(KeyValuePair<string, string> entry in fields)
-            {
-                if(entry.Value != null)
-                {
-                    result += HttpUtility.UrlEncode(entry.Key) + "=" +
-                        HttpUtility.UrlEncode(entry.Value) + "&";
-                }
-            }
-
-            return result.Substring(0, result.Length - 1);
-        }
-
         private static void beginFileField(string name, string fileName, BinaryWriter body)
         {
             string result = "--" + MULTIPART_BOUNDARY + newLine;
@@ -350,20 +334,6 @@ namespace pdfcrowd
         }
 
         internal byte[] post(Dictionary<string, string> fields, Dictionary<string, string> files, Dictionary<string, byte[]> rawData, Stream outStream)
-        {
-            return files.Count == 0 && rawData.Count == 0 ?
-                postUrlEncoded(fields, outStream) :
-                postMultipart(fields, files, rawData, outStream);
-        }
-
-        private byte[] postUrlEncoded(Dictionary<string, string> fields, Stream outStream)
-        {
-            string body = encodePostData(fields);
-            string contentType = "application/x-www-form-urlencoded";
-            return doPost(body, contentType, outStream);
-        }
-
-        private byte[] postMultipart(Dictionary<string, string> fields, Dictionary<string, string> files, Dictionary<string, byte[]> rawData, Stream outStream)
         {
             byte[] body = encodeMultipartPostData(fields, files, rawData);
             string contentType = "multipart/form-data; boundary=" + MULTIPART_BOUNDARY;
@@ -1114,7 +1084,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Set the HTTP authentication.
+        * Set credentials to access HTTP base authentication protected websites.
         * 
         * @param userName Set the HTTP authentication user name.
         * @param password Set the HTTP authentication password.
@@ -2100,7 +2070,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Set the HTTP authentication.
+        * Set credentials to access HTTP base authentication protected websites.
         * 
         * @param userName Set the HTTP authentication user name.
         * @param password Set the HTTP authentication password.
