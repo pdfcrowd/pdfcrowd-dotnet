@@ -1,6 +1,6 @@
 .PHONY : dist clean
 
-DIR_NAME := pdfcrowd-4.3.1
+DIR_NAME := pdfcrowd-4.3.2
 COMPILER := mcs
 BIN_DIR := bin
 OUT := $(BIN_DIR)/pdfcrowd.dll

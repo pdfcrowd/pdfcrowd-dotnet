@@ -63,7 +63,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "4.3.1";
+        public static readonly string CLIENT_VERSION = "4.3.2";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -74,7 +74,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/4.3.1 (http://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/4.3.2 (http://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -1345,6 +1345,18 @@ namespace pdfcrowd
                 throw new Error(ConnectionHelper.createInvalidValueMessage(headerFooterScaleFactor, "header_footer_scale_factor", "html-to-pdf", "The value must be in a range 10-500.", "set_header_footer_scale_factor"), 470);
             
             fields["header_footer_scale_factor"] = ConnectionHelper.intToString(headerFooterScaleFactor);
+            return this;
+        }
+
+        /**
+        * Disable the intelligent shrinking strategy that tries to optimally fit the HTML contents to a PDF page.
+        * 
+        * @param disableSmartShrinking Set to <span class='field-value'>true</span> to disable the intelligent shrinking strategy.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setDisableSmartShrinking(bool disableSmartShrinking)
+        {
+            fields["disable_smart_shrinking"] = disableSmartShrinking ? "true" : null;
             return this;
         }
 
