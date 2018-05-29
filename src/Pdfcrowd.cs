@@ -243,6 +243,13 @@ namespace pdfcrowd
             }
             catch(WebException why)
             {
+                if(why.Status == WebExceptionStatus.TrustFailure ||
+                   why.Status == WebExceptionStatus.SecureChannelFailure) {
+                   throw new Error("There was a problem connecting to Pdfcrowd servers over HTTPS:\n" +
+                                   why.Message +
+                                   "\nYou can still use the API over HTTP, you just need to add the following line right after Pdfcrowd client initialization:\nclient.setUseHttp(true);",
+                                   481);
+                }
                 if (why.Response != null && why.Status == WebExceptionStatus.ProtocolError)
                 {
                     HttpWebResponse response = (HttpWebResponse)why.Response;
@@ -252,14 +259,14 @@ namespace pdfcrowd
                     stream.Position = 0;
                     string err = readStream(stream);
                     throw new Error(err, response.StatusCode);
-                } else {
-                    string innerException = "";
-                    if (why.InnerException != null)
-                    {
-                        innerException = "\n" + why.InnerException.Message;
-                    }
-                    throw new Error(why.Message + innerException, HttpStatusCode.Unused);
                 }
+
+                string innerException = "";
+                if (why.InnerException != null)
+                {
+                    innerException = "\n" + why.InnerException.Message;
+                }
+                throw new Error(why.Message + innerException, HttpStatusCode.Unused);
             }
         }
 
