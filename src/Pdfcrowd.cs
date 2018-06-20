@@ -63,7 +63,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "4.3.3";
+        public static readonly string CLIENT_VERSION = "4.3.5";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -74,7 +74,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/4.3.3 (http://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/4.3.5 (http://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -1727,6 +1727,18 @@ namespace pdfcrowd
         }
 
         /**
+        * Tag the conversion with a custom value. The tag is used in <a href='/user/account/log/conversion/'>conversion statistics</a>. A value longer than 32 characters is cut off.
+        * 
+        * @param tag A string with the custom tag.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setTag(string tag)
+        {
+            fields["tag"] = tag;
+            return this;
+        }
+
+        /**
         * Specifies if the client communicates over HTTP or HTTPS with Pdfcrowd API.
         * 
         * @param useHttp Set to <span class='field-value'>true</span> to use HTTP.
@@ -2354,6 +2366,18 @@ namespace pdfcrowd
         }
 
         /**
+        * Tag the conversion with a custom value. The tag is used in <a href='/user/account/log/conversion/'>conversion statistics</a>. A value longer than 32 characters is cut off.
+        * 
+        * @param tag A string with the custom tag.
+        * @return The converter object.
+        */
+        public HtmlToImageClient setTag(string tag)
+        {
+            fields["tag"] = tag;
+            return this;
+        }
+
+        /**
         * Specifies if the client communicates over HTTP or HTTPS with Pdfcrowd API.
         * 
         * @param useHttp Set to <span class='field-value'>true</span> to use HTTP.
@@ -2691,6 +2715,18 @@ namespace pdfcrowd
         }
 
         /**
+        * Tag the conversion with a custom value. The tag is used in <a href='/user/account/log/conversion/'>conversion statistics</a>. A value longer than 32 characters is cut off.
+        * 
+        * @param tag A string with the custom tag.
+        * @return The converter object.
+        */
+        public ImageToImageClient setTag(string tag)
+        {
+            fields["tag"] = tag;
+            return this;
+        }
+
+        /**
         * Specifies if the client communicates over HTTP or HTTPS with Pdfcrowd API.
         * 
         * @param useHttp Set to <span class='field-value'>true</span> to use HTTP.
@@ -2917,6 +2953,18 @@ namespace pdfcrowd
         public int getOutputSize()
         {
             return helper.getOutputSize();
+        }
+
+        /**
+        * Tag the conversion with a custom value. The tag is used in <a href='/user/account/log/conversion/'>conversion statistics</a>. A value longer than 32 characters is cut off.
+        * 
+        * @param tag A string with the custom tag.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setTag(string tag)
+        {
+            fields["tag"] = tag;
+            return this;
         }
 
         /**
@@ -3239,6 +3287,18 @@ namespace pdfcrowd
         public int getOutputSize()
         {
             return helper.getOutputSize();
+        }
+
+        /**
+        * Tag the conversion with a custom value. The tag is used in <a href='/user/account/log/conversion/'>conversion statistics</a>. A value longer than 32 characters is cut off.
+        * 
+        * @param tag A string with the custom tag.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setTag(string tag)
+        {
+            fields["tag"] = tag;
+            return this;
         }
 
         /**
