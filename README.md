@@ -11,3 +11,7 @@ can sign up [here](https://pdfcrowd.com/pricing/api/).
 
 * API Home:  <https://pdfcrowd.com/doc/api/>
 * API Reference:  <https://pdfcrowd.com/doc/api/html-to-pdf/dotnet/>
+
+## License
+
+This project is licensed under the MIT License.
