@@ -14,4 +14,4 @@ can sign up [here](https://pdfcrowd.com/pricing/api/).
 
 ## License
 
-This project is licensed under the MIT License.
+This client library is licensed under the MIT License.
