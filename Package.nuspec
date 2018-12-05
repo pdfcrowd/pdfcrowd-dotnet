@@ -2,9 +2,9 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>Pdfcrowd.Official</id>
-    <version>4.3.5</version>
+    <version>4.4.1</version>
     <title>Pdfcrowd API - .NET client library</title>
-    <authors>Jaroslav Grešula, Pavel Mádr</authors>
+    <authors>Pdfcrowd Dev Team</authors>
     <owners>Pdfcrowd</owners>
     <licenseUrl>https://github.com/pdfcrowd/pdfcrowd-dotnet/blob/master/LICENSE.txt</licenseUrl>
     <projectUrl>https://pdfcrowd.com/doc/api/html-to-pdf/dotnet/</projectUrl>
