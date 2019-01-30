@@ -1,6 +1,6 @@
 .PHONY : dist clean
 
-DIR_NAME := pdfcrowd-4.4.1
+DIR_NAME := pdfcrowd-4.4.2
 COMPILER := mcs
 BIN_DIR := bin
 OUT := $(BIN_DIR)/pdfcrowd.dll
@@ -25,9 +25,9 @@ dist:
 publish:
 	nuget pack
 	@if [ $(NUGET_VALID) -eq 0 ]; then \
-		nuget push Pdfcrowd.Official.4.4.1.nupkg -Source https://www.nuget.org/api/v2/package -ApiKey $(API_KEY) ; \
+		nuget push Pdfcrowd.Official.4.4.2.nupkg -Source https://www.nuget.org/api/v2/package -ApiKey $(API_KEY) ; \
 	else \
 		echo ; \
-		echo Not valid nuget version, upload Pdfcrowd.Official.4.4.1.nupkg manually to https://www.nuget.org/packages/manage/upload ; \
+		echo Not valid nuget version, upload Pdfcrowd.Official.4.4.2.nupkg manually to https://www.nuget.org/packages/manage/upload ; \
 		echo ; \
 	fi
