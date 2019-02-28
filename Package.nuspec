@@ -6,7 +6,7 @@
     <title>Pdfcrowd API - .NET client library</title>
     <authors>Pdfcrowd Dev Team</authors>
     <owners>Pdfcrowd</owners>
-    <licenseUrl>https://github.com/pdfcrowd/pdfcrowd-dotnet/blob/master/LICENSE.txt</licenseUrl>
+    <license type="file">LICENSE.txt</license>
     <projectUrl>https://pdfcrowd.com/doc/api/html-to-pdf/dotnet/</projectUrl>
     <iconUrl>https://pdfcrowd.com/static/images/pdfcrowd_icon_48.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -20,6 +20,7 @@
   </metadata>
   <files>
     <file src="README.md" target="" />
+    <file src="LICENSE.txt" target="" />
     <file src="bin/pdfcrowd.dll" target="lib/net20" />
     <file src="src/*.cs" target="src" />
   </files>

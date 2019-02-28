@@ -6,8 +6,6 @@ BIN_DIR := bin
 OUT := $(BIN_DIR)/pdfcrowd.dll
 DOT_NET_VERSION := 2
 
-NUGET_VALID := $(shell aptitude show nuget | grep -q 'Version: 4' ; echo $$?)
-
 compile:
 	@mkdir -p $(BIN_DIR)
 	$(COMPILER) -t:library -sdk:$(DOT_NET_VERSION) /reference:System.Net.dll /reference:System.Web.dll \
@@ -23,11 +21,6 @@ dist:
 	@cd dist && mkdir -p $(DIR_NAME) && cp ../$(BIN_DIR)/pdfcrowd.dll $(DIR_NAME) && zip pdfcrowd.zip $(DIR_NAME)/*
 
 publish:
+	sudo nuget update -self
 	nuget pack
-	@if [ $(NUGET_VALID) -eq 0 ]; then \
-		nuget push Pdfcrowd.Official.4.5.0.nupkg -Source https://www.nuget.org/api/v2/package -ApiKey $(API_KEY) ; \
-	else \
-		echo ; \
-		echo Not valid nuget version, upload Pdfcrowd.Official.4.5.0.nupkg manually to https://www.nuget.org/packages/manage/upload ; \
-		echo ; \
-	fi
+	nuget push Pdfcrowd.Official.4.5.0.nupkg -Source https://www.nuget.org/api/v2/package -ApiKey $(API_KEY)
