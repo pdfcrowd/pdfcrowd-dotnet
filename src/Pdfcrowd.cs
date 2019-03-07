@@ -63,7 +63,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "4.5.0";
+        public static readonly string CLIENT_VERSION = "4.6.0";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -74,7 +74,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/4.5.0 (http://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/4.6.0 (http://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -2446,6 +2446,21 @@ namespace pdfcrowd
                 throw new Error(ConnectionHelper.createInvalidValueMessage(screenshotHeight, "screenshot_height", "html-to-image", "Must be a positive integer number.", "set_screenshot_height"), 470);
             
             fields["screenshot_height"] = ConnectionHelper.intToString(screenshotHeight);
+            return this;
+        }
+
+        /**
+        * Set the scaling factor (zoom) for the output image.
+        *
+        * @param scaleFactor The percentage value. Must be a positive integer number.
+        * @return The converter object.
+        */
+        public HtmlToImageClient setScaleFactor(int scaleFactor)
+        {
+            if (!(scaleFactor > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(scaleFactor, "scale_factor", "html-to-image", "Must be a positive integer number.", "set_scale_factor"), 470);
+            
+            fields["scale_factor"] = ConnectionHelper.intToString(scaleFactor);
             return this;
         }
 

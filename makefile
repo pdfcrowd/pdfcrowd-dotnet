@@ -1,6 +1,6 @@
 .PHONY : dist clean
 
-DIR_NAME := pdfcrowd-4.5.0
+DIR_NAME := pdfcrowd-4.6.0
 COMPILER := mcs
 BIN_DIR := bin
 OUT := $(BIN_DIR)/pdfcrowd.dll
@@ -23,4 +23,4 @@ dist:
 publish:
 	sudo nuget update -self
 	nuget pack
-	nuget push Pdfcrowd.Official.4.5.0.nupkg -Source https://www.nuget.org/api/v2/package -ApiKey $(API_KEY)
+	nuget push Pdfcrowd.Official.4.6.0.nupkg -Source https://www.nuget.org/api/v2/package -ApiKey $(API_KEY)
