@@ -63,7 +63,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "4.6.0";
+        public static readonly string CLIENT_VERSION = "4.7.0";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -74,7 +74,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/4.6.0 (http://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/4.7.0 (http://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -1347,6 +1347,21 @@ namespace pdfcrowd
                 throw new Error(ConnectionHelper.createInvalidValueMessage(renderingMode, "rendering_mode", "html-to-pdf", "Allowed values are default, viewport.", "set_rendering_mode"), 470);
             
             fields["rendering_mode"] = renderingMode;
+            return this;
+        }
+
+        /**
+        * Specifies the scaling mode used for fitting the HTML contents to the print area.
+        *
+        * @param smartScalingMode The smart scaling mode. Allowed values are default, disabled, viewport-fit, content-fit, single-page-fit.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setSmartScalingMode(string smartScalingMode)
+        {
+            if (!Regex.Match(smartScalingMode, "(?i)^(default|disabled|viewport-fit|content-fit|single-page-fit)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(smartScalingMode, "smart_scaling_mode", "html-to-pdf", "Allowed values are default, disabled, viewport-fit, content-fit, single-page-fit.", "set_smart_scaling_mode"), 470);
+            
+            fields["smart_scaling_mode"] = smartScalingMode;
             return this;
         }
 
