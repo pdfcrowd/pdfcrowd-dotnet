@@ -63,7 +63,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "4.7.0";
+        public static readonly string CLIENT_VERSION = "4.8.0";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -74,7 +74,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/4.7.0 (http://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/4.8.0 (http://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -1005,6 +1005,84 @@ namespace pdfcrowd
         }
 
         /**
+        * Set the top left X coordinate of the content area.
+        *
+        * @param contentAreaX Can be specified in inches (in), millimeters (mm), centimeters (cm), or points (pt). It may contain a negative value.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setContentAreaX(string contentAreaX)
+        {
+            if (!Regex.Match(contentAreaX, "(?i)^\\-?[0-9]*(\\.[0-9]+)?(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(contentAreaX, "content_area_x", "html-to-pdf", "Can be specified in inches (in), millimeters (mm), centimeters (cm), or points (pt). It may contain a negative value.", "set_content_area_x"), 470);
+            
+            fields["content_area_x"] = contentAreaX;
+            return this;
+        }
+
+        /**
+        * Set the top left Y coordinate of the content area.
+        *
+        * @param contentAreaY Can be specified in inches (in), millimeters (mm), centimeters (cm), or points (pt). It may contain a negative value.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setContentAreaY(string contentAreaY)
+        {
+            if (!Regex.Match(contentAreaY, "(?i)^\\-?[0-9]*(\\.[0-9]+)?(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(contentAreaY, "content_area_y", "html-to-pdf", "Can be specified in inches (in), millimeters (mm), centimeters (cm), or points (pt). It may contain a negative value.", "set_content_area_y"), 470);
+            
+            fields["content_area_y"] = contentAreaY;
+            return this;
+        }
+
+        /**
+        * Set the width of the content area. It should be at least 1 inch.
+        *
+        * @param contentAreaWidth Can be specified in inches (in), millimeters (mm), centimeters (cm), or points (pt).
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setContentAreaWidth(string contentAreaWidth)
+        {
+            if (!Regex.Match(contentAreaWidth, "(?i)^[0-9]*(\\.[0-9]+)?(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(contentAreaWidth, "content_area_width", "html-to-pdf", "Can be specified in inches (in), millimeters (mm), centimeters (cm), or points (pt).", "set_content_area_width"), 470);
+            
+            fields["content_area_width"] = contentAreaWidth;
+            return this;
+        }
+
+        /**
+        * Set the height of the content area. It should be at least 1 inch.
+        *
+        * @param contentAreaHeight Can be specified in inches (in), millimeters (mm), centimeters (cm), or points (pt).
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setContentAreaHeight(string contentAreaHeight)
+        {
+            if (!Regex.Match(contentAreaHeight, "(?i)^[0-9]*(\\.[0-9]+)?(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(contentAreaHeight, "content_area_height", "html-to-pdf", "Can be specified in inches (in), millimeters (mm), centimeters (cm), or points (pt).", "set_content_area_height"), 470);
+            
+            fields["content_area_height"] = contentAreaHeight;
+            return this;
+        }
+
+        /**
+        * Set the content area position and size. The content area enables to specify a web page area to be converted.
+        *
+        * @param x Set the top left X coordinate of the content area. Can be specified in inches (in), millimeters (mm), centimeters (cm), or points (pt). It may contain a negative value.
+        * @param y Set the top left Y coordinate of the content area. Can be specified in inches (in), millimeters (mm), centimeters (cm), or points (pt). It may contain a negative value.
+        * @param width Set the width of the content area. It should be at least 1 inch. Can be specified in inches (in), millimeters (mm), centimeters (cm), or points (pt).
+        * @param height Set the height of the content area. It should be at least 1 inch. Can be specified in inches (in), millimeters (mm), centimeters (cm), or points (pt).
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setContentArea(string x, string y, string width, string height)
+        {
+            this.setContentAreaX(x);
+            this.setContentAreaY(y);
+            this.setContentAreaWidth(width);
+            this.setContentAreaHeight(height);
+            return this;
+        }
+
+        /**
         * Do not print the background graphics.
         *
         * @param noBackground Set to <span class='field-value'>true</span> to disable the background graphics.
@@ -1187,7 +1265,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Run a custom JavaScript after the document is loaded and ready to print. The script is intended for post-load DOM manipulation (add/remove elements, update CSS, ...). The custom JavaScript can use helper functions from our <a href='/doc/api/libpdfcrowd/'>JavaScript library</a>.
+        * Run a custom JavaScript after the document is loaded and ready to print. The script is intended for post-load DOM manipulation (add/remove elements, update CSS, ...). In addition to the standard browser APIs, the custom JavaScript code can use helper functions from our <a href='/doc/api/libpdfcrowd/'>JavaScript library</a>.
         *
         * @param customJavascript A string containing a JavaScript code. The string must not be empty.
         * @return The converter object.
@@ -1202,7 +1280,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Run a custom JavaScript right after the document is loaded. The script is intended for early DOM manipulation. The custom JavaScript can use helper functions from our <a href='/doc/api/libpdfcrowd/'>JavaScript library</a>.
+        * Run a custom JavaScript right after the document is loaded. The script is intended for early DOM manipulation. In addition to the standard browser APIs, the custom JavaScript code can use helper functions from our <a href='/doc/api/libpdfcrowd/'>JavaScript library</a>.
         *
         * @param onLoadJavascript A string containing a JavaScript code. The string must not be empty.
         * @return The converter object.
@@ -2330,7 +2408,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Run a custom JavaScript after the document is loaded and ready to print. The script is intended for post-load DOM manipulation (add/remove elements, update CSS, ...). The custom JavaScript can use helper functions from our <a href='/doc/api/libpdfcrowd/'>JavaScript library</a>.
+        * Run a custom JavaScript after the document is loaded and ready to print. The script is intended for post-load DOM manipulation (add/remove elements, update CSS, ...). In addition to the standard browser APIs, the custom JavaScript code can use helper functions from our <a href='/doc/api/libpdfcrowd/'>JavaScript library</a>.
         *
         * @param customJavascript A string containing a JavaScript code. The string must not be empty.
         * @return The converter object.
@@ -2345,7 +2423,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Run a custom JavaScript right after the document is loaded. The script is intended for early DOM manipulation. The custom JavaScript can use helper functions from our <a href='/doc/api/libpdfcrowd/'>JavaScript library</a>.
+        * Run a custom JavaScript right after the document is loaded. The script is intended for early DOM manipulation. In addition to the standard browser APIs, the custom JavaScript code can use helper functions from our <a href='/doc/api/libpdfcrowd/'>JavaScript library</a>.
         *
         * @param onLoadJavascript A string containing a JavaScript code. The string must not be empty.
         * @return The converter object.
