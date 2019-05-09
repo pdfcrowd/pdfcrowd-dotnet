@@ -568,17 +568,7 @@ namespace pdfcrowd
     private static string boundary = "----------ThIs_Is_tHe_bOUnDary_$";
     private static string multipart_content_type = "multipart/form-data; boundary=" + boundary;
     private static string new_line = "\r\n";
-    
-    private static string get_mime_type(string fileName)
-    {
-      string mimeType = "application/octet-stream";
-      string ext = System.IO.Path.GetExtension(fileName).ToLower();
-      Microsoft.Win32.RegistryKey regKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(ext);
-      if(regKey != null && regKey.GetValue("Content Type") != null)
-        mimeType = regKey.GetValue("Content Type").ToString();
-      return mimeType;
-    }
-    
+
     private byte[] encode_multipart_post_data(string filename)
     {
       MemoryStream memw = new MemoryStream();
@@ -599,7 +589,7 @@ namespace pdfcrowd
       // filename
       result += "--" + boundary + new_line;
       result += String.Format("Content-Disposition: form-data; name=\"src\"; filename=\"{0}\"", filename) + new_line;
-      result += "Content-Type: " + get_mime_type(filename) + new_line;
+      result += "Content-Type: application/octet-stream" + new_line;
       result += new_line;
       retval.Write(utf8.GetBytes(result));
       // filename contents

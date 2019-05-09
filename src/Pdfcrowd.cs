@@ -63,7 +63,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "4.8.0";
+        public static readonly string CLIENT_VERSION = "4.8.1";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -74,7 +74,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/4.8.0 (http://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/4.8.1 (http://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -110,6 +110,20 @@ namespace pdfcrowd
                     return;
                 output.Write(buffer, 0, read);
             }
+        }
+
+        private static bool IsSslException(WebException why)
+        {
+            if(why.Status == WebExceptionStatus.TrustFailure ||
+               why.Status == WebExceptionStatus.SecureChannelFailure)
+            {
+                return true;
+            }
+
+            return why.Status == WebExceptionStatus.UnknownError &&
+                   why.InnerException != null &&
+                   why.InnerException.Message.StartsWith(
+                       "The SSL connection could not be established");
         }
 
         private WebRequest getConnection()
@@ -195,65 +209,74 @@ namespace pdfcrowd
                 using(Stream dataStream = request.GetRequestStream())
                 {
                     dataStream.Write(byteArray, 0, byteArray.Length);
+                    dataStream.Flush();
+                    dataStream.Close();
                 }
 
                 // Get the response.
-                HttpWebResponse response = (HttpWebResponse) request.GetResponse();
-
-                debugLogUrl = getStringHeader(response, "X-Pdfcrowd-Debug-Log");
-                credits = getIntHeader(response, "X-Pdfcrowd-Remaining-Credits", 999999);
-                consumedCredits = getIntHeader(response, "X-Pdfcrowd-Consumed-Credits");
-                jobId = getStringHeader(response, "X-Pdfcrowd-Job-Id");
-                pageCount = getIntHeader(response, "X-Pdfcrowd-Pages");
-                outputSize = getIntHeader(response, "X-Pdfcrowd-Output-Size");
-
-                if(Environment.GetEnvironmentVariable("PDFCROWD_UNIT_TEST_MODE") != null &&
-                    retryCount > retry) {
-                    throw new Error("test 502", 502);
-                }
-
-                if(response.StatusCode == HttpStatusCode.OK)
+                using(HttpWebResponse response = (HttpWebResponse) request.GetResponse())
                 {
-                    // Get the stream containing content returned by the server.
-                    using(Stream dataStream = response.GetResponseStream())
-                    {
-                        if(outStream != null)
-                        {
-                            CopyStream(dataStream, outStream);
-                            outStream.Position = 0;
-                            return null;
-                        }
+                    debugLogUrl = getStringHeader(response, "X-Pdfcrowd-Debug-Log");
+                    credits = getIntHeader(response, "X-Pdfcrowd-Remaining-Credits", 999999);
+                    consumedCredits = getIntHeader(response, "X-Pdfcrowd-Consumed-Credits");
+                    jobId = getStringHeader(response, "X-Pdfcrowd-Job-Id");
+                    pageCount = getIntHeader(response, "X-Pdfcrowd-Pages");
+                    outputSize = getIntHeader(response, "X-Pdfcrowd-Output-Size");
 
-                        using(MemoryStream output = new MemoryStream())
+                    if(Environment.GetEnvironmentVariable("PDFCROWD_UNIT_TEST_MODE") != null &&
+                        retryCount > retry) {
+                        throw new Error("test 502", 502);
+                    }
+
+                    if(response.StatusCode == HttpStatusCode.OK)
+                    {
+                        // Get the stream containing content returned by the server.
+                        using(Stream dataStream = response.GetResponseStream())
                         {
-                            CopyStream(dataStream, output);
-                            return output.ToArray();
+                            if(outStream != null)
+                            {
+                                CopyStream(dataStream, outStream);
+                                outStream.Position = 0;
+                                return null;
+                            }
+
+                            using(MemoryStream output = new MemoryStream())
+                            {
+                                CopyStream(dataStream, output);
+                                return output.ToArray();
+                            }
                         }
                     }
-                }
-                else
-                {
-                    throw new Error(response.StatusDescription, response.StatusCode);
+                    else
+                    {
+                        throw new Error(response.StatusDescription, response.StatusCode);
+                    }
                 }
             }
             catch(WebException why)
             {
-                if(why.Status == WebExceptionStatus.TrustFailure ||
-                   why.Status == WebExceptionStatus.SecureChannelFailure) {
+                if(IsSslException(why))
+                {
                    throw new Error("There was a problem connecting to Pdfcrowd servers over HTTPS:\n" +
                                    why.Message +
                                    "\nYou can still use the API over HTTP, you just need to add the following line right after Pdfcrowd client initialization:\nclient.setUseHttp(true);",
                                    481);
                 }
+
                 if (why.Response != null && why.Status == WebExceptionStatus.ProtocolError)
                 {
                     HttpWebResponse response = (HttpWebResponse)why.Response;
 
-                    MemoryStream stream = new MemoryStream();
-                    CopyStream(response.GetResponseStream(), stream);
-                    stream.Position = 0;
-                    string err = readStream(stream);
-                    throw new Error(err, response.StatusCode);
+                    using(MemoryStream stream = new MemoryStream())
+                    {
+                        using(Stream dataStream = response.GetResponseStream())
+                        {
+                            CopyStream(dataStream, stream);
+                            stream.Position = 0;
+                            string err = readStream(stream);
+                            throw new Error(err, response.StatusCode);
+                        }
+                    }
                 }
 
                 string innerException = "";
@@ -1280,7 +1303,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Run a custom JavaScript right after the document is loaded. The script is intended for early DOM manipulation. In addition to the standard browser APIs, the custom JavaScript code can use helper functions from our <a href='/doc/api/libpdfcrowd/'>JavaScript library</a>.
+        * Run a custom JavaScript right after the document is loaded. The script is intended for early DOM manipulation (add/remove elements, update CSS, ...). In addition to the standard browser APIs, the custom JavaScript code can use helper functions from our <a href='/doc/api/libpdfcrowd/'>JavaScript library</a>.
         *
         * @param onLoadJavascript A string containing a JavaScript code. The string must not be empty.
         * @return The converter object.
@@ -2423,7 +2446,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Run a custom JavaScript right after the document is loaded. The script is intended for early DOM manipulation. In addition to the standard browser APIs, the custom JavaScript code can use helper functions from our <a href='/doc/api/libpdfcrowd/'>JavaScript library</a>.
+        * Run a custom JavaScript right after the document is loaded. The script is intended for early DOM manipulation (add/remove elements, update CSS, ...). In addition to the standard browser APIs, the custom JavaScript code can use helper functions from our <a href='/doc/api/libpdfcrowd/'>JavaScript library</a>.
         *
         * @param onLoadJavascript A string containing a JavaScript code. The string must not be empty.
         * @return The converter object.

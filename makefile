@@ -1,27 +1,22 @@
-.PHONY : dist clean
+.PHONY : dist clean compile publish
 
-DIR_NAME := pdfcrowd-4.8.0
-COMPILER := mcs
+DIR_NAME := pdfcrowd-4.8.1
 BIN_DIR := bin
-OUT := $(BIN_DIR)/pdfcrowd.dll
-DOT_NET_VERSION := 2
 
 compile:
-	@mkdir -p $(BIN_DIR)
-	$(COMPILER) -t:library -sdk:$(DOT_NET_VERSION) /reference:System.Net.dll /reference:System.Web.dll \
-		-out:$(OUT) -keyfile:../Pdfcrowd.snk \
-		src/AssemblyInfo.cs src/Client.cs src/Error.cs src/Pdfcrowd.cs
+	./build
 
 clean:
-	@rm -rf dist
 	@rm -rf $(BIN_DIR)
+	./build -target=Clean
 
 dist:
+	@rm -rf dist
 	@mkdir -p dist
-	@cd dist && mkdir -p $(DIR_NAME) && cp ../$(BIN_DIR)/pdfcrowd.dll $(DIR_NAME) && zip pdfcrowd.zip $(DIR_NAME)/*
+	@cd dist && mkdir -p $(DIR_NAME) && cp -R ../$(BIN_DIR)/Release/* $(DIR_NAME) && zip -r pdfcrowd.zip $(DIR_NAME)/*
 
 publish:
 	sudo nuget update -self
 	sudo rm -rf /tmp/NuGetScratch/lock
 	nuget pack
-	nuget push Pdfcrowd.Official.4.8.0.nupkg -Source https://www.nuget.org/api/v2/package -ApiKey $(API_KEY)
+	nuget push Pdfcrowd.Official.4.8.1.nupkg -Source https://www.nuget.org/api/v2/package -ApiKey $(API_KEY)

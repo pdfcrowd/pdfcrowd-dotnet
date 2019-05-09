@@ -7,7 +7,6 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle( "pdfcrowd" )]
 [assembly: AssemblyDescription( "" )]
-[assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "pdfcrowd" )]
 [assembly: AssemblyProduct( "pdfcrowd" )]
 [assembly: AssemblyCopyright( "Copyright © pdfcrowd 2010" )]
@@ -31,5 +30,27 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion( "4.8.0" )]
-[assembly: AssemblyFileVersion( "4.8.0" )]
+[assembly: AssemblyVersion( "4.8.1" )]
+[assembly: AssemblyFileVersion( "4.8.1" )]
+
+#if DEBUG
+#if NET20
+[assembly: AssemblyConfiguration(".NET Framework 2.0 Debug")]
+#elif NETSTANDARD2_0
+[assembly: AssemblyConfiguration(".NET Standard 2.0 Debug")]
+#elif NETCOREAPP2_0
+[assembly: AssemblyConfiguration(".NET Core 2.0 Debug")]
+#else
+#error Missing AssemblyConfiguration attribute.
+#endif
+#else
+#if NET20
+[assembly: AssemblyConfiguration(".NET Framework 2.0")]
+#elif NETSTANDARD2_0
+[assembly: AssemblyConfiguration(".NET Standard 2.0")]
+#elif NETCOREAPP2_0
+[assembly: AssemblyConfiguration(".NET Core 2.0")]
+#else
+#error Missing AssemblyConfiguration attribute.
+#endif
+#endif
