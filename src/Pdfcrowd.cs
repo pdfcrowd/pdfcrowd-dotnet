@@ -63,7 +63,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "4.8.1";
+        public static readonly string CLIENT_VERSION = "4.9.0";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -74,7 +74,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/4.8.1 (http://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/4.9.0 (http://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -911,81 +911,6 @@ namespace pdfcrowd
         }
 
         /**
-        * The page background color in RGB or RGBA hexadecimal format. The color fills the entire page regardless of the margins.
-        *
-        * @param pageBackgroundColor The value must be in RRGGBB or RRGGBBAA hexadecimal format.
-        * @return The converter object.
-        */
-        public HtmlToPdfClient setPageBackgroundColor(string pageBackgroundColor)
-        {
-            if (!Regex.Match(pageBackgroundColor, "^[0-9a-fA-F]{6,8}$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(pageBackgroundColor, "page_background_color", "html-to-pdf", "The value must be in RRGGBB or RRGGBBAA hexadecimal format.", "set_page_background_color"), 470);
-            
-            fields["page_background_color"] = pageBackgroundColor;
-            return this;
-        }
-
-        /**
-        * Apply the first page of the watermark PDF to every page of the output PDF.
-        *
-        * @param pageWatermark The file path to a local watermark PDF file. The file must exist and not be empty.
-        * @return The converter object.
-        */
-        public HtmlToPdfClient setPageWatermark(string pageWatermark)
-        {
-            if (!(File.Exists(pageWatermark) && new FileInfo(pageWatermark).Length > 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(pageWatermark, "page_watermark", "html-to-pdf", "The file must exist and not be empty.", "set_page_watermark"), 470);
-            
-            files["page_watermark"] = pageWatermark;
-            return this;
-        }
-
-        /**
-        * Apply each page of the specified watermark PDF to the corresponding page of the output PDF.
-        *
-        * @param multipageWatermark The file path to a local watermark PDF file. The file must exist and not be empty.
-        * @return The converter object.
-        */
-        public HtmlToPdfClient setMultipageWatermark(string multipageWatermark)
-        {
-            if (!(File.Exists(multipageWatermark) && new FileInfo(multipageWatermark).Length > 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(multipageWatermark, "multipage_watermark", "html-to-pdf", "The file must exist and not be empty.", "set_multipage_watermark"), 470);
-            
-            files["multipage_watermark"] = multipageWatermark;
-            return this;
-        }
-
-        /**
-        * Apply the first page of the specified PDF to the background of every page of the output PDF.
-        *
-        * @param pageBackground The file path to a local background PDF file. The file must exist and not be empty.
-        * @return The converter object.
-        */
-        public HtmlToPdfClient setPageBackground(string pageBackground)
-        {
-            if (!(File.Exists(pageBackground) && new FileInfo(pageBackground).Length > 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(pageBackground, "page_background", "html-to-pdf", "The file must exist and not be empty.", "set_page_background"), 470);
-            
-            files["page_background"] = pageBackground;
-            return this;
-        }
-
-        /**
-        * Apply each page of the specified PDF to the background of the corresponding page of the output PDF.
-        *
-        * @param multipageBackground The file path to a local background PDF file. The file must exist and not be empty.
-        * @return The converter object.
-        */
-        public HtmlToPdfClient setMultipageBackground(string multipageBackground)
-        {
-            if (!(File.Exists(multipageBackground) && new FileInfo(multipageBackground).Length > 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(multipageBackground, "multipage_background", "html-to-pdf", "The file must exist and not be empty.", "set_multipage_background"), 470);
-            
-            files["multipage_background"] = multipageBackground;
-            return this;
-        }
-
-        /**
         * The page header is not printed on the specified pages.
         *
         * @param pages List of physical page numbers. Negative numbers count backwards from the last page: -1 is the last page, -2 is the last but one page, and so on. A comma seperated list of page numbers.
@@ -1102,6 +1027,81 @@ namespace pdfcrowd
             this.setContentAreaY(y);
             this.setContentAreaWidth(width);
             this.setContentAreaHeight(height);
+            return this;
+        }
+
+        /**
+        * Apply the first page of the watermark PDF to every page of the output PDF.
+        *
+        * @param pageWatermark The file path to a local watermark PDF file. The file must exist and not be empty.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setPageWatermark(string pageWatermark)
+        {
+            if (!(File.Exists(pageWatermark) && new FileInfo(pageWatermark).Length > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(pageWatermark, "page_watermark", "html-to-pdf", "The file must exist and not be empty.", "set_page_watermark"), 470);
+            
+            files["page_watermark"] = pageWatermark;
+            return this;
+        }
+
+        /**
+        * Apply each page of the specified watermark PDF to the corresponding page of the output PDF.
+        *
+        * @param multipageWatermark The file path to a local watermark PDF file. The file must exist and not be empty.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setMultipageWatermark(string multipageWatermark)
+        {
+            if (!(File.Exists(multipageWatermark) && new FileInfo(multipageWatermark).Length > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(multipageWatermark, "multipage_watermark", "html-to-pdf", "The file must exist and not be empty.", "set_multipage_watermark"), 470);
+            
+            files["multipage_watermark"] = multipageWatermark;
+            return this;
+        }
+
+        /**
+        * Apply the first page of the specified PDF to the background of every page of the output PDF.
+        *
+        * @param pageBackground The file path to a local background PDF file. The file must exist and not be empty.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setPageBackground(string pageBackground)
+        {
+            if (!(File.Exists(pageBackground) && new FileInfo(pageBackground).Length > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(pageBackground, "page_background", "html-to-pdf", "The file must exist and not be empty.", "set_page_background"), 470);
+            
+            files["page_background"] = pageBackground;
+            return this;
+        }
+
+        /**
+        * Apply each page of the specified PDF to the background of the corresponding page of the output PDF.
+        *
+        * @param multipageBackground The file path to a local background PDF file. The file must exist and not be empty.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setMultipageBackground(string multipageBackground)
+        {
+            if (!(File.Exists(multipageBackground) && new FileInfo(multipageBackground).Length > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(multipageBackground, "multipage_background", "html-to-pdf", "The file must exist and not be empty.", "set_multipage_background"), 470);
+            
+            files["multipage_background"] = multipageBackground;
+            return this;
+        }
+
+        /**
+        * The page background color in RGB or RGBA hexadecimal format. The color fills the entire page regardless of the margins.
+        *
+        * @param pageBackgroundColor The value must be in RRGGBB or RRGGBBAA hexadecimal format.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setPageBackgroundColor(string pageBackgroundColor)
+        {
+            if (!Regex.Match(pageBackgroundColor, "^[0-9a-fA-F]{6,8}$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(pageBackgroundColor, "page_background_color", "html-to-pdf", "The value must be in RRGGBB or RRGGBBAA hexadecimal format.", "set_page_background_color"), 470);
+            
+            fields["page_background_color"] = pageBackgroundColor;
             return this;
         }
 
@@ -3247,6 +3247,309 @@ namespace pdfcrowd
             
             rawData["f_" + ConnectionHelper.intToString(fileId)] = pdfRawData;
             fileId++;
+            return this;
+        }
+
+        /**
+        * Apply the first page of the watermark PDF to every page of the output PDF.
+        *
+        * @param pageWatermark The file path to a local watermark PDF file. The file must exist and not be empty.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setPageWatermark(string pageWatermark)
+        {
+            if (!(File.Exists(pageWatermark) && new FileInfo(pageWatermark).Length > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(pageWatermark, "page_watermark", "pdf-to-pdf", "The file must exist and not be empty.", "set_page_watermark"), 470);
+            
+            files["page_watermark"] = pageWatermark;
+            return this;
+        }
+
+        /**
+        * Apply each page of the specified watermark PDF to the corresponding page of the output PDF.
+        *
+        * @param multipageWatermark The file path to a local watermark PDF file. The file must exist and not be empty.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setMultipageWatermark(string multipageWatermark)
+        {
+            if (!(File.Exists(multipageWatermark) && new FileInfo(multipageWatermark).Length > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(multipageWatermark, "multipage_watermark", "pdf-to-pdf", "The file must exist and not be empty.", "set_multipage_watermark"), 470);
+            
+            files["multipage_watermark"] = multipageWatermark;
+            return this;
+        }
+
+        /**
+        * Apply the first page of the specified PDF to the background of every page of the output PDF.
+        *
+        * @param pageBackground The file path to a local background PDF file. The file must exist and not be empty.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setPageBackground(string pageBackground)
+        {
+            if (!(File.Exists(pageBackground) && new FileInfo(pageBackground).Length > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(pageBackground, "page_background", "pdf-to-pdf", "The file must exist and not be empty.", "set_page_background"), 470);
+            
+            files["page_background"] = pageBackground;
+            return this;
+        }
+
+        /**
+        * Apply each page of the specified PDF to the background of the corresponding page of the output PDF.
+        *
+        * @param multipageBackground The file path to a local background PDF file. The file must exist and not be empty.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setMultipageBackground(string multipageBackground)
+        {
+            if (!(File.Exists(multipageBackground) && new FileInfo(multipageBackground).Length > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(multipageBackground, "multipage_background", "pdf-to-pdf", "The file must exist and not be empty.", "set_multipage_background"), 470);
+            
+            files["multipage_background"] = multipageBackground;
+            return this;
+        }
+
+        /**
+        * Create linearized PDF. This is also known as Fast Web View.
+        *
+        * @param linearize Set to <span class='field-value'>true</span> to create linearized PDF.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setLinearize(bool linearize)
+        {
+            fields["linearize"] = linearize ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Encrypt the PDF. This prevents search engines from indexing the contents.
+        *
+        * @param encrypt Set to <span class='field-value'>true</span> to enable PDF encryption.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setEncrypt(bool encrypt)
+        {
+            fields["encrypt"] = encrypt ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Protect the PDF with a user password. When a PDF has a user password, it must be supplied in order to view the document and to perform operations allowed by the access permissions.
+        *
+        * @param userPassword The user password.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setUserPassword(string userPassword)
+        {
+            fields["user_password"] = userPassword;
+            return this;
+        }
+
+        /**
+        * Protect the PDF with an owner password.  Supplying an owner password grants unlimited access to the PDF including changing the passwords and access permissions.
+        *
+        * @param ownerPassword The owner password.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setOwnerPassword(string ownerPassword)
+        {
+            fields["owner_password"] = ownerPassword;
+            return this;
+        }
+
+        /**
+        * Disallow printing of the output PDF.
+        *
+        * @param noPrint Set to <span class='field-value'>true</span> to set the no-print flag in the output PDF.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setNoPrint(bool noPrint)
+        {
+            fields["no_print"] = noPrint ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Disallow modification of the ouput PDF.
+        *
+        * @param noModify Set to <span class='field-value'>true</span> to set the read-only only flag in the output PDF.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setNoModify(bool noModify)
+        {
+            fields["no_modify"] = noModify ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Disallow text and graphics extraction from the output PDF.
+        *
+        * @param noCopy Set to <span class='field-value'>true</span> to set the no-copy flag in the output PDF.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setNoCopy(bool noCopy)
+        {
+            fields["no_copy"] = noCopy ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Specify the page layout to be used when the document is opened.
+        *
+        * @param pageLayout Allowed values are single-page, one-column, two-column-left, two-column-right.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setPageLayout(string pageLayout)
+        {
+            if (!Regex.Match(pageLayout, "(?i)^(single-page|one-column|two-column-left|two-column-right)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(pageLayout, "page_layout", "pdf-to-pdf", "Allowed values are single-page, one-column, two-column-left, two-column-right.", "set_page_layout"), 470);
+            
+            fields["page_layout"] = pageLayout;
+            return this;
+        }
+
+        /**
+        * Specify how the document should be displayed when opened.
+        *
+        * @param pageMode Allowed values are full-screen, thumbnails, outlines.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setPageMode(string pageMode)
+        {
+            if (!Regex.Match(pageMode, "(?i)^(full-screen|thumbnails|outlines)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(pageMode, "page_mode", "pdf-to-pdf", "Allowed values are full-screen, thumbnails, outlines.", "set_page_mode"), 470);
+            
+            fields["page_mode"] = pageMode;
+            return this;
+        }
+
+        /**
+        * Specify how the page should be displayed when opened.
+        *
+        * @param initialZoomType Allowed values are fit-width, fit-height, fit-page.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setInitialZoomType(string initialZoomType)
+        {
+            if (!Regex.Match(initialZoomType, "(?i)^(fit-width|fit-height|fit-page)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(initialZoomType, "initial_zoom_type", "pdf-to-pdf", "Allowed values are fit-width, fit-height, fit-page.", "set_initial_zoom_type"), 470);
+            
+            fields["initial_zoom_type"] = initialZoomType;
+            return this;
+        }
+
+        /**
+        * Display the specified page when the document is opened.
+        *
+        * @param initialPage Must be a positive integer number.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setInitialPage(int initialPage)
+        {
+            if (!(initialPage > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(initialPage, "initial_page", "pdf-to-pdf", "Must be a positive integer number.", "set_initial_page"), 470);
+            
+            fields["initial_page"] = ConnectionHelper.intToString(initialPage);
+            return this;
+        }
+
+        /**
+        * Specify the initial page zoom in percents when the document is opened.
+        *
+        * @param initialZoom Must be a positive integer number.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setInitialZoom(int initialZoom)
+        {
+            if (!(initialZoom > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(initialZoom, "initial_zoom", "pdf-to-pdf", "Must be a positive integer number.", "set_initial_zoom"), 470);
+            
+            fields["initial_zoom"] = ConnectionHelper.intToString(initialZoom);
+            return this;
+        }
+
+        /**
+        * Specify whether to hide the viewer application's tool bars when the document is active.
+        *
+        * @param hideToolbar Set to <span class='field-value'>true</span> to hide tool bars.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setHideToolbar(bool hideToolbar)
+        {
+            fields["hide_toolbar"] = hideToolbar ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Specify whether to hide the viewer application's menu bar when the document is active.
+        *
+        * @param hideMenubar Set to <span class='field-value'>true</span> to hide the menu bar.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setHideMenubar(bool hideMenubar)
+        {
+            fields["hide_menubar"] = hideMenubar ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Specify whether to hide user interface elements in the document's window (such as scroll bars and navigation controls), leaving only the document's contents displayed.
+        *
+        * @param hideWindowUi Set to <span class='field-value'>true</span> to hide ui elements.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setHideWindowUi(bool hideWindowUi)
+        {
+            fields["hide_window_ui"] = hideWindowUi ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Specify whether to resize the document's window to fit the size of the first displayed page.
+        *
+        * @param fitWindow Set to <span class='field-value'>true</span> to resize the window.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setFitWindow(bool fitWindow)
+        {
+            fields["fit_window"] = fitWindow ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Specify whether to position the document's window in the center of the screen.
+        *
+        * @param centerWindow Set to <span class='field-value'>true</span> to center the window.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setCenterWindow(bool centerWindow)
+        {
+            fields["center_window"] = centerWindow ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Specify whether the window's title bar should display the document title. If false , the title bar should instead display the name of the PDF file containing the document.
+        *
+        * @param displayTitle Set to <span class='field-value'>true</span> to display the title.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setDisplayTitle(bool displayTitle)
+        {
+            fields["display_title"] = displayTitle ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Set the predominant reading order for text to right-to-left. This option has no direct effect on the document's contents or page numbering but can be used to determine the relative positioning of pages when displayed side by side or printed n-up
+        *
+        * @param rightToLeft Set to <span class='field-value'>true</span> to set right-to-left reading order.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setRightToLeft(bool rightToLeft)
+        {
+            fields["right_to_left"] = rightToLeft ? "true" : null;
             return this;
         }
 
