@@ -22,7 +22,7 @@ build/
 [Bb]in/
 [Oo]bj/
 .vs/
-tools
+tools/*
 !tools/packages.config
 
 # Enable "build/" folder in the NuGet Packages folder since NuGet packages use it for MSBuild targets

@@ -55,9 +55,6 @@ if [ ! -f "$TOOLS_DIR/packages.config" ]; then
     fi
 fi
 
-# temporary fix of new Nuget version error
-sed -i s/34.[0-9]/33.0/g "$TOOLS_DIR/packages.config"
-
 # Download NuGet if it does not exist.
 if [ ! -f "$NUGET_EXE" ]; then
     echo "Downloading NuGet..."
