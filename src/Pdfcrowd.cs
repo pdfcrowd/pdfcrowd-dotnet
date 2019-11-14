@@ -1383,7 +1383,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Wait the specified number of milliseconds to finish all JavaScript after the document is loaded. The maximum value is determined by your API license.
+        * Wait the specified number of milliseconds to finish all JavaScript after the document is loaded. Your API license defines the maximum wait time by "Max Delay" parameter.
         *
         * @param javascriptDelay The number of milliseconds to wait. Must be a positive integer number or 0.
         * @return The converter object.
@@ -2520,7 +2520,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Wait the specified number of milliseconds to finish all JavaScript after the document is loaded. The maximum value is determined by your API license.
+        * Wait the specified number of milliseconds to finish all JavaScript after the document is loaded. Your API license defines the maximum wait time by "Max Delay" parameter.
         *
         * @param javascriptDelay The number of milliseconds to wait. Must be a positive integer number or 0.
         * @return The converter object.
