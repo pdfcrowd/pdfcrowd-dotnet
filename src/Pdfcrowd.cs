@@ -428,7 +428,7 @@ namespace pdfcrowd
 
         internal static string createInvalidValueMessage(object value, string field, string converter, string hint, string id)
         {
-            string message = string.Format("Invalid value '{0}' for a field '{1}'.", value, field);
+            string message = string.Format("Invalid value '{0}' for the field '{1}'.", value, field);
             if(hint != null)
             {
                 message += " " + hint;
