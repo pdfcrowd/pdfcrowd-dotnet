@@ -63,7 +63,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "4.11.0";
+        public static readonly string CLIENT_VERSION = "4.12.0";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -74,7 +74,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/4.11.0 (http://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/4.12.0 (http://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -1017,6 +1017,105 @@ namespace pdfcrowd
             this.setContentAreaY(y);
             this.setContentAreaWidth(width);
             this.setContentAreaHeight(height);
+            return this;
+        }
+
+        /**
+        * Set the input data for template rendering. The data format can be JSON, XML, YAML or CSV.
+        *
+        * @param dataString The input data string.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setDataString(string dataString)
+        {
+            fields["data_string"] = dataString;
+            return this;
+        }
+
+        /**
+        * Load the input data for template rendering from the specified file. The data format can be JSON, XML, YAML or CSV.
+        *
+        * @param dataFile The file path to a local file containing the input data.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setDataFile(string dataFile)
+        {
+            files["data_file"] = dataFile;
+            return this;
+        }
+
+        /**
+        * Specify the input data format.
+        *
+        * @param dataFormat The data format. Allowed values are auto, json, xml, yaml, csv.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setDataFormat(string dataFormat)
+        {
+            if (!Regex.Match(dataFormat, "(?i)^(auto|json|xml|yaml|csv)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(dataFormat, "data_format", "html-to-pdf", "Allowed values are auto, json, xml, yaml, csv.", "set_data_format"), 470);
+            
+            fields["data_format"] = dataFormat;
+            return this;
+        }
+
+        /**
+        * Set the encoding of the data file set by <a href='#set_data_file'>setDataFile</a>.
+        *
+        * @param dataEncoding The data file encoding.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setDataEncoding(string dataEncoding)
+        {
+            fields["data_encoding"] = dataEncoding;
+            return this;
+        }
+
+        /**
+        * Ignore undefined variables in the HTML template. The default mode is strict so any undefined variable causes the conversion to fail. You can use <span class='field-value text-nowrap'>&#x007b;&#x0025; if variable is defined &#x0025;&#x007d;</span> to check if the variable is defined.
+        *
+        * @param dataIgnoreUndefined Set to <span class='field-value'>true</span> to ignore undefined variables.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setDataIgnoreUndefined(bool dataIgnoreUndefined)
+        {
+            fields["data_ignore_undefined"] = dataIgnoreUndefined ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Auto escape HTML symbols in the input data before placing them into the output.
+        *
+        * @param dataAutoEscape Set to <span class='field-value'>true</span> to turn auto escaping on.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setDataAutoEscape(bool dataAutoEscape)
+        {
+            fields["data_auto_escape"] = dataAutoEscape ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Auto trim whitespace around each template command block.
+        *
+        * @param dataTrimBlocks Set to <span class='field-value'>true</span> to turn auto trimming on.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setDataTrimBlocks(bool dataTrimBlocks)
+        {
+            fields["data_trim_blocks"] = dataTrimBlocks ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Set the advanced data options:<ul><li><span class='field-value'>csv_delimiter</span> - The CSV data delimiter, the default is <span class='field-value'>,</span>.</li><li><span class='field-value'>xml_remove_root</span> - Remove the root XML element from the input data.</li><li><span class='field-value'>data_root</span> - The name of the root element inserted into the input data without a root node (e.g. CSV), the default is <span class='field-value'>data</span>.</li></ul>
+        *
+        * @param dataOptions Comma separated list of options.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setDataOptions(string dataOptions)
+        {
+            fields["data_options"] = dataOptions;
             return this;
         }
 
@@ -2291,6 +2390,105 @@ namespace pdfcrowd
                 File.Delete(filePath);
                 throw;
             }
+        }
+
+        /**
+        * Set the input data for template rendering. The data format can be JSON, XML, YAML or CSV.
+        *
+        * @param dataString The input data string.
+        * @return The converter object.
+        */
+        public HtmlToImageClient setDataString(string dataString)
+        {
+            fields["data_string"] = dataString;
+            return this;
+        }
+
+        /**
+        * Load the input data for template rendering from the specified file. The data format can be JSON, XML, YAML or CSV.
+        *
+        * @param dataFile The file path to a local file containing the input data.
+        * @return The converter object.
+        */
+        public HtmlToImageClient setDataFile(string dataFile)
+        {
+            files["data_file"] = dataFile;
+            return this;
+        }
+
+        /**
+        * Specify the input data format.
+        *
+        * @param dataFormat The data format. Allowed values are auto, json, xml, yaml, csv.
+        * @return The converter object.
+        */
+        public HtmlToImageClient setDataFormat(string dataFormat)
+        {
+            if (!Regex.Match(dataFormat, "(?i)^(auto|json|xml|yaml|csv)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(dataFormat, "data_format", "html-to-image", "Allowed values are auto, json, xml, yaml, csv.", "set_data_format"), 470);
+            
+            fields["data_format"] = dataFormat;
+            return this;
+        }
+
+        /**
+        * Set the encoding of the data file set by <a href='#set_data_file'>setDataFile</a>.
+        *
+        * @param dataEncoding The data file encoding.
+        * @return The converter object.
+        */
+        public HtmlToImageClient setDataEncoding(string dataEncoding)
+        {
+            fields["data_encoding"] = dataEncoding;
+            return this;
+        }
+
+        /**
+        * Ignore undefined variables in the HTML template. The default mode is strict so any undefined variable causes the conversion to fail. You can use <span class='field-value text-nowrap'>&#x007b;&#x0025; if variable is defined &#x0025;&#x007d;</span> to check if the variable is defined.
+        *
+        * @param dataIgnoreUndefined Set to <span class='field-value'>true</span> to ignore undefined variables.
+        * @return The converter object.
+        */
+        public HtmlToImageClient setDataIgnoreUndefined(bool dataIgnoreUndefined)
+        {
+            fields["data_ignore_undefined"] = dataIgnoreUndefined ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Auto escape HTML symbols in the input data before placing them into the output.
+        *
+        * @param dataAutoEscape Set to <span class='field-value'>true</span> to turn auto escaping on.
+        * @return The converter object.
+        */
+        public HtmlToImageClient setDataAutoEscape(bool dataAutoEscape)
+        {
+            fields["data_auto_escape"] = dataAutoEscape ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Auto trim whitespace around each template command block.
+        *
+        * @param dataTrimBlocks Set to <span class='field-value'>true</span> to turn auto trimming on.
+        * @return The converter object.
+        */
+        public HtmlToImageClient setDataTrimBlocks(bool dataTrimBlocks)
+        {
+            fields["data_trim_blocks"] = dataTrimBlocks ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Set the advanced data options:<ul><li><span class='field-value'>csv_delimiter</span> - The CSV data delimiter, the default is <span class='field-value'>,</span>.</li><li><span class='field-value'>xml_remove_root</span> - Remove the root XML element from the input data.</li><li><span class='field-value'>data_root</span> - The name of the root element inserted into the input data without a root node (e.g. CSV), the default is <span class='field-value'>data</span>.</li></ul>
+        *
+        * @param dataOptions Comma separated list of options.
+        * @return The converter object.
+        */
+        public HtmlToImageClient setDataOptions(string dataOptions)
+        {
+            fields["data_options"] = dataOptions;
+            return this;
         }
 
         /**
