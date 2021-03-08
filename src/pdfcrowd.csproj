@@ -10,6 +10,7 @@
     <Features>strict</Features>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <OutputPath>..\bin\$(Configuration)\</OutputPath>
+    <PathMap>$(MSBuildProjectDirectory)=src</PathMap>
     <!-- <GenerateDocumentationFile>true</GenerateDocumentationFile> -->
   </PropertyGroup>
 
