@@ -64,7 +64,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "5.0.0";
+        public static readonly string CLIENT_VERSION = "5.1.0";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -75,7 +75,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/5.0.0 (http://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/5.1.0 (https://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -102,7 +102,7 @@ namespace pdfcrowd
             return value.ToString(numericInfo);
         }
 
-        private static void CopyStream(Stream input, Stream output)
+        public static void CopyStream(Stream input, Stream output)
         {
             byte[] buffer = new byte[32768];
             while(true)
@@ -112,6 +112,13 @@ namespace pdfcrowd
                     return;
                 output.Write(buffer, 0, read);
             }
+        }
+
+        internal static byte[] ReadStream(Stream inStream)
+        {
+            var memStream = new MemoryStream();
+            CopyStream(inStream, memStream);
+            return memStream.ToArray();
         }
 
         private static bool IsSslException(WebException why)
@@ -634,6 +641,55 @@ namespace pdfcrowd
             try
             {
                 convertStringToStream(text, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
+        }
+
+        /**
+        * Convert an input stream.
+        *
+        * @param inStream The input stream with the source data.
+        * @return Byte array containing the conversion output.
+        */
+        public byte[] convertStream(Stream inStream)
+        {
+            rawData["stream"] = ConnectionHelper.ReadStream(inStream);
+            return helper.post(fields, files, rawData, null);
+        }
+
+        /**
+        * Convert an input stream and write the result to an output stream.
+        *
+        * @param inStream The input stream with the source data.
+        * @param outStream The output stream that will contain the conversion output.
+        */
+        public void convertStreamToStream(Stream inStream, Stream outStream)
+        {
+            rawData["stream"] = ConnectionHelper.ReadStream(inStream);
+            helper.post(fields, files, rawData, outStream);
+        }
+
+        /**
+        * Convert an input stream and write the result to a local file.
+        *
+        * @param inStream The input stream with the source data.
+        * @param filePath The output file path. The string must not be empty.
+        */
+        public void convertStreamToFile(Stream inStream, string filePath)
+        {
+            if (!(!String.IsNullOrEmpty(filePath)))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "convertStreamToFile::file_path", "html-to-pdf", "The string must not be empty.", "convert_stream_to_file"), 470);
+            
+            FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
+            try
+            {
+                convertStreamToStream(inStream, outputFile);
                 outputFile.Close();
             }
             catch(Error)
@@ -2573,6 +2629,55 @@ namespace pdfcrowd
         }
 
         /**
+        * Convert an input stream.
+        *
+        * @param inStream The input stream with the source data.
+        * @return Byte array containing the conversion output.
+        */
+        public byte[] convertStream(Stream inStream)
+        {
+            rawData["stream"] = ConnectionHelper.ReadStream(inStream);
+            return helper.post(fields, files, rawData, null);
+        }
+
+        /**
+        * Convert an input stream and write the result to an output stream.
+        *
+        * @param inStream The input stream with the source data.
+        * @param outStream The output stream that will contain the conversion output.
+        */
+        public void convertStreamToStream(Stream inStream, Stream outStream)
+        {
+            rawData["stream"] = ConnectionHelper.ReadStream(inStream);
+            helper.post(fields, files, rawData, outStream);
+        }
+
+        /**
+        * Convert an input stream and write the result to a local file.
+        *
+        * @param inStream The input stream with the source data.
+        * @param filePath The output file path. The string must not be empty.
+        */
+        public void convertStreamToFile(Stream inStream, string filePath)
+        {
+            if (!(!String.IsNullOrEmpty(filePath)))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "convertStreamToFile::file_path", "html-to-image", "The string must not be empty.", "convert_stream_to_file"), 470);
+            
+            FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
+            try
+            {
+                convertStreamToStream(inStream, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
+        }
+
+        /**
         * Set the input data for template rendering. The data format can be JSON, XML, YAML or CSV.
         *
         * @param dataString The input data string.
@@ -3428,6 +3533,55 @@ namespace pdfcrowd
             try
             {
                 convertRawDataToStream(data, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
+        }
+
+        /**
+        * Convert an input stream.
+        *
+        * @param inStream The input stream with the source data.
+        * @return Byte array containing the conversion output.
+        */
+        public byte[] convertStream(Stream inStream)
+        {
+            rawData["stream"] = ConnectionHelper.ReadStream(inStream);
+            return helper.post(fields, files, rawData, null);
+        }
+
+        /**
+        * Convert an input stream and write the result to an output stream.
+        *
+        * @param inStream The input stream with the source data.
+        * @param outStream The output stream that will contain the conversion output.
+        */
+        public void convertStreamToStream(Stream inStream, Stream outStream)
+        {
+            rawData["stream"] = ConnectionHelper.ReadStream(inStream);
+            helper.post(fields, files, rawData, outStream);
+        }
+
+        /**
+        * Convert an input stream and write the result to a local file.
+        *
+        * @param inStream The input stream with the source data.
+        * @param filePath The output file path. The string must not be empty.
+        */
+        public void convertStreamToFile(Stream inStream, string filePath)
+        {
+            if (!(!String.IsNullOrEmpty(filePath)))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "convertStreamToFile::file_path", "image-to-image", "The string must not be empty.", "convert_stream_to_file"), 470);
+            
+            FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
+            try
+            {
+                convertStreamToStream(inStream, outputFile);
                 outputFile.Close();
             }
             catch(Error)
@@ -4463,6 +4617,55 @@ namespace pdfcrowd
             try
             {
                 convertRawDataToStream(data, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
+        }
+
+        /**
+        * Convert an input stream.
+        *
+        * @param inStream The input stream with the source data.
+        * @return Byte array containing the conversion output.
+        */
+        public byte[] convertStream(Stream inStream)
+        {
+            rawData["stream"] = ConnectionHelper.ReadStream(inStream);
+            return helper.post(fields, files, rawData, null);
+        }
+
+        /**
+        * Convert an input stream and write the result to an output stream.
+        *
+        * @param inStream The input stream with the source data.
+        * @param outStream The output stream that will contain the conversion output.
+        */
+        public void convertStreamToStream(Stream inStream, Stream outStream)
+        {
+            rawData["stream"] = ConnectionHelper.ReadStream(inStream);
+            helper.post(fields, files, rawData, outStream);
+        }
+
+        /**
+        * Convert an input stream and write the result to a local file.
+        *
+        * @param inStream The input stream with the source data.
+        * @param filePath The output file path. The string must not be empty.
+        */
+        public void convertStreamToFile(Stream inStream, string filePath)
+        {
+            if (!(!String.IsNullOrEmpty(filePath)))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "convertStreamToFile::file_path", "image-to-pdf", "The string must not be empty.", "convert_stream_to_file"), 470);
+            
+            FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
+            try
+            {
+                convertStreamToStream(inStream, outputFile);
                 outputFile.Close();
             }
             catch(Error)
