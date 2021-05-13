@@ -30,8 +30,8 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion( "5.1.2" )]
-[assembly: AssemblyFileVersion( "5.1.2" )]
+[assembly: AssemblyVersion( "5.1.3" )]
+[assembly: AssemblyFileVersion( "5.1.3" )]
 
 #if DEBUG
 #if NET20
@@ -40,6 +40,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration(".NET Standard 2.0 Debug")]
 #elif NETCOREAPP2_0
 [assembly: AssemblyConfiguration(".NET Core 2.0 Debug")]
+#elif NET5_0
+[assembly: AssemblyConfiguration(".NET 5.0 Debug")]
 #else
 #error Missing AssemblyConfiguration attribute.
 #endif
@@ -50,6 +52,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration(".NET Standard 2.0")]
 #elif NETCOREAPP2_0
 [assembly: AssemblyConfiguration(".NET Core 2.0")]
+#elif NET5_0
+[assembly: AssemblyConfiguration(".NET 5.0")]
 #else
 #error Missing AssemblyConfiguration attribute.
 #endif

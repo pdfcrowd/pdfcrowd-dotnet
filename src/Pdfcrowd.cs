@@ -64,7 +64,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "5.1.2";
+        public static readonly string CLIENT_VERSION = "5.1.3";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -75,7 +75,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/5.1.2 (https://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/5.1.3 (https://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -191,7 +191,7 @@ namespace pdfcrowd
                         retry++;
                         Thread.Sleep(retry * 100);
                     } else {
-                        throw err;
+                        throw;
                     }
                 }
             }
@@ -652,9 +652,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Convert an input stream.
+        * Convert the contents of an input stream.
         *
-        * @param inStream The input stream with the source data.
+        * @param inStream The input stream with source data.<br> The stream can contain either HTML code or an archive (.zip, .tar.gz, .tar.bz2).<br>The archive can contain HTML code and its external assets (images, style sheets, javascript).
         * @return Byte array containing the conversion output.
         */
         public byte[] convertStream(Stream inStream)
@@ -664,9 +664,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Convert an input stream and write the result to an output stream.
+        * Convert the contents of an input stream and write the result to an output stream.
         *
-        * @param inStream The input stream with the source data.
+        * @param inStream The input stream with source data.<br> The stream can contain either HTML code or an archive (.zip, .tar.gz, .tar.bz2).<br>The archive can contain HTML code and its external assets (images, style sheets, javascript).
         * @param outStream The output stream that will contain the conversion output.
         */
         public void convertStreamToStream(Stream inStream, Stream outStream)
@@ -676,9 +676,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Convert an input stream and write the result to a local file.
+        * Convert the contents of an input stream and write the result to a local file.
         *
-        * @param inStream The input stream with the source data.
+        * @param inStream The input stream with source data.<br> The stream can contain either HTML code or an archive (.zip, .tar.gz, .tar.bz2).<br>The archive can contain HTML code and its external assets (images, style sheets, javascript).
         * @param filePath The output file path. The string must not be empty.
         */
         public void convertStreamToFile(Stream inStream, string filePath)
@@ -2629,9 +2629,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Convert an input stream.
+        * Convert the contents of an input stream.
         *
-        * @param inStream The input stream with the source data.
+        * @param inStream The input stream with source data.<br> The stream can contain either HTML code or an archive (.zip, .tar.gz, .tar.bz2).<br>The archive can contain HTML code and its external assets (images, style sheets, javascript).
         * @return Byte array containing the conversion output.
         */
         public byte[] convertStream(Stream inStream)
@@ -2641,9 +2641,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Convert an input stream and write the result to an output stream.
+        * Convert the contents of an input stream and write the result to an output stream.
         *
-        * @param inStream The input stream with the source data.
+        * @param inStream The input stream with source data.<br> The stream can contain either HTML code or an archive (.zip, .tar.gz, .tar.bz2).<br>The archive can contain HTML code and its external assets (images, style sheets, javascript).
         * @param outStream The output stream that will contain the conversion output.
         */
         public void convertStreamToStream(Stream inStream, Stream outStream)
@@ -2653,9 +2653,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Convert an input stream and write the result to a local file.
+        * Convert the contents of an input stream and write the result to a local file.
         *
-        * @param inStream The input stream with the source data.
+        * @param inStream The input stream with source data.<br> The stream can contain either HTML code or an archive (.zip, .tar.gz, .tar.bz2).<br>The archive can contain HTML code and its external assets (images, style sheets, javascript).
         * @param filePath The output file path. The string must not be empty.
         */
         public void convertStreamToFile(Stream inStream, string filePath)
@@ -3544,9 +3544,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Convert an input stream.
+        * Convert the contents of an input stream.
         *
-        * @param inStream The input stream with the source data.
+        * @param inStream The input stream with source data.<br>
         * @return Byte array containing the conversion output.
         */
         public byte[] convertStream(Stream inStream)
@@ -3556,9 +3556,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Convert an input stream and write the result to an output stream.
+        * Convert the contents of an input stream and write the result to an output stream.
         *
-        * @param inStream The input stream with the source data.
+        * @param inStream The input stream with source data.<br>
         * @param outStream The output stream that will contain the conversion output.
         */
         public void convertStreamToStream(Stream inStream, Stream outStream)
@@ -3568,9 +3568,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Convert an input stream and write the result to a local file.
+        * Convert the contents of an input stream and write the result to a local file.
         *
-        * @param inStream The input stream with the source data.
+        * @param inStream The input stream with source data.<br>
         * @param filePath The output file path. The string must not be empty.
         */
         public void convertStreamToFile(Stream inStream, string filePath)
@@ -4628,9 +4628,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Convert an input stream.
+        * Convert the contents of an input stream.
         *
-        * @param inStream The input stream with the source data.
+        * @param inStream The input stream with source data.<br>
         * @return Byte array containing the conversion output.
         */
         public byte[] convertStream(Stream inStream)
@@ -4640,9 +4640,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Convert an input stream and write the result to an output stream.
+        * Convert the contents of an input stream and write the result to an output stream.
         *
-        * @param inStream The input stream with the source data.
+        * @param inStream The input stream with source data.<br>
         * @param outStream The output stream that will contain the conversion output.
         */
         public void convertStreamToStream(Stream inStream, Stream outStream)
@@ -4652,9 +4652,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Convert an input stream and write the result to a local file.
+        * Convert the contents of an input stream and write the result to a local file.
         *
-        * @param inStream The input stream with the source data.
+        * @param inStream The input stream with source data.<br>
         * @param filePath The output file path. The string must not be empty.
         */
         public void convertStreamToFile(Stream inStream, string filePath)

@@ -24,15 +24,29 @@ Task("Build")
     .IsDependentOn("NuGetRestore")
     .Does(() =>
     {
-        MSBuild(SOLUTION_FILE, CreateSettings());
+        if(IsRunningOnWindows())
+            MSBuild(SOLUTION_FILE, CreateMsBuildSettings());
+        else
+            DotNetCoreBuild(SOLUTION_FILE, CreateDotNetCoreBuildSettings());
     });
 
-MSBuildSettings CreateSettings()
+DotNetCoreBuildSettings CreateDotNetCoreBuildSettings() =>
+    new DotNetCoreBuildSettings
+    {
+        Configuration = configuration,
+        NoRestore = true,
+        Verbosity = DotNetCoreVerbosity.Minimal
+    };
+
+MSBuildSettings CreateMsBuildSettings()
 {
     var settings = new MSBuildSettings { Verbosity = Verbosity.Minimal, Configuration = configuration };
 
-    // Only needed when packaging
-    settings.WithProperty("DebugType", "pdbonly");
+    if (!BuildSystem.IsLocalBuild)
+    {
+        // Extra arguments for NuGet package creation: EmbedUntrackedSources and ContinuousIntegrationBuild for deterministic build
+        settings.ArgumentCustomization = args => args.Append("-p:EmbedUntrackedSources=true -p:ContinuousIntegrationBuild=true");
+    }
 
     if (IsRunningOnWindows())
     {
