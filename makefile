@@ -1,6 +1,7 @@
 .PHONY : dist clean compile publish
 
-DIR_NAME := pdfcrowd-5.2.0
+VERSION = 5.2.2
+DIR_NAME := pdfcrowd-5.2.2
 BIN_DIR := bin
 
 compile:
@@ -10,13 +11,15 @@ clean:
 	@rm -rf $(BIN_DIR)
 	./build -target=Clean
 
-dist:
+dist: dist/pdfcrowd-$(VERSION)-dotnet.zip
+
+dist/pdfcrowd-$(VERSION)-dotnet.zip:
 	@rm -rf dist
 	@mkdir -p dist
-	@cd dist && mkdir -p $(DIR_NAME) && cp -R ../$(BIN_DIR)/Release/* $(DIR_NAME) && zip -r pdfcrowd.zip $(DIR_NAME)/*
+	@cd dist && mkdir -p $(DIR_NAME) && cp -R ../$(BIN_DIR)/Release/* $(DIR_NAME) && zip -r pdfcrowd-$(VERSION)-dotnet.zip $(DIR_NAME)/*
 
 publish:
 	sudo nuget update -self
 	sudo rm -rf /tmp/NuGetScratch/lock
 	nuget pack
-	nuget push Pdfcrowd.Official.5.2.0.nupkg -Source https://www.nuget.org/api/v2/package -ApiKey $(API_KEY)
+	nuget push Pdfcrowd.Official.5.2.2.nupkg -Source https://www.nuget.org/api/v2/package -ApiKey $(API_KEY)
