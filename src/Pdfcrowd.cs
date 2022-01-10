@@ -64,7 +64,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "5.2.2";
+        public static readonly string CLIENT_VERSION = "5.3.0";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -75,7 +75,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/5.2.2 (https://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/5.3.0 (https://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -1359,6 +1359,18 @@ namespace pdfcrowd
         public HtmlToPdfClient setDisableRemoteFonts(bool value)
         {
             fields["disable_remote_fonts"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Use a mobile user agent.
+        *
+        * @param value Set to <span class='field-value'>true</span> to use a mobile user agent.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setUseMobileUserAgent(bool value)
+        {
+            fields["use_mobile_user_agent"] = value ? "true" : null;
             return this;
         }
 
@@ -2794,6 +2806,18 @@ namespace pdfcrowd
         public HtmlToImageClient setDisableRemoteFonts(bool value)
         {
             fields["disable_remote_fonts"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Use a mobile user agent.
+        *
+        * @param value Set to <span class='field-value'>true</span> to use a mobile user agent.
+        * @return The converter object.
+        */
+        public HtmlToImageClient setUseMobileUserAgent(bool value)
+        {
+            fields["use_mobile_user_agent"] = value ? "true" : null;
             return this;
         }
 
