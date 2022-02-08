@@ -64,7 +64,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "5.3.0";
+        public static readonly string CLIENT_VERSION = "5.4.0";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -75,7 +75,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/5.3.0 (https://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/5.4.0 (https://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -1644,7 +1644,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Set the viewport height in pixels. The viewport is the user's visible area of the page.
+        * Set the viewport height in pixels. The viewport is the user's visible area of the page. If the input HTML uses lazily loaded images, try using a large value that covers the entire height of the HTML, e.g. 100000.
         *
         * @param height Must be a positive integer number.
         * @return The converter object.
@@ -1662,7 +1662,7 @@ namespace pdfcrowd
         * Set the viewport size. The viewport is the user's visible area of the page.
         *
         * @param width Set the viewport width in pixels. The viewport is the user's visible area of the page. The value must be in the range 96-65000.
-        * @param height Set the viewport height in pixels. The viewport is the user's visible area of the page. Must be a positive integer number.
+        * @param height Set the viewport height in pixels. The viewport is the user's visible area of the page. If the input HTML uses lazily loaded images, try using a large value that covers the entire height of the HTML, e.g. 100000. Must be a positive integer number.
         * @return The converter object.
         */
         public HtmlToPdfClient setViewport(int width, int height)
@@ -2187,7 +2187,7 @@ namespace pdfcrowd
 
         /**
         * Get the number of conversion credits available in your <a href='/user/account/'>account</a>.
-        * This method can only be called after a call to one of the convertXYZ methods.
+        * This method can only be called after a call to one of the convertXtoY methods.
         * The returned value can differ from the actual count if you run parallel conversions.
         * The special value <span class='field-value'>999999</span> is returned if the information is not available.
         * @return The number of credits.
@@ -2441,7 +2441,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Set a custom user agent HTTP header. It can be useful if you are behind some proxy or firewall.
+        * Set a custom user agent HTTP header. It can be useful if you are behind a proxy or a firewall.
         *
         * @param agent The user agent string.
         * @return The converter object.
@@ -2468,9 +2468,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Specifies the number of retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
+        * Specifies the number of automatic retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
         *
-        * @param count Number of retries wanted.
+        * @param count Number of retries.
         * @return The converter object.
         */
         public HtmlToPdfClient setRetryCount(int count)
@@ -3257,7 +3257,7 @@ namespace pdfcrowd
 
         /**
         * Get the number of conversion credits available in your <a href='/user/account/'>account</a>.
-        * This method can only be called after a call to one of the convertXYZ methods.
+        * This method can only be called after a call to one of the convertXtoY methods.
         * The returned value can differ from the actual count if you run parallel conversions.
         * The special value <span class='field-value'>999999</span> is returned if the information is not available.
         * @return The number of credits.
@@ -3401,7 +3401,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Set a custom user agent HTTP header. It can be useful if you are behind some proxy or firewall.
+        * Set a custom user agent HTTP header. It can be useful if you are behind a proxy or a firewall.
         *
         * @param agent The user agent string.
         * @return The converter object.
@@ -3428,9 +3428,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Specifies the number of retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
+        * Specifies the number of automatic retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
         *
-        * @param count Number of retries wanted.
+        * @param count Number of retries.
         * @return The converter object.
         */
         public HtmlToImageClient setRetryCount(int count)
@@ -3738,7 +3738,7 @@ namespace pdfcrowd
 
         /**
         * Get the number of conversion credits available in your <a href='/user/account/'>account</a>.
-        * This method can only be called after a call to one of the convertXYZ methods.
+        * This method can only be called after a call to one of the convertXtoY methods.
         * The returned value can differ from the actual count if you run parallel conversions.
         * The special value <span class='field-value'>999999</span> is returned if the information is not available.
         * @return The number of credits.
@@ -3855,7 +3855,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Set a custom user agent HTTP header. It can be useful if you are behind some proxy or firewall.
+        * Set a custom user agent HTTP header. It can be useful if you are behind a proxy or a firewall.
         *
         * @param agent The user agent string.
         * @return The converter object.
@@ -3882,9 +3882,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Specifies the number of retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
+        * Specifies the number of automatic retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
         *
-        * @param count Number of retries wanted.
+        * @param count Number of retries.
         * @return The converter object.
         */
         public ImageToImageClient setRetryCount(int count)
@@ -4000,6 +4000,18 @@ namespace pdfcrowd
             
             rawData["f_" + ConnectionHelper.intToString(fileId)] = data;
             fileId++;
+            return this;
+        }
+
+        /**
+        * Password to open the encrypted PDF file.
+        *
+        * @param password The input PDF password.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setInputPdfPassword(string password)
+        {
+            fields["input_pdf_password"] = password;
             return this;
         }
 
@@ -4452,7 +4464,7 @@ namespace pdfcrowd
 
         /**
         * Get the number of conversion credits available in your <a href='/user/account/'>account</a>.
-        * This method can only be called after a call to one of the convertXYZ methods.
+        * This method can only be called after a call to one of the convertXtoY methods.
         * The returned value can differ from the actual count if you run parallel conversions.
         * The special value <span class='field-value'>999999</span> is returned if the information is not available.
         * @return The number of credits.
@@ -4548,7 +4560,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Set a custom user agent HTTP header. It can be useful if you are behind some proxy or firewall.
+        * Set a custom user agent HTTP header. It can be useful if you are behind a proxy or a firewall.
         *
         * @param agent The user agent string.
         * @return The converter object.
@@ -4575,9 +4587,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Specifies the number of retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
+        * Specifies the number of automatic retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
         *
-        * @param count Number of retries wanted.
+        * @param count Number of retries.
         * @return The converter object.
         */
         public PdfToPdfClient setRetryCount(int count)
@@ -4870,7 +4882,7 @@ namespace pdfcrowd
 
         /**
         * Get the number of conversion credits available in your <a href='/user/account/'>account</a>.
-        * This method can only be called after a call to one of the convertXYZ methods.
+        * This method can only be called after a call to one of the convertXtoY methods.
         * The returned value can differ from the actual count if you run parallel conversions.
         * The special value <span class='field-value'>999999</span> is returned if the information is not available.
         * @return The number of credits.
@@ -4987,7 +4999,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Set a custom user agent HTTP header. It can be useful if you are behind some proxy or firewall.
+        * Set a custom user agent HTTP header. It can be useful if you are behind a proxy or a firewall.
         *
         * @param agent The user agent string.
         * @return The converter object.
@@ -5014,9 +5026,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Specifies the number of retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
+        * Specifies the number of automatic retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
         *
-        * @param count Number of retries wanted.
+        * @param count Number of retries.
         * @return The converter object.
         */
         public ImageToPdfClient setRetryCount(int count)
@@ -5025,6 +5037,587 @@ namespace pdfcrowd
             return this;
         }
 
+    }
+
+    /**
+    * Conversion from PDF to HTML.
+    */
+    public sealed class PdfToHtmlClient
+    {
+        private ConnectionHelper helper;
+        private Dictionary<string, string> fields = new Dictionary<string, string>();
+        private Dictionary<string, string> files = new Dictionary<string, string>();
+        private Dictionary<string, byte[]> rawData = new Dictionary<string, byte[]>();
+
+        #pragma warning disable CS0414
+        private int fileId = 1;
+        #pragma warning restore CS0414
+
+        /**
+        * Constructor for the Pdfcrowd API client.
+        *
+        * @param userName Your username at Pdfcrowd.
+        * @param apiKey Your API key.
+        */
+        public PdfToHtmlClient(string userName, string apiKey)
+        {
+            this.helper = new ConnectionHelper(userName, apiKey);
+            fields["input_format"] = "pdf";
+            fields["output_format"] = "html";
+        }
+
+        /**
+        * Convert a PDF.
+        *
+        * @param url The address of the PDF to convert. The supported protocols are http:// and https://.
+        * @return Byte array containing the conversion output.
+        */
+        public byte[] convertUrl(string url)
+        {
+            if (!Regex.Match(url, "(?i)^https?://.*$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrl", "pdf-to-html", "The supported protocols are http:// and https://.", "convert_url"), 470);
+            
+            fields["url"] = url;
+            return helper.post(fields, files, rawData, null);
+        }
+
+        /**
+        * Convert a PDF and write the result to an output stream.
+        *
+        * @param url The address of the PDF to convert. The supported protocols are http:// and https://.
+        * @param outStream The output stream that will contain the conversion output.
+        */
+        public void convertUrlToStream(string url, Stream outStream)
+        {
+            if (!Regex.Match(url, "(?i)^https?://.*$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrlToStream::url", "pdf-to-html", "The supported protocols are http:// and https://.", "convert_url_to_stream"), 470);
+            
+            fields["url"] = url;
+            helper.post(fields, files, rawData, outStream);
+        }
+
+        /**
+        * Convert a PDF and write the result to a local file.
+        *
+        * @param url The address of the PDF to convert. The supported protocols are http:// and https://.
+        * @param filePath The output file path. The string must not be empty. The converter generates an HTML or ZIP file. If ZIP file is generated, the file path must have a ZIP or zip extension.
+        */
+        public void convertUrlToFile(string url, string filePath)
+        {
+            if (!(!String.IsNullOrEmpty(filePath)))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "convertUrlToFile::file_path", "pdf-to-html", "The string must not be empty.", "convert_url_to_file"), 470);
+            
+            if (!(isOutputTypeValid(filePath)))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "convertUrlToFile::file_path", "pdf-to-html", "The converter generates an HTML or ZIP file. If ZIP file is generated, the file path must have a ZIP or zip extension.", "convert_url_to_file"), 470);
+            
+            FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
+            try
+            {
+                convertUrlToStream(url, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
+        }
+
+        /**
+        * Convert a local file.
+        *
+        * @param file The path to a local file to convert.<br>  The file must exist and not be empty.
+        * @return Byte array containing the conversion output.
+        */
+        public byte[] convertFile(string file)
+        {
+            if (!(File.Exists(file) && new FileInfo(file).Length > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(file, "convertFile", "pdf-to-html", "The file must exist and not be empty.", "convert_file"), 470);
+            
+            files["file"] = file;
+            return helper.post(fields, files, rawData, null);
+        }
+
+        /**
+        * Convert a local file and write the result to an output stream.
+        *
+        * @param file The path to a local file to convert.<br>  The file must exist and not be empty.
+        * @param outStream The output stream that will contain the conversion output.
+        */
+        public void convertFileToStream(string file, Stream outStream)
+        {
+            if (!(File.Exists(file) && new FileInfo(file).Length > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(file, "convertFileToStream::file", "pdf-to-html", "The file must exist and not be empty.", "convert_file_to_stream"), 470);
+            
+            files["file"] = file;
+            helper.post(fields, files, rawData, outStream);
+        }
+
+        /**
+        * Convert a local file and write the result to a local file.
+        *
+        * @param file The path to a local file to convert.<br>  The file must exist and not be empty.
+        * @param filePath The output file path. The string must not be empty. The converter generates an HTML or ZIP file. If ZIP file is generated, the file path must have a ZIP or zip extension.
+        */
+        public void convertFileToFile(string file, string filePath)
+        {
+            if (!(!String.IsNullOrEmpty(filePath)))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "convertFileToFile::file_path", "pdf-to-html", "The string must not be empty.", "convert_file_to_file"), 470);
+            
+            if (!(isOutputTypeValid(filePath)))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "convertFileToFile::file_path", "pdf-to-html", "The converter generates an HTML or ZIP file. If ZIP file is generated, the file path must have a ZIP or zip extension.", "convert_file_to_file"), 470);
+            
+            FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
+            try
+            {
+                convertFileToStream(file, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
+        }
+
+        /**
+        * Convert raw data.
+        *
+        * @param data The raw content to be converted.
+        * @return Byte array with the output.
+        */
+        public byte[] convertRawData(byte[] data)
+        {
+            rawData["file"] = data;
+            return helper.post(fields, files, rawData, null);
+        }
+
+        /**
+        * Convert raw data and write the result to an output stream.
+        *
+        * @param data The raw content to be converted.
+        * @param outStream The output stream that will contain the conversion output.
+        */
+        public void convertRawDataToStream(byte[] data, Stream outStream)
+        {
+            rawData["file"] = data;
+            helper.post(fields, files, rawData, outStream);
+        }
+
+        /**
+        * Convert raw data to a file.
+        *
+        * @param data The raw content to be converted.
+        * @param filePath The output file path. The string must not be empty. The converter generates an HTML or ZIP file. If ZIP file is generated, the file path must have a ZIP or zip extension.
+        */
+        public void convertRawDataToFile(byte[] data, string filePath)
+        {
+            if (!(!String.IsNullOrEmpty(filePath)))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "convertRawDataToFile::file_path", "pdf-to-html", "The string must not be empty.", "convert_raw_data_to_file"), 470);
+            
+            if (!(isOutputTypeValid(filePath)))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "convertRawDataToFile::file_path", "pdf-to-html", "The converter generates an HTML or ZIP file. If ZIP file is generated, the file path must have a ZIP or zip extension.", "convert_raw_data_to_file"), 470);
+            
+            FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
+            try
+            {
+                convertRawDataToStream(data, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
+        }
+
+        /**
+        * Convert the contents of an input stream.
+        *
+        * @param inStream The input stream with source data.<br>
+        * @return Byte array containing the conversion output.
+        */
+        public byte[] convertStream(Stream inStream)
+        {
+            rawData["stream"] = ConnectionHelper.ReadStream(inStream);
+            return helper.post(fields, files, rawData, null);
+        }
+
+        /**
+        * Convert the contents of an input stream and write the result to an output stream.
+        *
+        * @param inStream The input stream with source data.<br>
+        * @param outStream The output stream that will contain the conversion output.
+        */
+        public void convertStreamToStream(Stream inStream, Stream outStream)
+        {
+            rawData["stream"] = ConnectionHelper.ReadStream(inStream);
+            helper.post(fields, files, rawData, outStream);
+        }
+
+        /**
+        * Convert the contents of an input stream and write the result to a local file.
+        *
+        * @param inStream The input stream with source data.<br>
+        * @param filePath The output file path. The string must not be empty. The converter generates an HTML or ZIP file. If ZIP file is generated, the file path must have a ZIP or zip extension.
+        */
+        public void convertStreamToFile(Stream inStream, string filePath)
+        {
+            if (!(!String.IsNullOrEmpty(filePath)))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "convertStreamToFile::file_path", "pdf-to-html", "The string must not be empty.", "convert_stream_to_file"), 470);
+            
+            if (!(isOutputTypeValid(filePath)))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "convertStreamToFile::file_path", "pdf-to-html", "The converter generates an HTML or ZIP file. If ZIP file is generated, the file path must have a ZIP or zip extension.", "convert_stream_to_file"), 470);
+            
+            FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
+            try
+            {
+                convertStreamToStream(inStream, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
+        }
+
+        /**
+        * Password to open the encrypted PDF file.
+        *
+        * @param password The input PDF password.
+        * @return The converter object.
+        */
+        public PdfToHtmlClient setPdfPassword(string password)
+        {
+            fields["pdf_password"] = password;
+            return this;
+        }
+
+        /**
+        * Set the scaling factor (zoom) for the main page area.
+        *
+        * @param factor The percentage value. Must be a positive integer number.
+        * @return The converter object.
+        */
+        public PdfToHtmlClient setScaleFactor(int factor)
+        {
+            if (!(factor > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(factor, "setScaleFactor", "pdf-to-html", "Must be a positive integer number.", "set_scale_factor"), 470);
+            
+            fields["scale_factor"] = ConnectionHelper.intToString(factor);
+            return this;
+        }
+
+        /**
+        * Set the page range to print.
+        *
+        * @param pages A comma separated list of page numbers or ranges.
+        * @return The converter object.
+        */
+        public PdfToHtmlClient setPrintPageRange(string pages)
+        {
+            if (!Regex.Match(pages, "^(?:\\s*(?:\\d+|(?:\\d*\\s*\\-\\s*\\d+)|(?:\\d+\\s*\\-\\s*\\d*))\\s*,\\s*)*\\s*(?:\\d+|(?:\\d*\\s*\\-\\s*\\d+)|(?:\\d+\\s*\\-\\s*\\d*))\\s*$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(pages, "setPrintPageRange", "pdf-to-html", "A comma separated list of page numbers or ranges.", "set_print_page_range"), 470);
+            
+            fields["print_page_range"] = pages;
+            return this;
+        }
+
+        /**
+        * Specifies where the images are stored.
+        *
+        * @param mode The image storage mode. Allowed values are embed, separate.
+        * @return The converter object.
+        */
+        public PdfToHtmlClient setImageMode(string mode)
+        {
+            if (!Regex.Match(mode, "(?i)^(embed|separate)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(mode, "setImageMode", "pdf-to-html", "Allowed values are embed, separate.", "set_image_mode"), 470);
+            
+            fields["image_mode"] = mode;
+            return this;
+        }
+
+        /**
+        * Specifies where the style sheets are stored.
+        *
+        * @param mode The style sheet storage mode. Allowed values are embed, separate.
+        * @return The converter object.
+        */
+        public PdfToHtmlClient setCssMode(string mode)
+        {
+            if (!Regex.Match(mode, "(?i)^(embed|separate)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(mode, "setCssMode", "pdf-to-html", "Allowed values are embed, separate.", "set_css_mode"), 470);
+            
+            fields["css_mode"] = mode;
+            return this;
+        }
+
+        /**
+        * Specifies where the fonts are stored.
+        *
+        * @param mode The font storage mode. Allowed values are embed, separate.
+        * @return The converter object.
+        */
+        public PdfToHtmlClient setFontMode(string mode)
+        {
+            if (!Regex.Match(mode, "(?i)^(embed|separate)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(mode, "setFontMode", "pdf-to-html", "Allowed values are embed, separate.", "set_font_mode"), 470);
+            
+            fields["font_mode"] = mode;
+            return this;
+        }
+
+        /**
+        * A helper method to determine if the output file is a zip archive. The output of the conversion may be either an HTML file or a zip file containing the HTML and its external assets.
+        * @return <span class='field-value'>True</span> if the conversion output is a zip file, otherwise <span class='field-value'>False</span>.
+        */
+        public bool isZippedOutput()
+        {
+            return (fields.ContainsKey("image_mode") && fields["image_mode"] == "separate") || (fields.ContainsKey("css_mode") && fields["css_mode"] == "separate") || (fields.ContainsKey("font_mode") && fields["font_mode"] == "separate") || (fields.ContainsKey("force_zip") && fields["force_zip"] == "true");
+        }
+
+        /**
+        * Enforces the zip output format.
+        *
+        * @param value Set to <span class='field-value'>true</span> to get the output as a zip archive.
+        * @return The converter object.
+        */
+        public PdfToHtmlClient setForceZip(bool value)
+        {
+            fields["force_zip"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Set the HTML title. The title from the input PDF is used by default.
+        *
+        * @param title The HTML title.
+        * @return The converter object.
+        */
+        public PdfToHtmlClient setTitle(string title)
+        {
+            fields["title"] = title;
+            return this;
+        }
+
+        /**
+        * Set the HTML subject. The subject from the input PDF is used by default.
+        *
+        * @param subject The HTML subject.
+        * @return The converter object.
+        */
+        public PdfToHtmlClient setSubject(string subject)
+        {
+            fields["subject"] = subject;
+            return this;
+        }
+
+        /**
+        * Set the HTML author. The author from the input PDF is used by default.
+        *
+        * @param author The HTML author.
+        * @return The converter object.
+        */
+        public PdfToHtmlClient setAuthor(string author)
+        {
+            fields["author"] = author;
+            return this;
+        }
+
+        /**
+        * Associate keywords with the HTML document. Keywords from the input PDF are used by default.
+        *
+        * @param keywords The string containing the keywords.
+        * @return The converter object.
+        */
+        public PdfToHtmlClient setKeywords(string keywords)
+        {
+            fields["keywords"] = keywords;
+            return this;
+        }
+
+        /**
+        * Turn on the debug logging. Details about the conversion are stored in the debug log. The URL of the log can be obtained from the <a href='#get_debug_log_url'>getDebugLogUrl</a> method or available in <a href='/user/account/log/conversion/'>conversion statistics</a>.
+        *
+        * @param value Set to <span class='field-value'>true</span> to enable the debug logging.
+        * @return The converter object.
+        */
+        public PdfToHtmlClient setDebugLog(bool value)
+        {
+            fields["debug_log"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Get the URL of the debug log for the last conversion.
+        * @return The link to the debug log.
+        */
+        public string getDebugLogUrl()
+        {
+            return helper.getDebugLogUrl();
+        }
+
+        /**
+        * Get the number of conversion credits available in your <a href='/user/account/'>account</a>.
+        * This method can only be called after a call to one of the convertXtoY methods.
+        * The returned value can differ from the actual count if you run parallel conversions.
+        * The special value <span class='field-value'>999999</span> is returned if the information is not available.
+        * @return The number of credits.
+        */
+        public int getRemainingCreditCount()
+        {
+            return helper.getRemainingCreditCount();
+        }
+
+        /**
+        * Get the number of credits consumed by the last conversion.
+        * @return The number of credits.
+        */
+        public int getConsumedCreditCount()
+        {
+            return helper.getConsumedCreditCount();
+        }
+
+        /**
+        * Get the job id.
+        * @return The unique job identifier.
+        */
+        public string getJobId()
+        {
+            return helper.getJobId();
+        }
+
+        /**
+        * Get the total number of pages in the output document.
+        * @return The page count.
+        */
+        public int getPageCount()
+        {
+            return helper.getPageCount();
+        }
+
+        /**
+        * Get the size of the output in bytes.
+        * @return The count of bytes.
+        */
+        public int getOutputSize()
+        {
+            return helper.getOutputSize();
+        }
+
+        /**
+        * Get the version details.
+        * @return API version, converter version, and client version.
+        */
+        public string getVersion()
+        {
+            return string.Format("client {0}, API v2, converter {1}", ConnectionHelper.CLIENT_VERSION, helper.getConverterVersion());
+        }
+
+        /**
+        * Tag the conversion with a custom value. The tag is used in <a href='/user/account/log/conversion/'>conversion statistics</a>. A value longer than 32 characters is cut off.
+        *
+        * @param tag A string with the custom tag.
+        * @return The converter object.
+        */
+        public PdfToHtmlClient setTag(string tag)
+        {
+            fields["tag"] = tag;
+            return this;
+        }
+
+        /**
+        * A proxy server used by Pdfcrowd conversion process for accessing the source URLs with HTTP scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
+        *
+        * @param proxy The value must have format DOMAIN_OR_IP_ADDRESS:PORT.
+        * @return The converter object.
+        */
+        public PdfToHtmlClient setHttpProxy(string proxy)
+        {
+            if (!Regex.Match(proxy, "(?i)^([a-z0-9]+(-[a-z0-9]+)*\\.)+[a-z0-9]{1,}:\\d+$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(proxy, "setHttpProxy", "pdf-to-html", "The value must have format DOMAIN_OR_IP_ADDRESS:PORT.", "set_http_proxy"), 470);
+            
+            fields["http_proxy"] = proxy;
+            return this;
+        }
+
+        /**
+        * A proxy server used by Pdfcrowd conversion process for accessing the source URLs with HTTPS scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
+        *
+        * @param proxy The value must have format DOMAIN_OR_IP_ADDRESS:PORT.
+        * @return The converter object.
+        */
+        public PdfToHtmlClient setHttpsProxy(string proxy)
+        {
+            if (!Regex.Match(proxy, "(?i)^([a-z0-9]+(-[a-z0-9]+)*\\.)+[a-z0-9]{1,}:\\d+$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(proxy, "setHttpsProxy", "pdf-to-html", "The value must have format DOMAIN_OR_IP_ADDRESS:PORT.", "set_https_proxy"), 470);
+            
+            fields["https_proxy"] = proxy;
+            return this;
+        }
+
+        /**
+        * Specifies if the client communicates over HTTP or HTTPS with Pdfcrowd API.
+        * Warning: Using HTTP is insecure as data sent over HTTP is not encrypted. Enable this option only if you know what you are doing.
+        *
+        * @param value Set to <span class='field-value'>true</span> to use HTTP.
+        * @return The converter object.
+        */
+        public PdfToHtmlClient setUseHttp(bool value)
+        {
+            helper.setUseHttp(value);
+            return this;
+        }
+
+        /**
+        * Set a custom user agent HTTP header. It can be useful if you are behind a proxy or a firewall.
+        *
+        * @param agent The user agent string.
+        * @return The converter object.
+        */
+        public PdfToHtmlClient setUserAgent(string agent)
+        {
+            helper.setUserAgent(agent);
+            return this;
+        }
+
+        /**
+        * Specifies an HTTP proxy that the API client library will use to connect to the internet.
+        *
+        * @param host The proxy hostname.
+        * @param port The proxy port.
+        * @param userName The username.
+        * @param password The password.
+        * @return The converter object.
+        */
+        public PdfToHtmlClient setProxy(string host, int port, string userName, string password)
+        {
+            helper.setProxy(host, port, userName, password);
+            return this;
+        }
+
+        /**
+        * Specifies the number of automatic retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
+        *
+        * @param count Number of retries.
+        * @return The converter object.
+        */
+        public PdfToHtmlClient setRetryCount(int count)
+        {
+            helper.setRetryCount(count);
+            return this;
+        }
+
+        private bool isOutputTypeValid(string file_path) {
+            string extension = Path.GetExtension(file_path);
+            return (extension == ".zip") == isZippedOutput();
+        }
     }
 
 
