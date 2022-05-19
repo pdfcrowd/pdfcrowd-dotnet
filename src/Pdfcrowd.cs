@@ -64,7 +64,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "5.5.0";
+        public static readonly string CLIENT_VERSION = "5.6.0";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -75,7 +75,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/5.5.0 (https://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/5.6.0 (https://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -1786,6 +1786,18 @@ namespace pdfcrowd
                 throw new Error(ConnectionHelper.createInvalidValueMessage(dpi, "setImageDpi", "html-to-pdf", "Must be a positive integer number or 0.", "set_image_dpi"), 470);
             
             fields["image_dpi"] = ConnectionHelper.intToString(dpi);
+            return this;
+        }
+
+        /**
+        * Convert HTML forms to fillable PDF forms. Details can be found in the <a href='https://pdfcrowd.com/blog/create-fillable-pdf-form/'>blog post</a>.
+        *
+        * @param value Set to <span class='field-value'>true</span> to make fillable PDF forms.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setEnablePdfForms(bool value)
+        {
+            fields["enable_pdf_forms"] = value ? "true" : null;
             return this;
         }
 
