@@ -2,12 +2,12 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>Pdfcrowd.Official</id>
-    <version>5.6.1</version>
+    <version>5.6.2</version>
     <title>Pdfcrowd API - .NET client library</title>
     <authors>Pdfcrowd Dev Team</authors>
     <owners>Pdfcrowd</owners>
     <license type="file">LICENSE.txt</license>
-    <projectUrl>https://pdfcrowd.com/doc/api/html-to-pdf/dotnet/</projectUrl>
+    <projectUrl>https://pdfcrowd.com/api/html-to-pdf-dotnet/</projectUrl>
     <icon>pdfcrowd.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <repository type="git" url="https://github.com/pdfcrowd/pdfcrowd-dotnet"/>

@@ -9,8 +9,8 @@ can sign up [here](https://pdfcrowd.com/pricing/api/).
 
 ## Learn more
 
-* API Home:  <https://pdfcrowd.com/doc/api/>
-* API Reference:  <https://pdfcrowd.com/doc/api/html-to-pdf/dotnet/>
+* API Home:  <https://pdfcrowd.com/api/>
+* API Reference:  <https://pdfcrowd.com/api/html-to-pdf-dotnet/>
 * Interactive API Playground:
   * C#: <https://pdfcrowd.com/playground/html-to-pdf/?lang=dotnet>
   * ASP.NET Web Forms: <https://pdfcrowd.com/playground/html-to-pdf/?lang=wf-asp>
