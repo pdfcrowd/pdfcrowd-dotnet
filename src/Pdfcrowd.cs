@@ -64,7 +64,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "5.6.2";
+        public static readonly string CLIENT_VERSION = "5.7.0";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -75,7 +75,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/5.6.2 (https://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/5.7.0 (https://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -1643,13 +1643,13 @@ namespace pdfcrowd
         /**
         * The input HTML is automatically enhanced to improve the readability.
         *
-        * @param enhancements Allowed values are none, readability-v1.
+        * @param enhancements Allowed values are none, readability-v1, readability-v2, readability-v3.
         * @return The converter object.
         */
         public HtmlToPdfClient setReadabilityEnhancements(string enhancements)
         {
-            if (!Regex.Match(enhancements, "(?i)^(none|readability-v1)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(enhancements, "setReadabilityEnhancements", "html-to-pdf", "Allowed values are none, readability-v1.", "set_readability_enhancements"), 470);
+            if (!Regex.Match(enhancements, "(?i)^(none|readability-v1|readability-v2|readability-v3)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(enhancements, "setReadabilityEnhancements", "html-to-pdf", "Allowed values are none, readability-v1, readability-v2, readability-v3.", "set_readability_enhancements"), 470);
             
             fields["readability_enhancements"] = enhancements;
             return this;
@@ -3129,13 +3129,13 @@ namespace pdfcrowd
         /**
         * The input HTML is automatically enhanced to improve the readability.
         *
-        * @param enhancements Allowed values are none, readability-v1.
+        * @param enhancements Allowed values are none, readability-v1, readability-v2, readability-v3.
         * @return The converter object.
         */
         public HtmlToImageClient setReadabilityEnhancements(string enhancements)
         {
-            if (!Regex.Match(enhancements, "(?i)^(none|readability-v1)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(enhancements, "setReadabilityEnhancements", "html-to-image", "Allowed values are none, readability-v1.", "set_readability_enhancements"), 470);
+            if (!Regex.Match(enhancements, "(?i)^(none|readability-v1|readability-v2|readability-v3)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(enhancements, "setReadabilityEnhancements", "html-to-image", "Allowed values are none, readability-v1, readability-v2, readability-v3.", "set_readability_enhancements"), 470);
             
             fields["readability_enhancements"] = enhancements;
             return this;
