@@ -64,7 +64,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "5.7.0";
+        public static readonly string CLIENT_VERSION = "5.8.0";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -75,7 +75,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/5.7.0 (https://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/5.8.0 (https://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -1168,9 +1168,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Apply the first page of the watermark PDF to every page of the output PDF.
+        * Apply a watermark to each page of the output PDF file. A watermark can be either a PDF or an image. If a multi-page file (PDF or TIFF) is used, the first page is used as the watermark.
         *
-        * @param watermark The file path to a local watermark PDF file. The file must exist and not be empty.
+        * @param watermark The file path to a local file. The file must exist and not be empty.
         * @return The converter object.
         */
         public HtmlToPdfClient setPageWatermark(string watermark)
@@ -1183,7 +1183,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Load a watermark PDF from the specified URL and apply the first page of the watermark PDF to every page of the output PDF.
+        * Load a file from the specified URL and apply the file as a watermark to each page of the output PDF. A watermark can be either a PDF or an image. If a multi-page file (PDF or TIFF) is used, the first page is used as the watermark.
         *
         * @param url The supported protocols are http:// and https://.
         * @return The converter object.
@@ -1198,9 +1198,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Apply each page of the specified watermark PDF to the corresponding page of the output PDF.
+        * Apply each page of a watermark to the corresponding page of the output PDF. A watermark can be either a PDF or an image.
         *
-        * @param watermark The file path to a local watermark PDF file. The file must exist and not be empty.
+        * @param watermark The file path to a local file. The file must exist and not be empty.
         * @return The converter object.
         */
         public HtmlToPdfClient setMultipageWatermark(string watermark)
@@ -1213,7 +1213,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Load a watermark PDF from the specified URL and apply each page of the specified watermark PDF to the corresponding page of the output PDF.
+        * Load a file from the specified URL and apply each page of the file as a watermark to the corresponding page of the output PDF. A watermark can be either a PDF or an image.
         *
         * @param url The supported protocols are http:// and https://.
         * @return The converter object.
@@ -1228,9 +1228,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Apply the first page of the specified PDF to the background of every page of the output PDF.
+        * Apply a background to each page of the output PDF file. A background can be either a PDF or an image. If a multi-page file (PDF or TIFF) is used, the first page is used as the background.
         *
-        * @param background The file path to a local background PDF file. The file must exist and not be empty.
+        * @param background The file path to a local file. The file must exist and not be empty.
         * @return The converter object.
         */
         public HtmlToPdfClient setPageBackground(string background)
@@ -1243,7 +1243,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Load a background PDF from the specified URL and apply the first page of the background PDF to every page of the output PDF.
+        * Load a file from the specified URL and apply the file as a background to each page of the output PDF. A background can be either a PDF or an image. If a multi-page file (PDF or TIFF) is used, the first page is used as the background.
         *
         * @param url The supported protocols are http:// and https://.
         * @return The converter object.
@@ -1258,9 +1258,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Apply each page of the specified PDF to the background of the corresponding page of the output PDF.
+        * Apply each page of a background to the corresponding page of the output PDF. A background can be either a PDF or an image.
         *
-        * @param background The file path to a local background PDF file. The file must exist and not be empty.
+        * @param background The file path to a local file. The file must exist and not be empty.
         * @return The converter object.
         */
         public HtmlToPdfClient setMultipageBackground(string background)
@@ -1273,7 +1273,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Load a background PDF from the specified URL and apply each page of the specified background PDF to the corresponding page of the output PDF.
+        * Load a file from the specified URL and apply each page of the file as a background to the corresponding page of the output PDF. A background can be either a PDF or an image.
         *
         * @param url The supported protocols are http:// and https://.
         * @return The converter object.
@@ -4082,9 +4082,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Apply the first page of the watermark PDF to every page of the output PDF.
+        * Apply a watermark to each page of the output PDF file. A watermark can be either a PDF or an image. If a multi-page file (PDF or TIFF) is used, the first page is used as the watermark.
         *
-        * @param watermark The file path to a local watermark PDF file. The file must exist and not be empty.
+        * @param watermark The file path to a local file. The file must exist and not be empty.
         * @return The converter object.
         */
         public PdfToPdfClient setPageWatermark(string watermark)
@@ -4097,7 +4097,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Load a watermark PDF from the specified URL and apply the first page of the watermark PDF to every page of the output PDF.
+        * Load a file from the specified URL and apply the file as a watermark to each page of the output PDF. A watermark can be either a PDF or an image. If a multi-page file (PDF or TIFF) is used, the first page is used as the watermark.
         *
         * @param url The supported protocols are http:// and https://.
         * @return The converter object.
@@ -4112,9 +4112,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Apply each page of the specified watermark PDF to the corresponding page of the output PDF.
+        * Apply each page of a watermark to the corresponding page of the output PDF. A watermark can be either a PDF or an image.
         *
-        * @param watermark The file path to a local watermark PDF file. The file must exist and not be empty.
+        * @param watermark The file path to a local file. The file must exist and not be empty.
         * @return The converter object.
         */
         public PdfToPdfClient setMultipageWatermark(string watermark)
@@ -4127,7 +4127,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Load a watermark PDF from the specified URL and apply each page of the specified watermark PDF to the corresponding page of the output PDF.
+        * Load a file from the specified URL and apply each page of the file as a watermark to the corresponding page of the output PDF. A watermark can be either a PDF or an image.
         *
         * @param url The supported protocols are http:// and https://.
         * @return The converter object.
@@ -4142,9 +4142,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Apply the first page of the specified PDF to the background of every page of the output PDF.
+        * Apply a background to each page of the output PDF file. A background can be either a PDF or an image. If a multi-page file (PDF or TIFF) is used, the first page is used as the background.
         *
-        * @param background The file path to a local background PDF file. The file must exist and not be empty.
+        * @param background The file path to a local file. The file must exist and not be empty.
         * @return The converter object.
         */
         public PdfToPdfClient setPageBackground(string background)
@@ -4157,7 +4157,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Load a background PDF from the specified URL and apply the first page of the background PDF to every page of the output PDF.
+        * Load a file from the specified URL and apply the file as a background to each page of the output PDF. A background can be either a PDF or an image. If a multi-page file (PDF or TIFF) is used, the first page is used as the background.
         *
         * @param url The supported protocols are http:// and https://.
         * @return The converter object.
@@ -4172,9 +4172,9 @@ namespace pdfcrowd
         }
 
         /**
-        * Apply each page of the specified PDF to the background of the corresponding page of the output PDF.
+        * Apply each page of a background to the corresponding page of the output PDF. A background can be either a PDF or an image.
         *
-        * @param background The file path to a local background PDF file. The file must exist and not be empty.
+        * @param background The file path to a local file. The file must exist and not be empty.
         * @return The converter object.
         */
         public PdfToPdfClient setMultipageBackground(string background)
@@ -4187,7 +4187,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Load a background PDF from the specified URL and apply each page of the specified background PDF to the corresponding page of the output PDF.
+        * Load a file from the specified URL and apply each page of the file as a background to the corresponding page of the output PDF. A background can be either a PDF or an image.
         *
         * @param url The supported protocols are http:// and https://.
         * @return The converter object.
