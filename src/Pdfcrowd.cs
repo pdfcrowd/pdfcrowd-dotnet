@@ -49,6 +49,7 @@ namespace pdfcrowd
         private int consumedCredits;
         private string jobId;
         private int pageCount;
+        private int totalPageCount;
         private int outputSize;
 
         private string proxyHost;
@@ -64,7 +65,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "5.8.0";
+        public static readonly string CLIENT_VERSION = "5.9.0";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -75,7 +76,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/5.8.0 (https://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/5.9.0 (https://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -93,6 +94,7 @@ namespace pdfcrowd
             consumedCredits = 0;
             jobId = "";
             pageCount = 0;
+            totalPageCount = 0;
             outputSize = 0;
             retry = 0;
         }
@@ -231,6 +233,7 @@ namespace pdfcrowd
                     consumedCredits = getIntHeader(response, "X-Pdfcrowd-Consumed-Credits");
                     jobId = getStringHeader(response, "X-Pdfcrowd-Job-Id");
                     pageCount = getIntHeader(response, "X-Pdfcrowd-Pages");
+                    totalPageCount = getIntHeader(response, "X-Pdfcrowd-Total-Pages");
                     outputSize = getIntHeader(response, "X-Pdfcrowd-Output-Size");
 
                     if(Environment.GetEnvironmentVariable("PDFCROWD_UNIT_TEST_MODE") != null &&
@@ -434,6 +437,11 @@ namespace pdfcrowd
         internal int getPageCount()
         {
             return pageCount;
+        }
+
+        internal int getTotalPageCount()
+        {
+            return totalPageCount;
         }
 
         internal int getOutputSize()
@@ -1643,13 +1651,13 @@ namespace pdfcrowd
         /**
         * The input HTML is automatically enhanced to improve the readability.
         *
-        * @param enhancements Allowed values are none, readability-v1, readability-v2, readability-v3.
+        * @param enhancements Allowed values are none, readability-v1, readability-v2, readability-v3, readability-v4.
         * @return The converter object.
         */
         public HtmlToPdfClient setReadabilityEnhancements(string enhancements)
         {
-            if (!Regex.Match(enhancements, "(?i)^(none|readability-v1|readability-v2|readability-v3)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(enhancements, "setReadabilityEnhancements", "html-to-pdf", "Allowed values are none, readability-v1, readability-v2, readability-v3.", "set_readability_enhancements"), 470);
+            if (!Regex.Match(enhancements, "(?i)^(none|readability-v1|readability-v2|readability-v3|readability-v4)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(enhancements, "setReadabilityEnhancements", "html-to-pdf", "Allowed values are none, readability-v1, readability-v2, readability-v3, readability-v4.", "set_readability_enhancements"), 470);
             
             fields["readability_enhancements"] = enhancements;
             return this;
@@ -2255,12 +2263,21 @@ namespace pdfcrowd
         }
 
         /**
-        * Get the total number of pages in the output document.
+        * Get the number of pages in the output document.
         * @return The page count.
         */
         public int getPageCount()
         {
             return helper.getPageCount();
+        }
+
+        /**
+        * Get the total number of pages in the original output document, including the pages excluded by <a href='#set_print_page_range'>setPrintPageRange()</a>.
+        * @return The total page count.
+        */
+        public int getTotalPageCount()
+        {
+            return helper.getTotalPageCount();
         }
 
         /**
@@ -3129,13 +3146,13 @@ namespace pdfcrowd
         /**
         * The input HTML is automatically enhanced to improve the readability.
         *
-        * @param enhancements Allowed values are none, readability-v1, readability-v2, readability-v3.
+        * @param enhancements Allowed values are none, readability-v1, readability-v2, readability-v3, readability-v4.
         * @return The converter object.
         */
         public HtmlToImageClient setReadabilityEnhancements(string enhancements)
         {
-            if (!Regex.Match(enhancements, "(?i)^(none|readability-v1|readability-v2|readability-v3)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(enhancements, "setReadabilityEnhancements", "html-to-image", "Allowed values are none, readability-v1, readability-v2, readability-v3.", "set_readability_enhancements"), 470);
+            if (!Regex.Match(enhancements, "(?i)^(none|readability-v1|readability-v2|readability-v3|readability-v4)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(enhancements, "setReadabilityEnhancements", "html-to-image", "Allowed values are none, readability-v1, readability-v2, readability-v3, readability-v4.", "set_readability_enhancements"), 470);
             
             fields["readability_enhancements"] = enhancements;
             return this;
@@ -4559,7 +4576,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Get the total number of pages in the output document.
+        * Get the number of pages in the output document.
         * @return The page count.
         */
         public int getPageCount()
@@ -5560,7 +5577,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Get the total number of pages in the output document.
+        * Get the number of pages in the output document.
         * @return The page count.
         */
         public int getPageCount()
