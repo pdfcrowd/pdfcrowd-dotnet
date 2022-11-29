@@ -65,7 +65,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "5.9.0";
+        public static readonly string CLIENT_VERSION = "5.10.0";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -76,7 +76,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/5.9.0 (https://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/5.10.0 (https://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -1725,13 +1725,13 @@ namespace pdfcrowd
         /**
         * Specifies the scaling mode used for fitting the HTML contents to the print area.
         *
-        * @param mode The smart scaling mode. Allowed values are default, disabled, viewport-fit, content-fit, single-page-fit, mode1.
+        * @param mode The smart scaling mode. Allowed values are default, disabled, viewport-fit, content-fit, single-page-fit, single-page-fit-ex, mode1.
         * @return The converter object.
         */
         public HtmlToPdfClient setSmartScalingMode(string mode)
         {
-            if (!Regex.Match(mode, "(?i)^(default|disabled|viewport-fit|content-fit|single-page-fit|mode1)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(mode, "setSmartScalingMode", "html-to-pdf", "Allowed values are default, disabled, viewport-fit, content-fit, single-page-fit, mode1.", "set_smart_scaling_mode"), 470);
+            if (!Regex.Match(mode, "(?i)^(default|disabled|viewport-fit|content-fit|single-page-fit|single-page-fit-ex|mode1)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(mode, "setSmartScalingMode", "html-to-pdf", "Allowed values are default, disabled, viewport-fit, content-fit, single-page-fit, single-page-fit-ex, mode1.", "set_smart_scaling_mode"), 470);
             
             fields["smart_scaling_mode"] = mode;
             return this;
@@ -4943,6 +4943,405 @@ namespace pdfcrowd
         }
 
         /**
+        * Apply a watermark to each page of the output PDF file. A watermark can be either a PDF or an image. If a multi-page file (PDF or TIFF) is used, the first page is used as the watermark.
+        *
+        * @param watermark The file path to a local file. The file must exist and not be empty.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setPageWatermark(string watermark)
+        {
+            if (!(File.Exists(watermark) && new FileInfo(watermark).Length > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(watermark, "setPageWatermark", "image-to-pdf", "The file must exist and not be empty.", "set_page_watermark"), 470);
+            
+            files["page_watermark"] = watermark;
+            return this;
+        }
+
+        /**
+        * Load a file from the specified URL and apply the file as a watermark to each page of the output PDF. A watermark can be either a PDF or an image. If a multi-page file (PDF or TIFF) is used, the first page is used as the watermark.
+        *
+        * @param url The supported protocols are http:// and https://.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setPageWatermarkUrl(string url)
+        {
+            if (!Regex.Match(url, "(?i)^https?://.*$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setPageWatermarkUrl", "image-to-pdf", "The supported protocols are http:// and https://.", "set_page_watermark_url"), 470);
+            
+            fields["page_watermark_url"] = url;
+            return this;
+        }
+
+        /**
+        * Apply each page of a watermark to the corresponding page of the output PDF. A watermark can be either a PDF or an image.
+        *
+        * @param watermark The file path to a local file. The file must exist and not be empty.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setMultipageWatermark(string watermark)
+        {
+            if (!(File.Exists(watermark) && new FileInfo(watermark).Length > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(watermark, "setMultipageWatermark", "image-to-pdf", "The file must exist and not be empty.", "set_multipage_watermark"), 470);
+            
+            files["multipage_watermark"] = watermark;
+            return this;
+        }
+
+        /**
+        * Load a file from the specified URL and apply each page of the file as a watermark to the corresponding page of the output PDF. A watermark can be either a PDF or an image.
+        *
+        * @param url The supported protocols are http:// and https://.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setMultipageWatermarkUrl(string url)
+        {
+            if (!Regex.Match(url, "(?i)^https?://.*$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setMultipageWatermarkUrl", "image-to-pdf", "The supported protocols are http:// and https://.", "set_multipage_watermark_url"), 470);
+            
+            fields["multipage_watermark_url"] = url;
+            return this;
+        }
+
+        /**
+        * Apply a background to each page of the output PDF file. A background can be either a PDF or an image. If a multi-page file (PDF or TIFF) is used, the first page is used as the background.
+        *
+        * @param background The file path to a local file. The file must exist and not be empty.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setPageBackground(string background)
+        {
+            if (!(File.Exists(background) && new FileInfo(background).Length > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(background, "setPageBackground", "image-to-pdf", "The file must exist and not be empty.", "set_page_background"), 470);
+            
+            files["page_background"] = background;
+            return this;
+        }
+
+        /**
+        * Load a file from the specified URL and apply the file as a background to each page of the output PDF. A background can be either a PDF or an image. If a multi-page file (PDF or TIFF) is used, the first page is used as the background.
+        *
+        * @param url The supported protocols are http:// and https://.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setPageBackgroundUrl(string url)
+        {
+            if (!Regex.Match(url, "(?i)^https?://.*$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setPageBackgroundUrl", "image-to-pdf", "The supported protocols are http:// and https://.", "set_page_background_url"), 470);
+            
+            fields["page_background_url"] = url;
+            return this;
+        }
+
+        /**
+        * Apply each page of a background to the corresponding page of the output PDF. A background can be either a PDF or an image.
+        *
+        * @param background The file path to a local file. The file must exist and not be empty.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setMultipageBackground(string background)
+        {
+            if (!(File.Exists(background) && new FileInfo(background).Length > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(background, "setMultipageBackground", "image-to-pdf", "The file must exist and not be empty.", "set_multipage_background"), 470);
+            
+            files["multipage_background"] = background;
+            return this;
+        }
+
+        /**
+        * Load a file from the specified URL and apply each page of the file as a background to the corresponding page of the output PDF. A background can be either a PDF or an image.
+        *
+        * @param url The supported protocols are http:// and https://.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setMultipageBackgroundUrl(string url)
+        {
+            if (!Regex.Match(url, "(?i)^https?://.*$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setMultipageBackgroundUrl", "image-to-pdf", "The supported protocols are http:// and https://.", "set_multipage_background_url"), 470);
+            
+            fields["multipage_background_url"] = url;
+            return this;
+        }
+
+        /**
+        * Create linearized PDF. This is also known as Fast Web View.
+        *
+        * @param value Set to <span class='field-value'>true</span> to create linearized PDF.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setLinearize(bool value)
+        {
+            fields["linearize"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Encrypt the PDF. This prevents search engines from indexing the contents.
+        *
+        * @param value Set to <span class='field-value'>true</span> to enable PDF encryption.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setEncrypt(bool value)
+        {
+            fields["encrypt"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Protect the PDF with a user password. When a PDF has a user password, it must be supplied in order to view the document and to perform operations allowed by the access permissions.
+        *
+        * @param password The user password.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setUserPassword(string password)
+        {
+            fields["user_password"] = password;
+            return this;
+        }
+
+        /**
+        * Protect the PDF with an owner password.  Supplying an owner password grants unlimited access to the PDF including changing the passwords and access permissions.
+        *
+        * @param password The owner password.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setOwnerPassword(string password)
+        {
+            fields["owner_password"] = password;
+            return this;
+        }
+
+        /**
+        * Disallow printing of the output PDF.
+        *
+        * @param value Set to <span class='field-value'>true</span> to set the no-print flag in the output PDF.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setNoPrint(bool value)
+        {
+            fields["no_print"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Disallow modification of the output PDF.
+        *
+        * @param value Set to <span class='field-value'>true</span> to set the read-only only flag in the output PDF.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setNoModify(bool value)
+        {
+            fields["no_modify"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Disallow text and graphics extraction from the output PDF.
+        *
+        * @param value Set to <span class='field-value'>true</span> to set the no-copy flag in the output PDF.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setNoCopy(bool value)
+        {
+            fields["no_copy"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Set the title of the PDF.
+        *
+        * @param title The title.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setTitle(string title)
+        {
+            fields["title"] = title;
+            return this;
+        }
+
+        /**
+        * Set the subject of the PDF.
+        *
+        * @param subject The subject.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setSubject(string subject)
+        {
+            fields["subject"] = subject;
+            return this;
+        }
+
+        /**
+        * Set the author of the PDF.
+        *
+        * @param author The author.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setAuthor(string author)
+        {
+            fields["author"] = author;
+            return this;
+        }
+
+        /**
+        * Associate keywords with the document.
+        *
+        * @param keywords The string with the keywords.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setKeywords(string keywords)
+        {
+            fields["keywords"] = keywords;
+            return this;
+        }
+
+        /**
+        * Specify the page layout to be used when the document is opened.
+        *
+        * @param layout Allowed values are single-page, one-column, two-column-left, two-column-right.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setPageLayout(string layout)
+        {
+            if (!Regex.Match(layout, "(?i)^(single-page|one-column|two-column-left|two-column-right)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(layout, "setPageLayout", "image-to-pdf", "Allowed values are single-page, one-column, two-column-left, two-column-right.", "set_page_layout"), 470);
+            
+            fields["page_layout"] = layout;
+            return this;
+        }
+
+        /**
+        * Specify how the document should be displayed when opened.
+        *
+        * @param mode Allowed values are full-screen, thumbnails, outlines.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setPageMode(string mode)
+        {
+            if (!Regex.Match(mode, "(?i)^(full-screen|thumbnails|outlines)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(mode, "setPageMode", "image-to-pdf", "Allowed values are full-screen, thumbnails, outlines.", "set_page_mode"), 470);
+            
+            fields["page_mode"] = mode;
+            return this;
+        }
+
+        /**
+        * Specify how the page should be displayed when opened.
+        *
+        * @param zoomType Allowed values are fit-width, fit-height, fit-page.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setInitialZoomType(string zoomType)
+        {
+            if (!Regex.Match(zoomType, "(?i)^(fit-width|fit-height|fit-page)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(zoomType, "setInitialZoomType", "image-to-pdf", "Allowed values are fit-width, fit-height, fit-page.", "set_initial_zoom_type"), 470);
+            
+            fields["initial_zoom_type"] = zoomType;
+            return this;
+        }
+
+        /**
+        * Display the specified page when the document is opened.
+        *
+        * @param page Must be a positive integer number.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setInitialPage(int page)
+        {
+            if (!(page > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(page, "setInitialPage", "image-to-pdf", "Must be a positive integer number.", "set_initial_page"), 470);
+            
+            fields["initial_page"] = ConnectionHelper.intToString(page);
+            return this;
+        }
+
+        /**
+        * Specify the initial page zoom in percents when the document is opened.
+        *
+        * @param zoom Must be a positive integer number.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setInitialZoom(int zoom)
+        {
+            if (!(zoom > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(zoom, "setInitialZoom", "image-to-pdf", "Must be a positive integer number.", "set_initial_zoom"), 470);
+            
+            fields["initial_zoom"] = ConnectionHelper.intToString(zoom);
+            return this;
+        }
+
+        /**
+        * Specify whether to hide the viewer application's tool bars when the document is active.
+        *
+        * @param value Set to <span class='field-value'>true</span> to hide tool bars.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setHideToolbar(bool value)
+        {
+            fields["hide_toolbar"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Specify whether to hide the viewer application's menu bar when the document is active.
+        *
+        * @param value Set to <span class='field-value'>true</span> to hide the menu bar.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setHideMenubar(bool value)
+        {
+            fields["hide_menubar"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Specify whether to hide user interface elements in the document's window (such as scroll bars and navigation controls), leaving only the document's contents displayed.
+        *
+        * @param value Set to <span class='field-value'>true</span> to hide ui elements.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setHideWindowUi(bool value)
+        {
+            fields["hide_window_ui"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Specify whether to resize the document's window to fit the size of the first displayed page.
+        *
+        * @param value Set to <span class='field-value'>true</span> to resize the window.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setFitWindow(bool value)
+        {
+            fields["fit_window"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Specify whether to position the document's window in the center of the screen.
+        *
+        * @param value Set to <span class='field-value'>true</span> to center the window.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setCenterWindow(bool value)
+        {
+            fields["center_window"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Specify whether the window's title bar should display the document title. If false , the title bar should instead display the name of the PDF file containing the document.
+        *
+        * @param value Set to <span class='field-value'>true</span> to display the title.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setDisplayTitle(bool value)
+        {
+            fields["display_title"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
         * Turn on the debug logging. Details about the conversion are stored in the debug log. The URL of the log can be obtained from the <a href='#get_debug_log_url'>getDebugLogUrl</a> method or available in <a href='/user/account/log/conversion/'>conversion statistics</a>.
         *
         * @param value Set to <span class='field-value'>true</span> to enable the debug logging.
@@ -5701,6 +6100,628 @@ namespace pdfcrowd
             string extension = Path.GetExtension(file_path);
             return (extension == ".zip") == isZippedOutput();
         }
+    }
+
+    /**
+    * Conversion from PDF to text.
+    */
+    public sealed class PdfToTextClient
+    {
+        private ConnectionHelper helper;
+        private Dictionary<string, string> fields = new Dictionary<string, string>();
+        private Dictionary<string, string> files = new Dictionary<string, string>();
+        private Dictionary<string, byte[]> rawData = new Dictionary<string, byte[]>();
+
+        #pragma warning disable CS0414
+        private int fileId = 1;
+        #pragma warning restore CS0414
+
+        /**
+        * Constructor for the Pdfcrowd API client.
+        *
+        * @param userName Your username at Pdfcrowd.
+        * @param apiKey Your API key.
+        */
+        public PdfToTextClient(string userName, string apiKey)
+        {
+            this.helper = new ConnectionHelper(userName, apiKey);
+            fields["input_format"] = "pdf";
+            fields["output_format"] = "txt";
+        }
+
+        /**
+        * Convert a PDF.
+        *
+        * @param url The address of the PDF to convert. The supported protocols are http:// and https://.
+        * @return Byte array containing the conversion output.
+        */
+        public byte[] convertUrl(string url)
+        {
+            if (!Regex.Match(url, "(?i)^https?://.*$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrl", "pdf-to-text", "The supported protocols are http:// and https://.", "convert_url"), 470);
+            
+            fields["url"] = url;
+            return helper.post(fields, files, rawData, null);
+        }
+
+        /**
+        * Convert a PDF and write the result to an output stream.
+        *
+        * @param url The address of the PDF to convert. The supported protocols are http:// and https://.
+        * @param outStream The output stream that will contain the conversion output.
+        */
+        public void convertUrlToStream(string url, Stream outStream)
+        {
+            if (!Regex.Match(url, "(?i)^https?://.*$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrlToStream::url", "pdf-to-text", "The supported protocols are http:// and https://.", "convert_url_to_stream"), 470);
+            
+            fields["url"] = url;
+            helper.post(fields, files, rawData, outStream);
+        }
+
+        /**
+        * Convert a PDF and write the result to a local file.
+        *
+        * @param url The address of the PDF to convert. The supported protocols are http:// and https://.
+        * @param filePath The output file path. The string must not be empty.
+        */
+        public void convertUrlToFile(string url, string filePath)
+        {
+            if (!(!String.IsNullOrEmpty(filePath)))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "convertUrlToFile::file_path", "pdf-to-text", "The string must not be empty.", "convert_url_to_file"), 470);
+            
+            FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
+            try
+            {
+                convertUrlToStream(url, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
+        }
+
+        /**
+        * Convert a local file.
+        *
+        * @param file The path to a local file to convert.<br>  The file must exist and not be empty.
+        * @return Byte array containing the conversion output.
+        */
+        public byte[] convertFile(string file)
+        {
+            if (!(File.Exists(file) && new FileInfo(file).Length > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(file, "convertFile", "pdf-to-text", "The file must exist and not be empty.", "convert_file"), 470);
+            
+            files["file"] = file;
+            return helper.post(fields, files, rawData, null);
+        }
+
+        /**
+        * Convert a local file and write the result to an output stream.
+        *
+        * @param file The path to a local file to convert.<br>  The file must exist and not be empty.
+        * @param outStream The output stream that will contain the conversion output.
+        */
+        public void convertFileToStream(string file, Stream outStream)
+        {
+            if (!(File.Exists(file) && new FileInfo(file).Length > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(file, "convertFileToStream::file", "pdf-to-text", "The file must exist and not be empty.", "convert_file_to_stream"), 470);
+            
+            files["file"] = file;
+            helper.post(fields, files, rawData, outStream);
+        }
+
+        /**
+        * Convert a local file and write the result to a local file.
+        *
+        * @param file The path to a local file to convert.<br>  The file must exist and not be empty.
+        * @param filePath The output file path. The string must not be empty.
+        */
+        public void convertFileToFile(string file, string filePath)
+        {
+            if (!(!String.IsNullOrEmpty(filePath)))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "convertFileToFile::file_path", "pdf-to-text", "The string must not be empty.", "convert_file_to_file"), 470);
+            
+            FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
+            try
+            {
+                convertFileToStream(file, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
+        }
+
+        /**
+        * Convert raw data.
+        *
+        * @param data The raw content to be converted.
+        * @return Byte array with the output.
+        */
+        public byte[] convertRawData(byte[] data)
+        {
+            rawData["file"] = data;
+            return helper.post(fields, files, rawData, null);
+        }
+
+        /**
+        * Convert raw data and write the result to an output stream.
+        *
+        * @param data The raw content to be converted.
+        * @param outStream The output stream that will contain the conversion output.
+        */
+        public void convertRawDataToStream(byte[] data, Stream outStream)
+        {
+            rawData["file"] = data;
+            helper.post(fields, files, rawData, outStream);
+        }
+
+        /**
+        * Convert raw data to a file.
+        *
+        * @param data The raw content to be converted.
+        * @param filePath The output file path. The string must not be empty.
+        */
+        public void convertRawDataToFile(byte[] data, string filePath)
+        {
+            if (!(!String.IsNullOrEmpty(filePath)))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "convertRawDataToFile::file_path", "pdf-to-text", "The string must not be empty.", "convert_raw_data_to_file"), 470);
+            
+            FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
+            try
+            {
+                convertRawDataToStream(data, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
+        }
+
+        /**
+        * Convert the contents of an input stream.
+        *
+        * @param inStream The input stream with source data.<br>
+        * @return Byte array containing the conversion output.
+        */
+        public byte[] convertStream(Stream inStream)
+        {
+            rawData["stream"] = ConnectionHelper.ReadStream(inStream);
+            return helper.post(fields, files, rawData, null);
+        }
+
+        /**
+        * Convert the contents of an input stream and write the result to an output stream.
+        *
+        * @param inStream The input stream with source data.<br>
+        * @param outStream The output stream that will contain the conversion output.
+        */
+        public void convertStreamToStream(Stream inStream, Stream outStream)
+        {
+            rawData["stream"] = ConnectionHelper.ReadStream(inStream);
+            helper.post(fields, files, rawData, outStream);
+        }
+
+        /**
+        * Convert the contents of an input stream and write the result to a local file.
+        *
+        * @param inStream The input stream with source data.<br>
+        * @param filePath The output file path. The string must not be empty.
+        */
+        public void convertStreamToFile(Stream inStream, string filePath)
+        {
+            if (!(!String.IsNullOrEmpty(filePath)))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "convertStreamToFile::file_path", "pdf-to-text", "The string must not be empty.", "convert_stream_to_file"), 470);
+            
+            FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
+            try
+            {
+                convertStreamToStream(inStream, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
+        }
+
+        /**
+        * The password to open the encrypted PDF file.
+        *
+        * @param password The input PDF password.
+        * @return The converter object.
+        */
+        public PdfToTextClient setPdfPassword(string password)
+        {
+            fields["pdf_password"] = password;
+            return this;
+        }
+
+        /**
+        * Set the page range to print.
+        *
+        * @param pages A comma separated list of page numbers or ranges.
+        * @return The converter object.
+        */
+        public PdfToTextClient setPrintPageRange(string pages)
+        {
+            if (!Regex.Match(pages, "^(?:\\s*(?:\\d+|(?:\\d*\\s*\\-\\s*\\d+)|(?:\\d+\\s*\\-\\s*\\d*))\\s*,\\s*)*\\s*(?:\\d+|(?:\\d*\\s*\\-\\s*\\d+)|(?:\\d+\\s*\\-\\s*\\d*))\\s*$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(pages, "setPrintPageRange", "pdf-to-text", "A comma separated list of page numbers or ranges.", "set_print_page_range"), 470);
+            
+            fields["print_page_range"] = pages;
+            return this;
+        }
+
+        /**
+        * Ignore the original PDF layout.
+        *
+        * @param value Set to <span class='field-value'>true</span> to ignore the layout.
+        * @return The converter object.
+        */
+        public PdfToTextClient setNoLayout(bool value)
+        {
+            fields["no_layout"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
+        * The end-of-line convention for the text output.
+        *
+        * @param eol Allowed values are unix, dos, mac.
+        * @return The converter object.
+        */
+        public PdfToTextClient setEol(string eol)
+        {
+            if (!Regex.Match(eol, "(?i)^(unix|dos|mac)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(eol, "setEol", "pdf-to-text", "Allowed values are unix, dos, mac.", "set_eol"), 470);
+            
+            fields["eol"] = eol;
+            return this;
+        }
+
+        /**
+        * Specify the page break mode for the text output.
+        *
+        * @param mode Allowed values are none, default, custom.
+        * @return The converter object.
+        */
+        public PdfToTextClient setPageBreakMode(string mode)
+        {
+            if (!Regex.Match(mode, "(?i)^(none|default|custom)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(mode, "setPageBreakMode", "pdf-to-text", "Allowed values are none, default, custom.", "set_page_break_mode"), 470);
+            
+            fields["page_break_mode"] = mode;
+            return this;
+        }
+
+        /**
+        * Specify the custom page break.
+        *
+        * @param pageBreak String to insert between the pages.
+        * @return The converter object.
+        */
+        public PdfToTextClient setCustomPageBreak(string pageBreak)
+        {
+            fields["custom_page_break"] = pageBreak;
+            return this;
+        }
+
+        /**
+        * Specify the paragraph detection mode.
+        *
+        * @param mode Allowed values are none, bounding-box, characters.
+        * @return The converter object.
+        */
+        public PdfToTextClient setParagraphMode(string mode)
+        {
+            if (!Regex.Match(mode, "(?i)^(none|bounding-box|characters)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(mode, "setParagraphMode", "pdf-to-text", "Allowed values are none, bounding-box, characters.", "set_paragraph_mode"), 470);
+            
+            fields["paragraph_mode"] = mode;
+            return this;
+        }
+
+        /**
+        * Set the maximum line spacing when the paragraph detection mode is enabled.
+        *
+        * @param threshold The value must be a positive integer percentage.
+        * @return The converter object.
+        */
+        public PdfToTextClient setLineSpacingThreshold(string threshold)
+        {
+            if (!Regex.Match(threshold, "(?i)^0$|^[0-9]+%$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(threshold, "setLineSpacingThreshold", "pdf-to-text", "The value must be a positive integer percentage.", "set_line_spacing_threshold"), 470);
+            
+            fields["line_spacing_threshold"] = threshold;
+            return this;
+        }
+
+        /**
+        * Remove the hyphen character from the end of lines.
+        *
+        * @param value Set to <span class='field-value'>true</span> to remove hyphens.
+        * @return The converter object.
+        */
+        public PdfToTextClient setRemoveHyphenation(bool value)
+        {
+            fields["remove_hyphenation"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Remove empty lines from the text output.
+        *
+        * @param value Set to <span class='field-value'>true</span> to remove empty lines.
+        * @return The converter object.
+        */
+        public PdfToTextClient setRemoveEmptyLines(bool value)
+        {
+            fields["remove_empty_lines"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Set the top left X coordinate of the crop area in points.
+        *
+        * @param x Must be a positive integer number or 0.
+        * @return The converter object.
+        */
+        public PdfToTextClient setCropAreaX(int x)
+        {
+            if (!(x >= 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(x, "setCropAreaX", "pdf-to-text", "Must be a positive integer number or 0.", "set_crop_area_x"), 470);
+            
+            fields["crop_area_x"] = ConnectionHelper.intToString(x);
+            return this;
+        }
+
+        /**
+        * Set the top left Y coordinate of the crop area in points.
+        *
+        * @param y Must be a positive integer number or 0.
+        * @return The converter object.
+        */
+        public PdfToTextClient setCropAreaY(int y)
+        {
+            if (!(y >= 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(y, "setCropAreaY", "pdf-to-text", "Must be a positive integer number or 0.", "set_crop_area_y"), 470);
+            
+            fields["crop_area_y"] = ConnectionHelper.intToString(y);
+            return this;
+        }
+
+        /**
+        * Set the width of the crop area in points.
+        *
+        * @param width Must be a positive integer number or 0.
+        * @return The converter object.
+        */
+        public PdfToTextClient setCropAreaWidth(int width)
+        {
+            if (!(width >= 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setCropAreaWidth", "pdf-to-text", "Must be a positive integer number or 0.", "set_crop_area_width"), 470);
+            
+            fields["crop_area_width"] = ConnectionHelper.intToString(width);
+            return this;
+        }
+
+        /**
+        * Set the height of the crop area in points.
+        *
+        * @param height Must be a positive integer number or 0.
+        * @return The converter object.
+        */
+        public PdfToTextClient setCropAreaHeight(int height)
+        {
+            if (!(height >= 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setCropAreaHeight", "pdf-to-text", "Must be a positive integer number or 0.", "set_crop_area_height"), 470);
+            
+            fields["crop_area_height"] = ConnectionHelper.intToString(height);
+            return this;
+        }
+
+        /**
+        * Set the crop area. It allows to extract just a part of a PDF page.
+        *
+        * @param x Set the top left X coordinate of the crop area in points. Must be a positive integer number or 0.
+        * @param y Set the top left Y coordinate of the crop area in points. Must be a positive integer number or 0.
+        * @param width Set the width of the crop area in points. Must be a positive integer number or 0.
+        * @param height Set the height of the crop area in points. Must be a positive integer number or 0.
+        * @return The converter object.
+        */
+        public PdfToTextClient setCropArea(int x, int y, int width, int height)
+        {
+            this.setCropAreaX(x);
+            this.setCropAreaY(y);
+            this.setCropAreaWidth(width);
+            this.setCropAreaHeight(height);
+            return this;
+        }
+
+        /**
+        * Turn on the debug logging. Details about the conversion are stored in the debug log. The URL of the log can be obtained from the <a href='#get_debug_log_url'>getDebugLogUrl</a> method or available in <a href='/user/account/log/conversion/'>conversion statistics</a>.
+        *
+        * @param value Set to <span class='field-value'>true</span> to enable the debug logging.
+        * @return The converter object.
+        */
+        public PdfToTextClient setDebugLog(bool value)
+        {
+            fields["debug_log"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Get the URL of the debug log for the last conversion.
+        * @return The link to the debug log.
+        */
+        public string getDebugLogUrl()
+        {
+            return helper.getDebugLogUrl();
+        }
+
+        /**
+        * Get the number of conversion credits available in your <a href='/user/account/'>account</a>.
+        * This method can only be called after a call to one of the convertXtoY methods.
+        * The returned value can differ from the actual count if you run parallel conversions.
+        * The special value <span class='field-value'>999999</span> is returned if the information is not available.
+        * @return The number of credits.
+        */
+        public int getRemainingCreditCount()
+        {
+            return helper.getRemainingCreditCount();
+        }
+
+        /**
+        * Get the number of credits consumed by the last conversion.
+        * @return The number of credits.
+        */
+        public int getConsumedCreditCount()
+        {
+            return helper.getConsumedCreditCount();
+        }
+
+        /**
+        * Get the job id.
+        * @return The unique job identifier.
+        */
+        public string getJobId()
+        {
+            return helper.getJobId();
+        }
+
+        /**
+        * Get the number of pages in the output document.
+        * @return The page count.
+        */
+        public int getPageCount()
+        {
+            return helper.getPageCount();
+        }
+
+        /**
+        * Get the size of the output in bytes.
+        * @return The count of bytes.
+        */
+        public int getOutputSize()
+        {
+            return helper.getOutputSize();
+        }
+
+        /**
+        * Get the version details.
+        * @return API version, converter version, and client version.
+        */
+        public string getVersion()
+        {
+            return string.Format("client {0}, API v2, converter {1}", ConnectionHelper.CLIENT_VERSION, helper.getConverterVersion());
+        }
+
+        /**
+        * Tag the conversion with a custom value. The tag is used in <a href='/user/account/log/conversion/'>conversion statistics</a>. A value longer than 32 characters is cut off.
+        *
+        * @param tag A string with the custom tag.
+        * @return The converter object.
+        */
+        public PdfToTextClient setTag(string tag)
+        {
+            fields["tag"] = tag;
+            return this;
+        }
+
+        /**
+        * A proxy server used by Pdfcrowd conversion process for accessing the source URLs with HTTP scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
+        *
+        * @param proxy The value must have format DOMAIN_OR_IP_ADDRESS:PORT.
+        * @return The converter object.
+        */
+        public PdfToTextClient setHttpProxy(string proxy)
+        {
+            if (!Regex.Match(proxy, "(?i)^([a-z0-9]+(-[a-z0-9]+)*\\.)+[a-z0-9]{1,}:\\d+$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(proxy, "setHttpProxy", "pdf-to-text", "The value must have format DOMAIN_OR_IP_ADDRESS:PORT.", "set_http_proxy"), 470);
+            
+            fields["http_proxy"] = proxy;
+            return this;
+        }
+
+        /**
+        * A proxy server used by Pdfcrowd conversion process for accessing the source URLs with HTTPS scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
+        *
+        * @param proxy The value must have format DOMAIN_OR_IP_ADDRESS:PORT.
+        * @return The converter object.
+        */
+        public PdfToTextClient setHttpsProxy(string proxy)
+        {
+            if (!Regex.Match(proxy, "(?i)^([a-z0-9]+(-[a-z0-9]+)*\\.)+[a-z0-9]{1,}:\\d+$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(proxy, "setHttpsProxy", "pdf-to-text", "The value must have format DOMAIN_OR_IP_ADDRESS:PORT.", "set_https_proxy"), 470);
+            
+            fields["https_proxy"] = proxy;
+            return this;
+        }
+
+        /**
+        * Specifies if the client communicates over HTTP or HTTPS with Pdfcrowd API.
+        * Warning: Using HTTP is insecure as data sent over HTTP is not encrypted. Enable this option only if you know what you are doing.
+        *
+        * @param value Set to <span class='field-value'>true</span> to use HTTP.
+        * @return The converter object.
+        */
+        public PdfToTextClient setUseHttp(bool value)
+        {
+            helper.setUseHttp(value);
+            return this;
+        }
+
+        /**
+        * Set a custom user agent HTTP header. It can be useful if you are behind a proxy or a firewall.
+        *
+        * @param agent The user agent string.
+        * @return The converter object.
+        */
+        public PdfToTextClient setUserAgent(string agent)
+        {
+            helper.setUserAgent(agent);
+            return this;
+        }
+
+        /**
+        * Specifies an HTTP proxy that the API client library will use to connect to the internet.
+        *
+        * @param host The proxy hostname.
+        * @param port The proxy port.
+        * @param userName The username.
+        * @param password The password.
+        * @return The converter object.
+        */
+        public PdfToTextClient setProxy(string host, int port, string userName, string password)
+        {
+            helper.setProxy(host, port, userName, password);
+            return this;
+        }
+
+        /**
+        * Specifies the number of automatic retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
+        *
+        * @param count Number of retries.
+        * @return The converter object.
+        */
+        public PdfToTextClient setRetryCount(int count)
+        {
+            helper.setRetryCount(count);
+            return this;
+        }
+
     }
 
 
