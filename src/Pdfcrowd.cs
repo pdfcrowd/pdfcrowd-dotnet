@@ -65,7 +65,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "5.10.0";
+        public static readonly string CLIENT_VERSION = "5.11.0";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -76,7 +76,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/5.10.0 (https://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/5.11.0 (https://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -3799,6 +3799,215 @@ namespace pdfcrowd
         }
 
         /**
+        * Set the output canvas size.
+        *
+        * @param size Allowed values are A0, A1, A2, A3, A4, A5, A6, Letter.
+        * @return The converter object.
+        */
+        public ImageToImageClient setCanvasSize(string size)
+        {
+            if (!Regex.Match(size, "(?i)^(A0|A1|A2|A3|A4|A5|A6|Letter)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(size, "setCanvasSize", "image-to-image", "Allowed values are A0, A1, A2, A3, A4, A5, A6, Letter.", "set_canvas_size"), 470);
+            
+            fields["canvas_size"] = size;
+            return this;
+        }
+
+        /**
+        * Set the output canvas width.
+        *
+        * @param width The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToImageClient setCanvasWidth(string width)
+        {
+            if (!Regex.Match(width, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setCanvasWidth", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_canvas_width"), 470);
+            
+            fields["canvas_width"] = width;
+            return this;
+        }
+
+        /**
+        * Set the output canvas height.
+        *
+        * @param height The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToImageClient setCanvasHeight(string height)
+        {
+            if (!Regex.Match(height, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setCanvasHeight", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_canvas_height"), 470);
+            
+            fields["canvas_height"] = height;
+            return this;
+        }
+
+        /**
+        * Set the output canvas dimensions. If no canvas size is specified, margins are applied as a border around the image.
+        *
+        * @param width Set the output canvas width. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param height Set the output canvas height. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToImageClient setCanvasDimensions(string width, string height)
+        {
+            this.setCanvasWidth(width);
+            this.setCanvasHeight(height);
+            return this;
+        }
+
+        /**
+        * Set the output canvas orientation.
+        *
+        * @param orientation Allowed values are landscape, portrait.
+        * @return The converter object.
+        */
+        public ImageToImageClient setOrientation(string orientation)
+        {
+            if (!Regex.Match(orientation, "(?i)^(landscape|portrait)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(orientation, "setOrientation", "image-to-image", "Allowed values are landscape, portrait.", "set_orientation"), 470);
+            
+            fields["orientation"] = orientation;
+            return this;
+        }
+
+        /**
+        * Set the image position on the page.
+        *
+        * @param position Allowed values are center, top, bottom, left, right, top-left, top-right, bottom-left, bottom-right.
+        * @return The converter object.
+        */
+        public ImageToImageClient setPosition(string position)
+        {
+            if (!Regex.Match(position, "(?i)^(center|top|bottom|left|right|top-left|top-right|bottom-left|bottom-right)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(position, "setPosition", "image-to-image", "Allowed values are center, top, bottom, left, right, top-left, top-right, bottom-left, bottom-right.", "set_position"), 470);
+            
+            fields["position"] = position;
+            return this;
+        }
+
+        /**
+        * Set the mode to print the image on the content area of the page.
+        *
+        * @param mode Allowed values are default, fit, stretch.
+        * @return The converter object.
+        */
+        public ImageToImageClient setPrintCanvasMode(string mode)
+        {
+            if (!Regex.Match(mode, "(?i)^(default|fit|stretch)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(mode, "setPrintCanvasMode", "image-to-image", "Allowed values are default, fit, stretch.", "set_print_canvas_mode"), 470);
+            
+            fields["print_canvas_mode"] = mode;
+            return this;
+        }
+
+        /**
+        * Set the output canvas top margin.
+        *
+        * @param top The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToImageClient setMarginTop(string top)
+        {
+            if (!Regex.Match(top, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(top, "setMarginTop", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_margin_top"), 470);
+            
+            fields["margin_top"] = top;
+            return this;
+        }
+
+        /**
+        * Set the output canvas right margin.
+        *
+        * @param right The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToImageClient setMarginRight(string right)
+        {
+            if (!Regex.Match(right, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(right, "setMarginRight", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_margin_right"), 470);
+            
+            fields["margin_right"] = right;
+            return this;
+        }
+
+        /**
+        * Set the output canvas bottom margin.
+        *
+        * @param bottom The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToImageClient setMarginBottom(string bottom)
+        {
+            if (!Regex.Match(bottom, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(bottom, "setMarginBottom", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_margin_bottom"), 470);
+            
+            fields["margin_bottom"] = bottom;
+            return this;
+        }
+
+        /**
+        * Set the output canvas left margin.
+        *
+        * @param left The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToImageClient setMarginLeft(string left)
+        {
+            if (!Regex.Match(left, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(left, "setMarginLeft", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_margin_left"), 470);
+            
+            fields["margin_left"] = left;
+            return this;
+        }
+
+        /**
+        * Set the output canvas margins.
+        *
+        * @param top Set the output canvas top margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param right Set the output canvas right margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param bottom Set the output canvas bottom margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param left Set the output canvas left margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToImageClient setMargins(string top, string right, string bottom, string left)
+        {
+            this.setMarginTop(top);
+            this.setMarginRight(right);
+            this.setMarginBottom(bottom);
+            this.setMarginLeft(left);
+            return this;
+        }
+
+        /**
+        * The canvas background color in RGB or RGBA hexadecimal format. The color fills the entire canvas regardless of margins. If no canvas size is specified and the image format supports background (e.g. PDF, PNG), the background color is applied too.
+        *
+        * @param color The value must be in RRGGBB or RRGGBBAA hexadecimal format.
+        * @return The converter object.
+        */
+        public ImageToImageClient setCanvasBackgroundColor(string color)
+        {
+            if (!Regex.Match(color, "^[0-9a-fA-F]{6,8}$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(color, "setCanvasBackgroundColor", "image-to-image", "The value must be in RRGGBB or RRGGBBAA hexadecimal format.", "set_canvas_background_color"), 470);
+            
+            fields["canvas_background_color"] = color;
+            return this;
+        }
+
+        /**
+        * Set the DPI resolution of the input image. The DPI affects margin options specified in points too (e.g. 1 point is equal to 1 pixel in 96 DPI).
+        *
+        * @param dpi The DPI value.
+        * @return The converter object.
+        */
+        public ImageToImageClient setDpi(int dpi)
+        {
+            fields["dpi"] = ConnectionHelper.intToString(dpi);
+            return this;
+        }
+
+        /**
         * Turn on the debug logging. Details about the conversion are stored in the debug log. The URL of the log can be obtained from the <a href='#get_debug_log_url'>getDebugLogUrl</a> method or available in <a href='/user/account/log/conversion/'>conversion statistics</a>.
         *
         * @param value Set to <span class='field-value'>true</span> to enable the debug logging.
@@ -4008,13 +4217,13 @@ namespace pdfcrowd
         /**
         * Specifies the action to be performed on the input PDFs.
         *
-        * @param action Allowed values are join, shuffle.
+        * @param action Allowed values are join, shuffle, extract, delete.
         * @return The converter object.
         */
         public PdfToPdfClient setAction(string action)
         {
-            if (!Regex.Match(action, "(?i)^(join|shuffle)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(action, "setAction", "pdf-to-pdf", "Allowed values are join, shuffle.", "set_action"), 470);
+            if (!Regex.Match(action, "(?i)^(join|shuffle|extract|delete)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(action, "setAction", "pdf-to-pdf", "Allowed values are join, shuffle, extract, delete.", "set_action"), 470);
             
             fields["action"] = action;
             return this;
@@ -4095,6 +4304,21 @@ namespace pdfcrowd
         public PdfToPdfClient setInputPdfPassword(string password)
         {
             fields["input_pdf_password"] = password;
+            return this;
+        }
+
+        /**
+        * Set the page range for <span class='field-value'>extract</span> or <span class='field-value'>delete</span> action.
+        *
+        * @param pages A comma separated list of page numbers or ranges.
+        * @return The converter object.
+        */
+        public PdfToPdfClient setPageRange(string pages)
+        {
+            if (!Regex.Match(pages, "^(?:\\s*(?:\\d+|(?:\\d*\\s*\\-\\s*\\d+)|(?:\\d+\\s*\\-\\s*\\d*))\\s*,\\s*)*\\s*(?:\\d+|(?:\\d*\\s*\\-\\s*\\d+)|(?:\\d+\\s*\\-\\s*\\d*))\\s*$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(pages, "setPageRange", "pdf-to-pdf", "A comma separated list of page numbers or ranges.", "set_page_range"), 470);
+            
+            fields["page_range"] = pages;
             return this;
         }
 
@@ -4939,6 +5163,215 @@ namespace pdfcrowd
         public ImageToPdfClient setRotate(string rotate)
         {
             fields["rotate"] = rotate;
+            return this;
+        }
+
+        /**
+        * Set the output page size.
+        *
+        * @param size Allowed values are A0, A1, A2, A3, A4, A5, A6, Letter.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setPageSize(string size)
+        {
+            if (!Regex.Match(size, "(?i)^(A0|A1|A2|A3|A4|A5|A6|Letter)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(size, "setPageSize", "image-to-pdf", "Allowed values are A0, A1, A2, A3, A4, A5, A6, Letter.", "set_page_size"), 470);
+            
+            fields["page_size"] = size;
+            return this;
+        }
+
+        /**
+        * Set the output page width.
+        *
+        * @param width The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToPdfClient setPageWidth(string width)
+        {
+            if (!Regex.Match(width, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setPageWidth", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_page_width"), 470);
+            
+            fields["page_width"] = width;
+            return this;
+        }
+
+        /**
+        * Set the output page height.
+        *
+        * @param height The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToPdfClient setPageHeight(string height)
+        {
+            if (!Regex.Match(height, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setPageHeight", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_page_height"), 470);
+            
+            fields["page_height"] = height;
+            return this;
+        }
+
+        /**
+        * Set the output page dimensions. If no page size is specified, margins are applied as a border around the image.
+        *
+        * @param width Set the output page width. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param height Set the output page height. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToPdfClient setPageDimensions(string width, string height)
+        {
+            this.setPageWidth(width);
+            this.setPageHeight(height);
+            return this;
+        }
+
+        /**
+        * Set the output page orientation.
+        *
+        * @param orientation Allowed values are landscape, portrait.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setOrientation(string orientation)
+        {
+            if (!Regex.Match(orientation, "(?i)^(landscape|portrait)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(orientation, "setOrientation", "image-to-pdf", "Allowed values are landscape, portrait.", "set_orientation"), 470);
+            
+            fields["orientation"] = orientation;
+            return this;
+        }
+
+        /**
+        * Set the image position on the page.
+        *
+        * @param position Allowed values are center, top, bottom, left, right, top-left, top-right, bottom-left, bottom-right.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setPosition(string position)
+        {
+            if (!Regex.Match(position, "(?i)^(center|top|bottom|left|right|top-left|top-right|bottom-left|bottom-right)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(position, "setPosition", "image-to-pdf", "Allowed values are center, top, bottom, left, right, top-left, top-right, bottom-left, bottom-right.", "set_position"), 470);
+            
+            fields["position"] = position;
+            return this;
+        }
+
+        /**
+        * Set the mode to print the image on the content area of the page.
+        *
+        * @param mode Allowed values are default, fit, stretch.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setPrintPageMode(string mode)
+        {
+            if (!Regex.Match(mode, "(?i)^(default|fit|stretch)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(mode, "setPrintPageMode", "image-to-pdf", "Allowed values are default, fit, stretch.", "set_print_page_mode"), 470);
+            
+            fields["print_page_mode"] = mode;
+            return this;
+        }
+
+        /**
+        * Set the output page top margin.
+        *
+        * @param top The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToPdfClient setMarginTop(string top)
+        {
+            if (!Regex.Match(top, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(top, "setMarginTop", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_margin_top"), 470);
+            
+            fields["margin_top"] = top;
+            return this;
+        }
+
+        /**
+        * Set the output page right margin.
+        *
+        * @param right The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToPdfClient setMarginRight(string right)
+        {
+            if (!Regex.Match(right, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(right, "setMarginRight", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_margin_right"), 470);
+            
+            fields["margin_right"] = right;
+            return this;
+        }
+
+        /**
+        * Set the output page bottom margin.
+        *
+        * @param bottom The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToPdfClient setMarginBottom(string bottom)
+        {
+            if (!Regex.Match(bottom, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(bottom, "setMarginBottom", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_margin_bottom"), 470);
+            
+            fields["margin_bottom"] = bottom;
+            return this;
+        }
+
+        /**
+        * Set the output page left margin.
+        *
+        * @param left The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToPdfClient setMarginLeft(string left)
+        {
+            if (!Regex.Match(left, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(left, "setMarginLeft", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_margin_left"), 470);
+            
+            fields["margin_left"] = left;
+            return this;
+        }
+
+        /**
+        * Set the output page margins.
+        *
+        * @param top Set the output page top margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param right Set the output page right margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param bottom Set the output page bottom margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param left Set the output page left margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToPdfClient setPageMargins(string top, string right, string bottom, string left)
+        {
+            this.setMarginTop(top);
+            this.setMarginRight(right);
+            this.setMarginBottom(bottom);
+            this.setMarginLeft(left);
+            return this;
+        }
+
+        /**
+        * The page background color in RGB or RGBA hexadecimal format. The color fills the entire page regardless of the margins. If not page size is specified and the image format supports background (e.g. PDF, PNG), the background color is applied too.
+        *
+        * @param color The value must be in RRGGBB or RRGGBBAA hexadecimal format.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setPageBackgroundColor(string color)
+        {
+            if (!Regex.Match(color, "^[0-9a-fA-F]{6,8}$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(color, "setPageBackgroundColor", "image-to-pdf", "The value must be in RRGGBB or RRGGBBAA hexadecimal format.", "set_page_background_color"), 470);
+            
+            fields["page_background_color"] = color;
+            return this;
+        }
+
+        /**
+        * Set the DPI resolution of the input image. The DPI affects margin options specified in points too (e.g. 1 point is equal to 1 pixel in 96 DPI).
+        *
+        * @param dpi The DPI value.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setDpi(int dpi)
+        {
+            fields["dpi"] = ConnectionHelper.intToString(dpi);
             return this;
         }
 
