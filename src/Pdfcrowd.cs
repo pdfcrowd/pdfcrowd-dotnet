@@ -65,7 +65,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "5.11.0";
+        public static readonly string CLIENT_VERSION = "5.12.0";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -76,7 +76,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/5.11.0 (https://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/5.12.0 (https://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -738,13 +738,13 @@ namespace pdfcrowd
         /**
         * Set the output page width. The safe maximum is <span class='field-value'>200in</span> otherwise some PDF viewers may be unable to open the PDF.
         *
-        * @param width The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param width The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public HtmlToPdfClient setPageWidth(string width)
         {
             if (!Regex.Match(width, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setPageWidth", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_page_width"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setPageWidth", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_page_width"), 470);
             
             fields["page_width"] = width;
             return this;
@@ -753,13 +753,13 @@ namespace pdfcrowd
         /**
         * Set the output page height. Use <span class='field-value'>-1</span> for a single page PDF. The safe maximum is <span class='field-value'>200in</span> otherwise some PDF viewers may be unable to open the PDF.
         *
-        * @param height The value must be -1 or specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param height The value must be -1 or specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public HtmlToPdfClient setPageHeight(string height)
         {
             if (!Regex.Match(height, "(?i)^0$|^\\-1$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setPageHeight", "html-to-pdf", "The value must be -1 or specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_page_height"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setPageHeight", "html-to-pdf", "The value must be -1 or specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_page_height"), 470);
             
             fields["page_height"] = height;
             return this;
@@ -768,8 +768,8 @@ namespace pdfcrowd
         /**
         * Set the output page dimensions.
         *
-        * @param width Set the output page width. The safe maximum is <span class='field-value'>200in</span> otherwise some PDF viewers may be unable to open the PDF. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
-        * @param height Set the output page height. Use <span class='field-value'>-1</span> for a single page PDF. The safe maximum is <span class='field-value'>200in</span> otherwise some PDF viewers may be unable to open the PDF. The value must be -1 or specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param width Set the output page width. The safe maximum is <span class='field-value'>200in</span> otherwise some PDF viewers may be unable to open the PDF. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param height Set the output page height. Use <span class='field-value'>-1</span> for a single page PDF. The safe maximum is <span class='field-value'>200in</span> otherwise some PDF viewers may be unable to open the PDF. The value must be -1 or specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public HtmlToPdfClient setPageDimensions(string width, string height)
@@ -797,13 +797,13 @@ namespace pdfcrowd
         /**
         * Set the output page top margin.
         *
-        * @param top The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param top The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public HtmlToPdfClient setMarginTop(string top)
         {
             if (!Regex.Match(top, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(top, "setMarginTop", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_margin_top"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(top, "setMarginTop", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_top"), 470);
             
             fields["margin_top"] = top;
             return this;
@@ -812,13 +812,13 @@ namespace pdfcrowd
         /**
         * Set the output page right margin.
         *
-        * @param right The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param right The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public HtmlToPdfClient setMarginRight(string right)
         {
             if (!Regex.Match(right, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(right, "setMarginRight", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_margin_right"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(right, "setMarginRight", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_right"), 470);
             
             fields["margin_right"] = right;
             return this;
@@ -827,13 +827,13 @@ namespace pdfcrowd
         /**
         * Set the output page bottom margin.
         *
-        * @param bottom The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param bottom The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public HtmlToPdfClient setMarginBottom(string bottom)
         {
             if (!Regex.Match(bottom, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(bottom, "setMarginBottom", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_margin_bottom"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(bottom, "setMarginBottom", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_bottom"), 470);
             
             fields["margin_bottom"] = bottom;
             return this;
@@ -842,13 +842,13 @@ namespace pdfcrowd
         /**
         * Set the output page left margin.
         *
-        * @param left The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param left The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public HtmlToPdfClient setMarginLeft(string left)
         {
             if (!Regex.Match(left, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(left, "setMarginLeft", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_margin_left"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(left, "setMarginLeft", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_left"), 470);
             
             fields["margin_left"] = left;
             return this;
@@ -869,10 +869,10 @@ namespace pdfcrowd
         /**
         * Set the output page margins.
         *
-        * @param top Set the output page top margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
-        * @param right Set the output page right margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
-        * @param bottom Set the output page bottom margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
-        * @param left Set the output page left margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param top Set the output page top margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param right Set the output page right margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param bottom Set the output page bottom margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param left Set the output page left margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public HtmlToPdfClient setPageMargins(string top, string right, string bottom, string left)
@@ -914,13 +914,13 @@ namespace pdfcrowd
         /**
         * Set the top left X coordinate of the content area. It is relative to the top left X coordinate of the print area.
         *
-        * @param x The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt". It may contain a negative value.
+        * @param x The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt". It may contain a negative value.
         * @return The converter object.
         */
         public HtmlToPdfClient setContentAreaX(string x)
         {
             if (!Regex.Match(x, "(?i)^0$|^\\-?[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(x, "setContentAreaX", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\". It may contain a negative value.", "set_content_area_x"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(x, "setContentAreaX", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\". It may contain a negative value.", "set_content_area_x"), 470);
             
             fields["content_area_x"] = x;
             return this;
@@ -929,13 +929,13 @@ namespace pdfcrowd
         /**
         * Set the top left Y coordinate of the content area. It is relative to the top left Y coordinate of the print area.
         *
-        * @param y The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt". It may contain a negative value.
+        * @param y The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt". It may contain a negative value.
         * @return The converter object.
         */
         public HtmlToPdfClient setContentAreaY(string y)
         {
             if (!Regex.Match(y, "(?i)^0$|^\\-?[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(y, "setContentAreaY", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\". It may contain a negative value.", "set_content_area_y"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(y, "setContentAreaY", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\". It may contain a negative value.", "set_content_area_y"), 470);
             
             fields["content_area_y"] = y;
             return this;
@@ -944,13 +944,13 @@ namespace pdfcrowd
         /**
         * Set the width of the content area. It should be at least 1 inch.
         *
-        * @param width The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param width The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public HtmlToPdfClient setContentAreaWidth(string width)
         {
             if (!Regex.Match(width, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setContentAreaWidth", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_content_area_width"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setContentAreaWidth", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_content_area_width"), 470);
             
             fields["content_area_width"] = width;
             return this;
@@ -959,13 +959,13 @@ namespace pdfcrowd
         /**
         * Set the height of the content area. It should be at least 1 inch.
         *
-        * @param height The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param height The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public HtmlToPdfClient setContentAreaHeight(string height)
         {
             if (!Regex.Match(height, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setContentAreaHeight", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_content_area_height"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setContentAreaHeight", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_content_area_height"), 470);
             
             fields["content_area_height"] = height;
             return this;
@@ -974,10 +974,10 @@ namespace pdfcrowd
         /**
         * Set the content area position and size. The content area enables to specify a web page area to be converted.
         *
-        * @param x Set the top left X coordinate of the content area. It is relative to the top left X coordinate of the print area. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt". It may contain a negative value.
-        * @param y Set the top left Y coordinate of the content area. It is relative to the top left Y coordinate of the print area. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt". It may contain a negative value.
-        * @param width Set the width of the content area. It should be at least 1 inch. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
-        * @param height Set the height of the content area. It should be at least 1 inch. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param x Set the top left X coordinate of the content area. It is relative to the top left X coordinate of the print area. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt". It may contain a negative value.
+        * @param y Set the top left Y coordinate of the content area. It is relative to the top left Y coordinate of the print area. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt". It may contain a negative value.
+        * @param width Set the width of the content area. It should be at least 1 inch. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param height Set the height of the content area. It should be at least 1 inch. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public HtmlToPdfClient setContentArea(string x, string y, string width, string height)
@@ -1037,13 +1037,13 @@ namespace pdfcrowd
         /**
         * Set the header height.
         *
-        * @param height The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param height The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public HtmlToPdfClient setHeaderHeight(string height)
         {
             if (!Regex.Match(height, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setHeaderHeight", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_header_height"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setHeaderHeight", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_header_height"), 470);
             
             fields["header_height"] = height;
             return this;
@@ -1094,13 +1094,13 @@ namespace pdfcrowd
         /**
         * Set the footer height.
         *
-        * @param height The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param height The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public HtmlToPdfClient setFooterHeight(string height)
         {
             if (!Regex.Match(height, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setFooterHeight", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_footer_height"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setFooterHeight", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_footer_height"), 470);
             
             fields["footer_height"] = height;
             return this;
@@ -3799,6 +3799,96 @@ namespace pdfcrowd
         }
 
         /**
+        * Set the top left X coordinate of the content area. It is relative to the top left X coordinate of the print area.
+        *
+        * @param x The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToImageClient setCropAreaX(string x)
+        {
+            if (!Regex.Match(x, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(x, "setCropAreaX", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_crop_area_x"), 470);
+            
+            fields["crop_area_x"] = x;
+            return this;
+        }
+
+        /**
+        * Set the top left Y coordinate of the content area. It is relative to the top left Y coordinate of the print area.
+        *
+        * @param y The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToImageClient setCropAreaY(string y)
+        {
+            if (!Regex.Match(y, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(y, "setCropAreaY", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_crop_area_y"), 470);
+            
+            fields["crop_area_y"] = y;
+            return this;
+        }
+
+        /**
+        * Set the width of the content area. It should be at least 1 inch.
+        *
+        * @param width The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToImageClient setCropAreaWidth(string width)
+        {
+            if (!Regex.Match(width, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setCropAreaWidth", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_crop_area_width"), 470);
+            
+            fields["crop_area_width"] = width;
+            return this;
+        }
+
+        /**
+        * Set the height of the content area. It should be at least 1 inch.
+        *
+        * @param height The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToImageClient setCropAreaHeight(string height)
+        {
+            if (!Regex.Match(height, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setCropAreaHeight", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_crop_area_height"), 470);
+            
+            fields["crop_area_height"] = height;
+            return this;
+        }
+
+        /**
+        * Set the content area position and size. The content area enables to specify the part to be converted.
+        *
+        * @param x Set the top left X coordinate of the content area. It is relative to the top left X coordinate of the print area. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param y Set the top left Y coordinate of the content area. It is relative to the top left Y coordinate of the print area. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param width Set the width of the content area. It should be at least 1 inch. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param height Set the height of the content area. It should be at least 1 inch. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToImageClient setCropArea(string x, string y, string width, string height)
+        {
+            this.setCropAreaX(x);
+            this.setCropAreaY(y);
+            this.setCropAreaWidth(width);
+            this.setCropAreaHeight(height);
+            return this;
+        }
+
+        /**
+        * Remove borders of an image which does not change in color.
+        *
+        * @param value Set to <span class='field-value'>true</span> to remove borders.
+        * @return The converter object.
+        */
+        public ImageToImageClient setRemoveBorders(bool value)
+        {
+            fields["remove_borders"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
         * Set the output canvas size.
         *
         * @param size Allowed values are A0, A1, A2, A3, A4, A5, A6, Letter.
@@ -3816,13 +3906,13 @@ namespace pdfcrowd
         /**
         * Set the output canvas width.
         *
-        * @param width The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param width The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public ImageToImageClient setCanvasWidth(string width)
         {
             if (!Regex.Match(width, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setCanvasWidth", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_canvas_width"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setCanvasWidth", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_canvas_width"), 470);
             
             fields["canvas_width"] = width;
             return this;
@@ -3831,13 +3921,13 @@ namespace pdfcrowd
         /**
         * Set the output canvas height.
         *
-        * @param height The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param height The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public ImageToImageClient setCanvasHeight(string height)
         {
             if (!Regex.Match(height, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setCanvasHeight", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_canvas_height"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setCanvasHeight", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_canvas_height"), 470);
             
             fields["canvas_height"] = height;
             return this;
@@ -3846,8 +3936,8 @@ namespace pdfcrowd
         /**
         * Set the output canvas dimensions. If no canvas size is specified, margins are applied as a border around the image.
         *
-        * @param width Set the output canvas width. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
-        * @param height Set the output canvas height. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param width Set the output canvas width. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param height Set the output canvas height. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public ImageToImageClient setCanvasDimensions(string width, string height)
@@ -3873,7 +3963,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Set the image position on the page.
+        * Set the image position on the canvas.
         *
         * @param position Allowed values are center, top, bottom, left, right, top-left, top-right, bottom-left, bottom-right.
         * @return The converter object.
@@ -3888,7 +3978,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Set the mode to print the image on the content area of the page.
+        * Set the mode to print the image on the canvas.
         *
         * @param mode Allowed values are default, fit, stretch.
         * @return The converter object.
@@ -3905,13 +3995,13 @@ namespace pdfcrowd
         /**
         * Set the output canvas top margin.
         *
-        * @param top The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param top The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public ImageToImageClient setMarginTop(string top)
         {
             if (!Regex.Match(top, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(top, "setMarginTop", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_margin_top"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(top, "setMarginTop", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_top"), 470);
             
             fields["margin_top"] = top;
             return this;
@@ -3920,13 +4010,13 @@ namespace pdfcrowd
         /**
         * Set the output canvas right margin.
         *
-        * @param right The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param right The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public ImageToImageClient setMarginRight(string right)
         {
             if (!Regex.Match(right, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(right, "setMarginRight", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_margin_right"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(right, "setMarginRight", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_right"), 470);
             
             fields["margin_right"] = right;
             return this;
@@ -3935,13 +4025,13 @@ namespace pdfcrowd
         /**
         * Set the output canvas bottom margin.
         *
-        * @param bottom The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param bottom The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public ImageToImageClient setMarginBottom(string bottom)
         {
             if (!Regex.Match(bottom, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(bottom, "setMarginBottom", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_margin_bottom"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(bottom, "setMarginBottom", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_bottom"), 470);
             
             fields["margin_bottom"] = bottom;
             return this;
@@ -3950,13 +4040,13 @@ namespace pdfcrowd
         /**
         * Set the output canvas left margin.
         *
-        * @param left The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param left The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public ImageToImageClient setMarginLeft(string left)
         {
             if (!Regex.Match(left, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(left, "setMarginLeft", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_margin_left"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(left, "setMarginLeft", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_left"), 470);
             
             fields["margin_left"] = left;
             return this;
@@ -3965,10 +4055,10 @@ namespace pdfcrowd
         /**
         * Set the output canvas margins.
         *
-        * @param top Set the output canvas top margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
-        * @param right Set the output canvas right margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
-        * @param bottom Set the output canvas bottom margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
-        * @param left Set the output canvas left margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param top Set the output canvas top margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param right Set the output canvas right margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param bottom Set the output canvas bottom margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param left Set the output canvas left margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public ImageToImageClient setMargins(string top, string right, string bottom, string left)
@@ -5167,6 +5257,96 @@ namespace pdfcrowd
         }
 
         /**
+        * Set the top left X coordinate of the content area. It is relative to the top left X coordinate of the print area.
+        *
+        * @param x The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToPdfClient setCropAreaX(string x)
+        {
+            if (!Regex.Match(x, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(x, "setCropAreaX", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_crop_area_x"), 470);
+            
+            fields["crop_area_x"] = x;
+            return this;
+        }
+
+        /**
+        * Set the top left Y coordinate of the content area. It is relative to the top left Y coordinate of the print area.
+        *
+        * @param y The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToPdfClient setCropAreaY(string y)
+        {
+            if (!Regex.Match(y, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(y, "setCropAreaY", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_crop_area_y"), 470);
+            
+            fields["crop_area_y"] = y;
+            return this;
+        }
+
+        /**
+        * Set the width of the content area. It should be at least 1 inch.
+        *
+        * @param width The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToPdfClient setCropAreaWidth(string width)
+        {
+            if (!Regex.Match(width, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setCropAreaWidth", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_crop_area_width"), 470);
+            
+            fields["crop_area_width"] = width;
+            return this;
+        }
+
+        /**
+        * Set the height of the content area. It should be at least 1 inch.
+        *
+        * @param height The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToPdfClient setCropAreaHeight(string height)
+        {
+            if (!Regex.Match(height, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setCropAreaHeight", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_crop_area_height"), 470);
+            
+            fields["crop_area_height"] = height;
+            return this;
+        }
+
+        /**
+        * Set the content area position and size. The content area enables to specify the part to be converted.
+        *
+        * @param x Set the top left X coordinate of the content area. It is relative to the top left X coordinate of the print area. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param y Set the top left Y coordinate of the content area. It is relative to the top left Y coordinate of the print area. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param width Set the width of the content area. It should be at least 1 inch. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param height Set the height of the content area. It should be at least 1 inch. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @return The converter object.
+        */
+        public ImageToPdfClient setCropArea(string x, string y, string width, string height)
+        {
+            this.setCropAreaX(x);
+            this.setCropAreaY(y);
+            this.setCropAreaWidth(width);
+            this.setCropAreaHeight(height);
+            return this;
+        }
+
+        /**
+        * Remove borders of an image which does not change in color.
+        *
+        * @param value Set to <span class='field-value'>true</span> to remove borders.
+        * @return The converter object.
+        */
+        public ImageToPdfClient setRemoveBorders(bool value)
+        {
+            fields["remove_borders"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
         * Set the output page size.
         *
         * @param size Allowed values are A0, A1, A2, A3, A4, A5, A6, Letter.
@@ -5184,13 +5364,13 @@ namespace pdfcrowd
         /**
         * Set the output page width.
         *
-        * @param width The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param width The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public ImageToPdfClient setPageWidth(string width)
         {
             if (!Regex.Match(width, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setPageWidth", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_page_width"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setPageWidth", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_page_width"), 470);
             
             fields["page_width"] = width;
             return this;
@@ -5199,13 +5379,13 @@ namespace pdfcrowd
         /**
         * Set the output page height.
         *
-        * @param height The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param height The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public ImageToPdfClient setPageHeight(string height)
         {
             if (!Regex.Match(height, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setPageHeight", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_page_height"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setPageHeight", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_page_height"), 470);
             
             fields["page_height"] = height;
             return this;
@@ -5214,8 +5394,8 @@ namespace pdfcrowd
         /**
         * Set the output page dimensions. If no page size is specified, margins are applied as a border around the image.
         *
-        * @param width Set the output page width. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
-        * @param height Set the output page height. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param width Set the output page width. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param height Set the output page height. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public ImageToPdfClient setPageDimensions(string width, string height)
@@ -5273,13 +5453,13 @@ namespace pdfcrowd
         /**
         * Set the output page top margin.
         *
-        * @param top The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param top The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public ImageToPdfClient setMarginTop(string top)
         {
             if (!Regex.Match(top, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(top, "setMarginTop", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_margin_top"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(top, "setMarginTop", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_top"), 470);
             
             fields["margin_top"] = top;
             return this;
@@ -5288,13 +5468,13 @@ namespace pdfcrowd
         /**
         * Set the output page right margin.
         *
-        * @param right The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param right The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public ImageToPdfClient setMarginRight(string right)
         {
             if (!Regex.Match(right, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(right, "setMarginRight", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_margin_right"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(right, "setMarginRight", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_right"), 470);
             
             fields["margin_right"] = right;
             return this;
@@ -5303,13 +5483,13 @@ namespace pdfcrowd
         /**
         * Set the output page bottom margin.
         *
-        * @param bottom The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param bottom The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public ImageToPdfClient setMarginBottom(string bottom)
         {
             if (!Regex.Match(bottom, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(bottom, "setMarginBottom", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_margin_bottom"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(bottom, "setMarginBottom", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_bottom"), 470);
             
             fields["margin_bottom"] = bottom;
             return this;
@@ -5318,13 +5498,13 @@ namespace pdfcrowd
         /**
         * Set the output page left margin.
         *
-        * @param left The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param left The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public ImageToPdfClient setMarginLeft(string left)
         {
             if (!Regex.Match(left, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(left, "setMarginLeft", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", or points \"pt\".", "set_margin_left"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(left, "setMarginLeft", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_left"), 470);
             
             fields["margin_left"] = left;
             return this;
@@ -5333,10 +5513,10 @@ namespace pdfcrowd
         /**
         * Set the output page margins.
         *
-        * @param top Set the output page top margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
-        * @param right Set the output page right margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
-        * @param bottom Set the output page bottom margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
-        * @param left Set the output page left margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", or points "pt".
+        * @param top Set the output page top margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param right Set the output page right margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param bottom Set the output page bottom margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param left Set the output page left margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
         * @return The converter object.
         */
         public ImageToPdfClient setPageMargins(string top, string right, string bottom, string left)
