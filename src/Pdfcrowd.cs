@@ -65,7 +65,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "5.12.0";
+        public static readonly string CLIENT_VERSION = "5.12.1";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -76,7 +76,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/5.12.0 (https://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/5.12.1 (https://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -189,7 +189,8 @@ namespace pdfcrowd
                 }
                 catch(Error err)
                 {
-                    if(err.getCode() == 502 && retryCount > retry) {
+                    if((err.getCode() == 502 || err.getCode() == 503) &&
+                        retryCount > retry) {
                         retry++;
                         Thread.Sleep(retry * 100);
                     } else {
@@ -235,11 +236,6 @@ namespace pdfcrowd
                     pageCount = getIntHeader(response, "X-Pdfcrowd-Pages");
                     totalPageCount = getIntHeader(response, "X-Pdfcrowd-Total-Pages");
                     outputSize = getIntHeader(response, "X-Pdfcrowd-Output-Size");
-
-                    if(Environment.GetEnvironmentVariable("PDFCROWD_UNIT_TEST_MODE") != null &&
-                        retryCount > retry) {
-                        throw new Error("test 502", 502);
-                    }
 
                     if(response.StatusCode == HttpStatusCode.OK)
                     {
@@ -2524,7 +2520,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Specifies the number of automatic retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
+        * Specifies the number of automatic retries when the 502 or 503 HTTP status code is received. The status code indicates a temporary network issue. This feature can be disabled by setting to 0.
         *
         * @param count Number of retries.
         * @return The converter object.
@@ -3511,7 +3507,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Specifies the number of automatic retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
+        * Specifies the number of automatic retries when the 502 or 503 HTTP status code is received. The status code indicates a temporary network issue. This feature can be disabled by setting to 0.
         *
         * @param count Number of retries.
         * @return The converter object.
@@ -4264,7 +4260,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Specifies the number of automatic retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
+        * Specifies the number of automatic retries when the 502 or 503 HTTP status code is received. The status code indicates a temporary network issue. This feature can be disabled by setting to 0.
         *
         * @param count Number of retries.
         * @return The converter object.
@@ -4984,7 +4980,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Specifies the number of automatic retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
+        * Specifies the number of automatic retries when the 502 or 503 HTTP status code is received. The status code indicates a temporary network issue. This feature can be disabled by setting to 0.
         *
         * @param count Number of retries.
         * @return The converter object.
@@ -6121,7 +6117,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Specifies the number of automatic retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
+        * Specifies the number of automatic retries when the 502 or 503 HTTP status code is received. The status code indicates a temporary network issue. This feature can be disabled by setting to 0.
         *
         * @param count Number of retries.
         * @return The converter object.
@@ -6698,7 +6694,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Specifies the number of automatic retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
+        * Specifies the number of automatic retries when the 502 or 503 HTTP status code is received. The status code indicates a temporary network issue. This feature can be disabled by setting to 0.
         *
         * @param count Number of retries.
         * @return The converter object.
@@ -7324,7 +7320,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Specifies the number of automatic retries when the 502 HTTP status code is received. The 502 status code indicates a temporary network issue. This feature can be disabled by setting to 0.
+        * Specifies the number of automatic retries when the 502 or 503 HTTP status code is received. The status code indicates a temporary network issue. This feature can be disabled by setting to 0.
         *
         * @param count Number of retries.
         * @return The converter object.
