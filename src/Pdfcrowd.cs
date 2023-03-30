@@ -65,7 +65,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "5.12.1";
+        public static readonly string CLIENT_VERSION = "5.13.0";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -76,7 +76,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/5.12.1 (https://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/5.13.0 (https://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -997,6 +997,21 @@ namespace pdfcrowd
                 throw new Error(ConnectionHelper.createInvalidValueMessage(mode, "setCssPageRuleMode", "html-to-pdf", "Allowed values are default, mode1, mode2.", "set_css_page_rule_mode"), 470);
             
             fields["css_page_rule_mode"] = mode;
+            return this;
+        }
+
+        /**
+        * Specifies which blank pages to exclude from the output document.
+        *
+        * @param pages The empty page behavior. Allowed values are trailing, none.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setRemoveBlankPages(string pages)
+        {
+            if (!Regex.Match(pages, "(?i)^(trailing|none)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(pages, "setRemoveBlankPages", "html-to-pdf", "Allowed values are trailing, none.", "set_remove_blank_pages"), 470);
+            
+            fields["remove_blank_pages"] = pages;
             return this;
         }
 
