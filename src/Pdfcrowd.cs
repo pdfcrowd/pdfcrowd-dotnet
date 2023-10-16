@@ -65,7 +65,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "5.14.0";
+        public static readonly string CLIENT_VERSION = "5.15.0";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -76,7 +76,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/5.14.0 (https://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/5.15.0 (https://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -2495,6 +2495,21 @@ namespace pdfcrowd
         }
 
         /**
+        * Set the maximum time to load the page and its resources. After this time, all requests will be considered successful. This can be useful to ensure that the conversion does not timeout. Use this method if there is no other way to fix page loading.
+        *
+        * @param maxTime The number of seconds to wait. The value must be in the range 10-30.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setMaxLoadingTime(int maxTime)
+        {
+            if (!(maxTime >= 10 && maxTime <= 30))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(maxTime, "setMaxLoadingTime", "html-to-pdf", "The value must be in the range 10-30.", "set_max_loading_time"), 470);
+            
+            fields["max_loading_time"] = ConnectionHelper.intToString(maxTime);
+            return this;
+        }
+
+        /**
         * Set the converter version. Different versions may produce different output. Choose which one provides the best output for your case.
         *
         * @param version The version identifier. Allowed values are latest, 20.10, 18.10.
@@ -2828,6 +2843,66 @@ namespace pdfcrowd
         public HtmlToImageClient setZipMainFilename(string filename)
         {
             fields["zip_main_filename"] = filename;
+            return this;
+        }
+
+        /**
+        * Set the output image width in pixels.
+        *
+        * @param width The value must be in the range 96-65000.
+        * @return The converter object.
+        */
+        public HtmlToImageClient setScreenshotWidth(int width)
+        {
+            if (!(width >= 96 && width <= 65000))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setScreenshotWidth", "html-to-image", "The value must be in the range 96-65000.", "set_screenshot_width"), 470);
+            
+            fields["screenshot_width"] = ConnectionHelper.intToString(width);
+            return this;
+        }
+
+        /**
+        * Set the output image height in pixels. If it is not specified, actual document height is used.
+        *
+        * @param height Must be a positive integer number.
+        * @return The converter object.
+        */
+        public HtmlToImageClient setScreenshotHeight(int height)
+        {
+            if (!(height > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setScreenshotHeight", "html-to-image", "Must be a positive integer number.", "set_screenshot_height"), 470);
+            
+            fields["screenshot_height"] = ConnectionHelper.intToString(height);
+            return this;
+        }
+
+        /**
+        * Set the scaling factor (zoom) for the output image.
+        *
+        * @param factor The percentage value. Must be a positive integer number.
+        * @return The converter object.
+        */
+        public HtmlToImageClient setScaleFactor(int factor)
+        {
+            if (!(factor > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(factor, "setScaleFactor", "html-to-image", "Must be a positive integer number.", "set_scale_factor"), 470);
+            
+            fields["scale_factor"] = ConnectionHelper.intToString(factor);
+            return this;
+        }
+
+        /**
+        * The output image background color.
+        *
+        * @param color The value must be in RRGGBB or RRGGBBAA hexadecimal format.
+        * @return The converter object.
+        */
+        public HtmlToImageClient setBackgroundColor(string color)
+        {
+            if (!Regex.Match(color, "^[0-9a-fA-F]{6,8}$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(color, "setBackgroundColor", "html-to-image", "The value must be in RRGGBB or RRGGBBAA hexadecimal format.", "set_background_color"), 470);
+            
+            fields["background_color"] = color;
             return this;
         }
 
@@ -3200,66 +3275,6 @@ namespace pdfcrowd
         }
 
         /**
-        * Set the output image width in pixels.
-        *
-        * @param width The value must be in the range 96-65000.
-        * @return The converter object.
-        */
-        public HtmlToImageClient setScreenshotWidth(int width)
-        {
-            if (!(width >= 96 && width <= 65000))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setScreenshotWidth", "html-to-image", "The value must be in the range 96-65000.", "set_screenshot_width"), 470);
-            
-            fields["screenshot_width"] = ConnectionHelper.intToString(width);
-            return this;
-        }
-
-        /**
-        * Set the output image height in pixels. If it is not specified, actual document height is used.
-        *
-        * @param height Must be a positive integer number.
-        * @return The converter object.
-        */
-        public HtmlToImageClient setScreenshotHeight(int height)
-        {
-            if (!(height > 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setScreenshotHeight", "html-to-image", "Must be a positive integer number.", "set_screenshot_height"), 470);
-            
-            fields["screenshot_height"] = ConnectionHelper.intToString(height);
-            return this;
-        }
-
-        /**
-        * Set the scaling factor (zoom) for the output image.
-        *
-        * @param factor The percentage value. Must be a positive integer number.
-        * @return The converter object.
-        */
-        public HtmlToImageClient setScaleFactor(int factor)
-        {
-            if (!(factor > 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(factor, "setScaleFactor", "html-to-image", "Must be a positive integer number.", "set_scale_factor"), 470);
-            
-            fields["scale_factor"] = ConnectionHelper.intToString(factor);
-            return this;
-        }
-
-        /**
-        * The output image background color.
-        *
-        * @param color The value must be in RRGGBB or RRGGBBAA hexadecimal format.
-        * @return The converter object.
-        */
-        public HtmlToImageClient setBackgroundColor(string color)
-        {
-            if (!Regex.Match(color, "^[0-9a-fA-F]{6,8}$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(color, "setBackgroundColor", "html-to-image", "The value must be in RRGGBB or RRGGBBAA hexadecimal format.", "set_background_color"), 470);
-            
-            fields["background_color"] = color;
-            return this;
-        }
-
-        /**
         * Set the input data for template rendering. The data format can be JSON, XML, YAML or CSV.
         *
         * @param dataString The input data string.
@@ -3493,6 +3508,21 @@ namespace pdfcrowd
         public HtmlToImageClient setClientCertificatePassword(string password)
         {
             fields["client_certificate_password"] = password;
+            return this;
+        }
+
+        /**
+        * Set the maximum time to load the page and its resources. After this time, all requests will be considered successful. This can be useful to ensure that the conversion does not timeout. Use this method if there is no other way to fix page loading.
+        *
+        * @param maxTime The number of seconds to wait. The value must be in the range 10-30.
+        * @return The converter object.
+        */
+        public HtmlToImageClient setMaxLoadingTime(int maxTime)
+        {
+            if (!(maxTime >= 10 && maxTime <= 30))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(maxTime, "setMaxLoadingTime", "html-to-image", "The value must be in the range 10-30.", "set_max_loading_time"), 470);
+            
+            fields["max_loading_time"] = ConnectionHelper.intToString(maxTime);
             return this;
         }
 
