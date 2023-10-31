@@ -65,7 +65,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "5.16.0";
+        public static readonly string CLIENT_VERSION = "5.17.0";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -76,7 +76,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/5.16.0 (https://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/5.17.0 (https://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -6509,15 +6509,30 @@ namespace pdfcrowd
         /**
         * Specifies where the images are stored.
         *
-        * @param mode The image storage mode. Allowed values are embed, separate.
+        * @param mode The image storage mode. Allowed values are embed, separate, none.
         * @return The converter object.
         */
         public PdfToHtmlClient setImageMode(string mode)
         {
-            if (!Regex.Match(mode, "(?i)^(embed|separate)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(mode, "setImageMode", "pdf-to-html", "Allowed values are embed, separate.", "set_image_mode"), 470);
+            if (!Regex.Match(mode, "(?i)^(embed|separate|none)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(mode, "setImageMode", "pdf-to-html", "Allowed values are embed, separate, none.", "set_image_mode"), 470);
             
             fields["image_mode"] = mode;
+            return this;
+        }
+
+        /**
+        * Specifies a format for the output images.
+        *
+        * @param imageFormat The image format. Allowed values are png, jpg, svg.
+        * @return The converter object.
+        */
+        public PdfToHtmlClient setImageFormat(string imageFormat)
+        {
+            if (!Regex.Match(imageFormat, "(?i)^(png|jpg|svg)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(imageFormat, "setImageFormat", "pdf-to-html", "Allowed values are png, jpg, svg.", "set_image_format"), 470);
+            
+            fields["image_format"] = imageFormat;
             return this;
         }
 
