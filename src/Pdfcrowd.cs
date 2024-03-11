@@ -65,7 +65,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "5.17.0";
+        public static readonly string CLIENT_VERSION = "5.18.0";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -76,7 +76,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/5.17.0 (https://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/5.18.0 (https://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -6522,7 +6522,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Specifies a format for the output images.
+        * Specifies the format for the output images.
         *
         * @param imageFormat The image format. Allowed values are png, jpg, svg.
         * @return The converter object.
@@ -6563,6 +6563,18 @@ namespace pdfcrowd
                 throw new Error(ConnectionHelper.createInvalidValueMessage(mode, "setFontMode", "pdf-to-html", "Allowed values are embed, separate.", "set_font_mode"), 470);
             
             fields["font_mode"] = mode;
+            return this;
+        }
+
+        /**
+        * Converts ligatures — two or more letters combined into a single glyph—back into their individual ASCII characters.
+        *
+        * @param value Set to <span class='field-value'>true</span> to split ligatures.
+        * @return The converter object.
+        */
+        public PdfToHtmlClient setSplitLigatures(bool value)
+        {
+            fields["split_ligatures"] = value ? "true" : null;
             return this;
         }
 
