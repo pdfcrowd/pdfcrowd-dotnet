@@ -65,7 +65,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "5.18.1";
+        public static readonly string CLIENT_VERSION = "5.19.0";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -76,7 +76,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/5.18.1 (https://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/5.19.0 (https://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -1734,7 +1734,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Set the rendering mode.
+        * Set the rendering mode of the page, allowing control over how content is displayed.
         *
         * @param mode The rendering mode. Allowed values are default, viewport.
         * @return The converter object.
@@ -2512,13 +2512,13 @@ namespace pdfcrowd
         /**
         * Set the converter version. Different versions may produce different output. Choose which one provides the best output for your case.
         *
-        * @param version The version identifier. Allowed values are latest, 20.10, 18.10.
+        * @param version The version identifier. Allowed values are latest, 24.04, 20.10, 18.10.
         * @return The converter object.
         */
         public HtmlToPdfClient setConverterVersion(string version)
         {
-            if (!Regex.Match(version, "(?i)^(latest|20.10|18.10)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(version, "setConverterVersion", "html-to-pdf", "Allowed values are latest, 20.10, 18.10.", "set_converter_version"), 470);
+            if (!Regex.Match(version, "(?i)^(latest|24.04|20.10|18.10)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(version, "setConverterVersion", "html-to-pdf", "Allowed values are latest, 24.04, 20.10, 18.10.", "set_converter_version"), 470);
             
             helper.setConverterVersion(version);
             return this;
@@ -3529,13 +3529,13 @@ namespace pdfcrowd
         /**
         * Set the converter version. Different versions may produce different output. Choose which one provides the best output for your case.
         *
-        * @param version The version identifier. Allowed values are latest, 20.10, 18.10.
+        * @param version The version identifier. Allowed values are latest, 24.04, 20.10, 18.10.
         * @return The converter object.
         */
         public HtmlToImageClient setConverterVersion(string version)
         {
-            if (!Regex.Match(version, "(?i)^(latest|20.10|18.10)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(version, "setConverterVersion", "html-to-image", "Allowed values are latest, 20.10, 18.10.", "set_converter_version"), 470);
+            if (!Regex.Match(version, "(?i)^(latest|24.04|20.10|18.10)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(version, "setConverterVersion", "html-to-image", "Allowed values are latest, 24.04, 20.10, 18.10.", "set_converter_version"), 470);
             
             helper.setConverterVersion(version);
             return this;
@@ -4282,13 +4282,13 @@ namespace pdfcrowd
         /**
         * Set the converter version. Different versions may produce different output. Choose which one provides the best output for your case.
         *
-        * @param version The version identifier. Allowed values are latest, 20.10, 18.10.
+        * @param version The version identifier. Allowed values are latest, 24.04, 20.10, 18.10.
         * @return The converter object.
         */
         public ImageToImageClient setConverterVersion(string version)
         {
-            if (!Regex.Match(version, "(?i)^(latest|20.10|18.10)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(version, "setConverterVersion", "image-to-image", "Allowed values are latest, 20.10, 18.10.", "set_converter_version"), 470);
+            if (!Regex.Match(version, "(?i)^(latest|24.04|20.10|18.10)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(version, "setConverterVersion", "image-to-image", "Allowed values are latest, 24.04, 20.10, 18.10.", "set_converter_version"), 470);
             
             helper.setConverterVersion(version);
             return this;
@@ -5002,13 +5002,13 @@ namespace pdfcrowd
         /**
         * Set the converter version. Different versions may produce different output. Choose which one provides the best output for your case.
         *
-        * @param version The version identifier. Allowed values are latest, 20.10, 18.10.
+        * @param version The version identifier. Allowed values are latest, 24.04, 20.10, 18.10.
         * @return The converter object.
         */
         public PdfToPdfClient setConverterVersion(string version)
         {
-            if (!Regex.Match(version, "(?i)^(latest|20.10|18.10)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(version, "setConverterVersion", "pdf-to-pdf", "Allowed values are latest, 20.10, 18.10.", "set_converter_version"), 470);
+            if (!Regex.Match(version, "(?i)^(latest|24.04|20.10|18.10)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(version, "setConverterVersion", "pdf-to-pdf", "Allowed values are latest, 24.04, 20.10, 18.10.", "set_converter_version"), 470);
             
             helper.setConverterVersion(version);
             return this;
@@ -6139,13 +6139,13 @@ namespace pdfcrowd
         /**
         * Set the converter version. Different versions may produce different output. Choose which one provides the best output for your case.
         *
-        * @param version The version identifier. Allowed values are latest, 20.10, 18.10.
+        * @param version The version identifier. Allowed values are latest, 24.04, 20.10, 18.10.
         * @return The converter object.
         */
         public ImageToPdfClient setConverterVersion(string version)
         {
-            if (!Regex.Match(version, "(?i)^(latest|20.10|18.10)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(version, "setConverterVersion", "image-to-pdf", "Allowed values are latest, 20.10, 18.10.", "set_converter_version"), 470);
+            if (!Regex.Match(version, "(?i)^(latest|24.04|20.10|18.10)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(version, "setConverterVersion", "image-to-pdf", "Allowed values are latest, 24.04, 20.10, 18.10.", "set_converter_version"), 470);
             
             helper.setConverterVersion(version);
             return this;
