@@ -1,7 +1,7 @@
 .PHONY : dist clean compile publish
 
-VERSION = 5.19.0
-DIR_NAME := pdfcrowd-5.19.0
+VERSION = 5.20.0
+DIR_NAME := pdfcrowd-5.20.0
 BIN_DIR := bin
 
 compile:
@@ -22,4 +22,4 @@ publish:
 	sudo nuget update -self
 	sudo rm -rf /tmp/NuGetScratch/lock
 	nuget pack
-	nuget push Pdfcrowd.Official.5.19.0.nupkg -Source https://www.nuget.org/api/v2/package -ApiKey $(API_KEY)
+	nuget push Pdfcrowd.Official.5.20.0.nupkg -Source https://www.nuget.org/api/v2/package -ApiKey $(API_KEY)

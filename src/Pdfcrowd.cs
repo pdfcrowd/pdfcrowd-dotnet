@@ -65,7 +65,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "5.19.0";
+        public static readonly string CLIENT_VERSION = "5.20.0";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -76,7 +76,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/5.19.0 (https://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/5.20.0 (https://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -7440,6 +7440,592 @@ namespace pdfcrowd
         * @return The converter object.
         */
         public PdfToTextClient setRetryCount(int count)
+        {
+            helper.setRetryCount(count);
+            return this;
+        }
+
+    }
+
+    /**
+    * Conversion from PDF to image.
+    */
+    public sealed class PdfToImageClient
+    {
+        private ConnectionHelper helper;
+        private Dictionary<string, string> fields = new Dictionary<string, string>();
+        private Dictionary<string, string> files = new Dictionary<string, string>();
+        private Dictionary<string, byte[]> rawData = new Dictionary<string, byte[]>();
+
+        #pragma warning disable CS0414
+        private int fileId = 1;
+        #pragma warning restore CS0414
+
+        /**
+        * Constructor for the Pdfcrowd API client.
+        *
+        * @param userName Your username at Pdfcrowd.
+        * @param apiKey Your API key.
+        */
+        public PdfToImageClient(string userName, string apiKey)
+        {
+            this.helper = new ConnectionHelper(userName, apiKey);
+            fields["input_format"] = "pdf";
+            fields["output_format"] = "png";
+        }
+
+        /**
+        * Convert an image.
+        *
+        * @param url The address of the image to convert. The supported protocols are http:// and https://.
+        * @return Byte array containing the conversion output.
+        */
+        public byte[] convertUrl(string url)
+        {
+            if (!Regex.Match(url, "(?i)^https?://.*$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrl", "pdf-to-image", "The supported protocols are http:// and https://.", "convert_url"), 470);
+            
+            fields["url"] = url;
+            return helper.post(fields, files, rawData, null);
+        }
+
+        /**
+        * Convert an image and write the result to an output stream.
+        *
+        * @param url The address of the image to convert. The supported protocols are http:// and https://.
+        * @param outStream The output stream that will contain the conversion output.
+        */
+        public void convertUrlToStream(string url, Stream outStream)
+        {
+            if (!Regex.Match(url, "(?i)^https?://.*$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrlToStream::url", "pdf-to-image", "The supported protocols are http:// and https://.", "convert_url_to_stream"), 470);
+            
+            fields["url"] = url;
+            helper.post(fields, files, rawData, outStream);
+        }
+
+        /**
+        * Convert an image and write the result to a local file.
+        *
+        * @param url The address of the image to convert. The supported protocols are http:// and https://.
+        * @param filePath The output file path. The string must not be empty.
+        */
+        public void convertUrlToFile(string url, string filePath)
+        {
+            if (!(!String.IsNullOrEmpty(filePath)))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "convertUrlToFile::file_path", "pdf-to-image", "The string must not be empty.", "convert_url_to_file"), 470);
+            
+            FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
+            try
+            {
+                convertUrlToStream(url, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
+        }
+
+        /**
+        * Convert a local file.
+        *
+        * @param file The path to a local file to convert.<br>  The file must exist and not be empty.
+        * @return Byte array containing the conversion output.
+        */
+        public byte[] convertFile(string file)
+        {
+            if (!(File.Exists(file) && new FileInfo(file).Length > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(file, "convertFile", "pdf-to-image", "The file must exist and not be empty.", "convert_file"), 470);
+            
+            files["file"] = file;
+            return helper.post(fields, files, rawData, null);
+        }
+
+        /**
+        * Convert a local file and write the result to an output stream.
+        *
+        * @param file The path to a local file to convert.<br>  The file must exist and not be empty.
+        * @param outStream The output stream that will contain the conversion output.
+        */
+        public void convertFileToStream(string file, Stream outStream)
+        {
+            if (!(File.Exists(file) && new FileInfo(file).Length > 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(file, "convertFileToStream::file", "pdf-to-image", "The file must exist and not be empty.", "convert_file_to_stream"), 470);
+            
+            files["file"] = file;
+            helper.post(fields, files, rawData, outStream);
+        }
+
+        /**
+        * Convert a local file and write the result to a local file.
+        *
+        * @param file The path to a local file to convert.<br>  The file must exist and not be empty.
+        * @param filePath The output file path. The string must not be empty.
+        */
+        public void convertFileToFile(string file, string filePath)
+        {
+            if (!(!String.IsNullOrEmpty(filePath)))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "convertFileToFile::file_path", "pdf-to-image", "The string must not be empty.", "convert_file_to_file"), 470);
+            
+            FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
+            try
+            {
+                convertFileToStream(file, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
+        }
+
+        /**
+        * Convert raw data.
+        *
+        * @param data The raw content to be converted.
+        * @return Byte array with the output.
+        */
+        public byte[] convertRawData(byte[] data)
+        {
+            rawData["file"] = data;
+            return helper.post(fields, files, rawData, null);
+        }
+
+        /**
+        * Convert raw data and write the result to an output stream.
+        *
+        * @param data The raw content to be converted.
+        * @param outStream The output stream that will contain the conversion output.
+        */
+        public void convertRawDataToStream(byte[] data, Stream outStream)
+        {
+            rawData["file"] = data;
+            helper.post(fields, files, rawData, outStream);
+        }
+
+        /**
+        * Convert raw data to a file.
+        *
+        * @param data The raw content to be converted.
+        * @param filePath The output file path. The string must not be empty.
+        */
+        public void convertRawDataToFile(byte[] data, string filePath)
+        {
+            if (!(!String.IsNullOrEmpty(filePath)))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "convertRawDataToFile::file_path", "pdf-to-image", "The string must not be empty.", "convert_raw_data_to_file"), 470);
+            
+            FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
+            try
+            {
+                convertRawDataToStream(data, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
+        }
+
+        /**
+        * Convert the contents of an input stream.
+        *
+        * @param inStream The input stream with source data.<br>
+        * @return Byte array containing the conversion output.
+        */
+        public byte[] convertStream(Stream inStream)
+        {
+            rawData["stream"] = ConnectionHelper.ReadStream(inStream);
+            return helper.post(fields, files, rawData, null);
+        }
+
+        /**
+        * Convert the contents of an input stream and write the result to an output stream.
+        *
+        * @param inStream The input stream with source data.<br>
+        * @param outStream The output stream that will contain the conversion output.
+        */
+        public void convertStreamToStream(Stream inStream, Stream outStream)
+        {
+            rawData["stream"] = ConnectionHelper.ReadStream(inStream);
+            helper.post(fields, files, rawData, outStream);
+        }
+
+        /**
+        * Convert the contents of an input stream and write the result to a local file.
+        *
+        * @param inStream The input stream with source data.<br>
+        * @param filePath The output file path. The string must not be empty.
+        */
+        public void convertStreamToFile(Stream inStream, string filePath)
+        {
+            if (!(!String.IsNullOrEmpty(filePath)))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(filePath, "convertStreamToFile::file_path", "pdf-to-image", "The string must not be empty.", "convert_stream_to_file"), 470);
+            
+            FileStream outputFile = new FileStream(filePath, FileMode.CreateNew);
+            try
+            {
+                convertStreamToStream(inStream, outputFile);
+                outputFile.Close();
+            }
+            catch(Error)
+            {
+                outputFile.Close();
+                File.Delete(filePath);
+                throw;
+            }
+        }
+
+        /**
+        * The format of the output file.
+        *
+        * @param outputFormat Allowed values are png, jpg, gif, tiff, bmp, ico, ppm, pgm, pbm, pnm, psb, pct, ras, tga, sgi, sun, webp.
+        * @return The converter object.
+        */
+        public PdfToImageClient setOutputFormat(string outputFormat)
+        {
+            if (!Regex.Match(outputFormat, "(?i)^(png|jpg|gif|tiff|bmp|ico|ppm|pgm|pbm|pnm|psb|pct|ras|tga|sgi|sun|webp)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(outputFormat, "setOutputFormat", "pdf-to-image", "Allowed values are png, jpg, gif, tiff, bmp, ico, ppm, pgm, pbm, pnm, psb, pct, ras, tga, sgi, sun, webp.", "set_output_format"), 470);
+            
+            fields["output_format"] = outputFormat;
+            return this;
+        }
+
+        /**
+        * Password to open the encrypted PDF file.
+        *
+        * @param password The input PDF password.
+        * @return The converter object.
+        */
+        public PdfToImageClient setPdfPassword(string password)
+        {
+            fields["pdf_password"] = password;
+            return this;
+        }
+
+        /**
+        * Set the page range to print.
+        *
+        * @param pages A comma separated list of page numbers or ranges.
+        * @return The converter object.
+        */
+        public PdfToImageClient setPrintPageRange(string pages)
+        {
+            if (!Regex.Match(pages, "^(?:\\s*(?:\\d+|(?:\\d*\\s*\\-\\s*\\d+)|(?:\\d+\\s*\\-\\s*\\d*))\\s*,\\s*)*\\s*(?:\\d+|(?:\\d*\\s*\\-\\s*\\d+)|(?:\\d+\\s*\\-\\s*\\d*))\\s*$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(pages, "setPrintPageRange", "pdf-to-image", "A comma separated list of page numbers or ranges.", "set_print_page_range"), 470);
+            
+            fields["print_page_range"] = pages;
+            return this;
+        }
+
+        /**
+        * Set the output graphics DPI.
+        *
+        * @param dpi The DPI value.
+        * @return The converter object.
+        */
+        public PdfToImageClient setDpi(int dpi)
+        {
+            fields["dpi"] = ConnectionHelper.intToString(dpi);
+            return this;
+        }
+
+        /**
+        * A helper method to determine if the output file from a conversion process is a zip archive. The conversion output can be either a single image file or a zip file containing one or more image files. This method should be called after the conversion has been successfully completed.
+        * @return <span class='field-value'>True</span> if the conversion output is a zip archive, otherwise <span class='field-value'>False</span>.
+        */
+        public bool isZippedOutput()
+        {
+            return (fields.ContainsKey("force_zip") && fields["force_zip"] == "true") || this.getPageCount() > 1;
+        }
+
+        /**
+        * Enforces the zip output format.
+        *
+        * @param value Set to <span class='field-value'>true</span> to get the output as a zip archive.
+        * @return The converter object.
+        */
+        public PdfToImageClient setForceZip(bool value)
+        {
+            fields["force_zip"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Use the crop box rather than media box.
+        *
+        * @param value Set to <span class='field-value'>true</span> to use crop box.
+        * @return The converter object.
+        */
+        public PdfToImageClient setUseCropbox(bool value)
+        {
+            fields["use_cropbox"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Set the top left X coordinate of the crop area in points.
+        *
+        * @param x Must be a positive integer number or 0.
+        * @return The converter object.
+        */
+        public PdfToImageClient setCropAreaX(int x)
+        {
+            if (!(x >= 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(x, "setCropAreaX", "pdf-to-image", "Must be a positive integer number or 0.", "set_crop_area_x"), 470);
+            
+            fields["crop_area_x"] = ConnectionHelper.intToString(x);
+            return this;
+        }
+
+        /**
+        * Set the top left Y coordinate of the crop area in points.
+        *
+        * @param y Must be a positive integer number or 0.
+        * @return The converter object.
+        */
+        public PdfToImageClient setCropAreaY(int y)
+        {
+            if (!(y >= 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(y, "setCropAreaY", "pdf-to-image", "Must be a positive integer number or 0.", "set_crop_area_y"), 470);
+            
+            fields["crop_area_y"] = ConnectionHelper.intToString(y);
+            return this;
+        }
+
+        /**
+        * Set the width of the crop area in points.
+        *
+        * @param width Must be a positive integer number or 0.
+        * @return The converter object.
+        */
+        public PdfToImageClient setCropAreaWidth(int width)
+        {
+            if (!(width >= 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setCropAreaWidth", "pdf-to-image", "Must be a positive integer number or 0.", "set_crop_area_width"), 470);
+            
+            fields["crop_area_width"] = ConnectionHelper.intToString(width);
+            return this;
+        }
+
+        /**
+        * Set the height of the crop area in points.
+        *
+        * @param height Must be a positive integer number or 0.
+        * @return The converter object.
+        */
+        public PdfToImageClient setCropAreaHeight(int height)
+        {
+            if (!(height >= 0))
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setCropAreaHeight", "pdf-to-image", "Must be a positive integer number or 0.", "set_crop_area_height"), 470);
+            
+            fields["crop_area_height"] = ConnectionHelper.intToString(height);
+            return this;
+        }
+
+        /**
+        * Set the crop area. It allows to extract just a part of a PDF page.
+        *
+        * @param x Set the top left X coordinate of the crop area in points. Must be a positive integer number or 0.
+        * @param y Set the top left Y coordinate of the crop area in points. Must be a positive integer number or 0.
+        * @param width Set the width of the crop area in points. Must be a positive integer number or 0.
+        * @param height Set the height of the crop area in points. Must be a positive integer number or 0.
+        * @return The converter object.
+        */
+        public PdfToImageClient setCropArea(int x, int y, int width, int height)
+        {
+            this.setCropAreaX(x);
+            this.setCropAreaY(y);
+            this.setCropAreaWidth(width);
+            this.setCropAreaHeight(height);
+            return this;
+        }
+
+        /**
+        * Generate a grayscale image.
+        *
+        * @param value Set to <span class='field-value'>true</span> to generate a grayscale image.
+        * @return The converter object.
+        */
+        public PdfToImageClient setUseGrayscale(bool value)
+        {
+            fields["use_grayscale"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Turn on the debug logging. Details about the conversion are stored in the debug log. The URL of the log can be obtained from the <a href='#get_debug_log_url'>getDebugLogUrl</a> method or available in <a href='/user/account/log/conversion/'>conversion statistics</a>.
+        *
+        * @param value Set to <span class='field-value'>true</span> to enable the debug logging.
+        * @return The converter object.
+        */
+        public PdfToImageClient setDebugLog(bool value)
+        {
+            fields["debug_log"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Get the URL of the debug log for the last conversion.
+        * @return The link to the debug log.
+        */
+        public string getDebugLogUrl()
+        {
+            return helper.getDebugLogUrl();
+        }
+
+        /**
+        * Get the number of conversion credits available in your <a href='/user/account/'>account</a>.
+        * This method can only be called after a call to one of the convertXtoY methods.
+        * The returned value can differ from the actual count if you run parallel conversions.
+        * The special value <span class='field-value'>999999</span> is returned if the information is not available.
+        * @return The number of credits.
+        */
+        public int getRemainingCreditCount()
+        {
+            return helper.getRemainingCreditCount();
+        }
+
+        /**
+        * Get the number of credits consumed by the last conversion.
+        * @return The number of credits.
+        */
+        public int getConsumedCreditCount()
+        {
+            return helper.getConsumedCreditCount();
+        }
+
+        /**
+        * Get the job id.
+        * @return The unique job identifier.
+        */
+        public string getJobId()
+        {
+            return helper.getJobId();
+        }
+
+        /**
+        * Get the number of pages in the output document.
+        * @return The page count.
+        */
+        public int getPageCount()
+        {
+            return helper.getPageCount();
+        }
+
+        /**
+        * Get the size of the output in bytes.
+        * @return The count of bytes.
+        */
+        public int getOutputSize()
+        {
+            return helper.getOutputSize();
+        }
+
+        /**
+        * Get the version details.
+        * @return API version, converter version, and client version.
+        */
+        public string getVersion()
+        {
+            return string.Format("client {0}, API v2, converter {1}", ConnectionHelper.CLIENT_VERSION, helper.getConverterVersion());
+        }
+
+        /**
+        * Tag the conversion with a custom value. The tag is used in <a href='/user/account/log/conversion/'>conversion statistics</a>. A value longer than 32 characters is cut off.
+        *
+        * @param tag A string with the custom tag.
+        * @return The converter object.
+        */
+        public PdfToImageClient setTag(string tag)
+        {
+            fields["tag"] = tag;
+            return this;
+        }
+
+        /**
+        * A proxy server used by Pdfcrowd conversion process for accessing the source URLs with HTTP scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
+        *
+        * @param proxy The value must have format DOMAIN_OR_IP_ADDRESS:PORT.
+        * @return The converter object.
+        */
+        public PdfToImageClient setHttpProxy(string proxy)
+        {
+            if (!Regex.Match(proxy, "(?i)^([a-z0-9]+(-[a-z0-9]+)*\\.)+[a-z0-9]{1,}:\\d+$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(proxy, "setHttpProxy", "pdf-to-image", "The value must have format DOMAIN_OR_IP_ADDRESS:PORT.", "set_http_proxy"), 470);
+            
+            fields["http_proxy"] = proxy;
+            return this;
+        }
+
+        /**
+        * A proxy server used by Pdfcrowd conversion process for accessing the source URLs with HTTPS scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
+        *
+        * @param proxy The value must have format DOMAIN_OR_IP_ADDRESS:PORT.
+        * @return The converter object.
+        */
+        public PdfToImageClient setHttpsProxy(string proxy)
+        {
+            if (!Regex.Match(proxy, "(?i)^([a-z0-9]+(-[a-z0-9]+)*\\.)+[a-z0-9]{1,}:\\d+$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(proxy, "setHttpsProxy", "pdf-to-image", "The value must have format DOMAIN_OR_IP_ADDRESS:PORT.", "set_https_proxy"), 470);
+            
+            fields["https_proxy"] = proxy;
+            return this;
+        }
+
+        /**
+        * Specifies if the client communicates over HTTP or HTTPS with Pdfcrowd API.
+        * Warning: Using HTTP is insecure as data sent over HTTP is not encrypted. Enable this option only if you know what you are doing.
+        *
+        * @param value Set to <span class='field-value'>true</span> to use HTTP.
+        * @return The converter object.
+        */
+        public PdfToImageClient setUseHttp(bool value)
+        {
+            helper.setUseHttp(value);
+            return this;
+        }
+
+        /**
+        * Set a custom user agent HTTP header. It can be useful if you are behind a proxy or a firewall.
+        *
+        * @param agent The user agent string.
+        * @return The converter object.
+        */
+        public PdfToImageClient setUserAgent(string agent)
+        {
+            helper.setUserAgent(agent);
+            return this;
+        }
+
+        /**
+        * Specifies an HTTP proxy that the API client library will use to connect to the internet.
+        *
+        * @param host The proxy hostname.
+        * @param port The proxy port.
+        * @param userName The username.
+        * @param password The password.
+        * @return The converter object.
+        */
+        public PdfToImageClient setProxy(string host, int port, string userName, string password)
+        {
+            helper.setProxy(host, port, userName, password);
+            return this;
+        }
+
+        /**
+        * Specifies the number of automatic retries when the 502 or 503 HTTP status code is received. The status code indicates a temporary network issue. This feature can be disabled by setting to 0.
+        *
+        * @param count Number of retries.
+        * @return The converter object.
+        */
+        public PdfToImageClient setRetryCount(int count)
         {
             helper.setRetryCount(count);
             return this;
