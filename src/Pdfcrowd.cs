@@ -65,7 +65,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "6.0.0";
+        public static readonly string CLIENT_VERSION = "6.0.1";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -76,7 +76,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/6.0.0 (https://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/6.0.1 (https://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -953,99 +953,6 @@ namespace pdfcrowd
         }
 
         /**
-        * Set the top left X coordinate of the content area. It is relative to the top left X coordinate of the print area.
-        *
-        * @param x The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt". It may contain a negative value.
-        * @return The converter object.
-        */
-        public HtmlToPdfClient setContentAreaX(string x)
-        {
-            if (!Regex.Match(x, "(?i)^0$|^\\-?[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(x, "setContentAreaX", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\". It may contain a negative value.", "set_content_area_x"), 470);
-            
-            fields["content_area_x"] = x;
-            return this;
-        }
-
-        /**
-        * Set the top left Y coordinate of the content area. It is relative to the top left Y coordinate of the print area.
-        *
-        * @param y The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt". It may contain a negative value.
-        * @return The converter object.
-        */
-        public HtmlToPdfClient setContentAreaY(string y)
-        {
-            if (!Regex.Match(y, "(?i)^0$|^\\-?[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(y, "setContentAreaY", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\". It may contain a negative value.", "set_content_area_y"), 470);
-            
-            fields["content_area_y"] = y;
-            return this;
-        }
-
-        /**
-        * Set the width of the content area. It should be at least 1 inch.
-        *
-        * @param width The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
-        * @return The converter object.
-        */
-        public HtmlToPdfClient setContentAreaWidth(string width)
-        {
-            if (!Regex.Match(width, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setContentAreaWidth", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_content_area_width"), 470);
-            
-            fields["content_area_width"] = width;
-            return this;
-        }
-
-        /**
-        * Set the height of the content area. It should be at least 1 inch.
-        *
-        * @param height The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
-        * @return The converter object.
-        */
-        public HtmlToPdfClient setContentAreaHeight(string height)
-        {
-            if (!Regex.Match(height, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setContentAreaHeight", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_content_area_height"), 470);
-            
-            fields["content_area_height"] = height;
-            return this;
-        }
-
-        /**
-        * Set the content area position and size. The content area enables to specify a web page area to be converted.
-        *
-        * @param x Set the top left X coordinate of the content area. It is relative to the top left X coordinate of the print area. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt". It may contain a negative value.
-        * @param y Set the top left Y coordinate of the content area. It is relative to the top left Y coordinate of the print area. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt". It may contain a negative value.
-        * @param width Set the width of the content area. It should be at least 1 inch. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
-        * @param height Set the height of the content area. It should be at least 1 inch. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
-        * @return The converter object.
-        */
-        public HtmlToPdfClient setContentArea(string x, string y, string width, string height)
-        {
-            this.setContentAreaX(x);
-            this.setContentAreaY(y);
-            this.setContentAreaWidth(width);
-            this.setContentAreaHeight(height);
-            return this;
-        }
-
-        /**
-        * Specifies behavior in presence of CSS @page rules. It may affect the page size, margins and orientation.
-        *
-        * @param mode The page rule mode. Allowed values are default, mode1, mode2.
-        * @return The converter object.
-        */
-        public HtmlToPdfClient setCssPageRuleMode(string mode)
-        {
-            if (!Regex.Match(mode, "(?i)^(default|mode1|mode2)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(mode, "setCssPageRuleMode", "html-to-pdf", "Allowed values are default, mode1, mode2.", "set_css_page_rule_mode"), 470);
-            
-            fields["css_page_rule_mode"] = mode;
-            return this;
-        }
-
-        /**
         * Specifies which blank pages to exclude from the output document.
         *
         * @param pages The empty page behavior. Allowed values are trailing, all, none.
@@ -1584,6 +1491,21 @@ namespace pdfcrowd
         public HtmlToPdfClient setNoXpdfcrowdHeader(bool value)
         {
             fields["no_xpdfcrowd_header"] = value ? "true" : null;
+            return this;
+        }
+
+        /**
+        * Specifies behavior in presence of CSS @page rules. It may affect the page size, margins and orientation.
+        *
+        * @param mode The page rule mode. Allowed values are default, mode1, mode2.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setCssPageRuleMode(string mode)
+        {
+            if (!Regex.Match(mode, "(?i)^(default|mode1|mode2)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(mode, "setCssPageRuleMode", "html-to-pdf", "Allowed values are default, mode1, mode2.", "set_css_page_rule_mode"), 470);
+            
+            fields["css_page_rule_mode"] = mode;
             return this;
         }
 
@@ -2450,6 +2372,84 @@ namespace pdfcrowd
                 throw new Error(ConnectionHelper.createInvalidValueMessage(dpi, "setLayoutDpi", "html-to-pdf", "The value must be in the range of 72-600.", "set_layout_dpi"), 470);
             
             fields["layout_dpi"] = ConnectionHelper.intToString(dpi);
+            return this;
+        }
+
+        /**
+        * Set the top left X coordinate of the content area. It is relative to the top left X coordinate of the print area.
+        *
+        * @param x The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt". It may contain a negative value.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setContentAreaX(string x)
+        {
+            if (!Regex.Match(x, "(?i)^0$|^\\-?[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(x, "setContentAreaX", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\". It may contain a negative value.", "set_content_area_x"), 470);
+            
+            fields["content_area_x"] = x;
+            return this;
+        }
+
+        /**
+        * Set the top left Y coordinate of the content area. It is relative to the top left Y coordinate of the print area.
+        *
+        * @param y The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt". It may contain a negative value.
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setContentAreaY(string y)
+        {
+            if (!Regex.Match(y, "(?i)^0$|^\\-?[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(y, "setContentAreaY", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\". It may contain a negative value.", "set_content_area_y"), 470);
+            
+            fields["content_area_y"] = y;
+            return this;
+        }
+
+        /**
+        * Set the width of the content area. It should be at least 1 inch.
+        *
+        * @param width The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setContentAreaWidth(string width)
+        {
+            if (!Regex.Match(width, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setContentAreaWidth", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_content_area_width"), 470);
+            
+            fields["content_area_width"] = width;
+            return this;
+        }
+
+        /**
+        * Set the height of the content area. It should be at least 1 inch.
+        *
+        * @param height The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setContentAreaHeight(string height)
+        {
+            if (!Regex.Match(height, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setContentAreaHeight", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_content_area_height"), 470);
+            
+            fields["content_area_height"] = height;
+            return this;
+        }
+
+        /**
+        * Set the content area position and size. The content area enables to specify a web page area to be converted.
+        *
+        * @param x Set the top left X coordinate of the content area. It is relative to the top left X coordinate of the print area. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt". It may contain a negative value.
+        * @param y Set the top left Y coordinate of the content area. It is relative to the top left Y coordinate of the print area. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt". It may contain a negative value.
+        * @param width Set the width of the content area. It should be at least 1 inch. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param height Set the height of the content area. It should be at least 1 inch. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @return The converter object.
+        */
+        public HtmlToPdfClient setContentArea(string x, string y, string width, string height)
+        {
+            this.setContentAreaX(x);
+            this.setContentAreaY(y);
+            this.setContentAreaWidth(width);
+            this.setContentAreaHeight(height);
             return this;
         }
 
