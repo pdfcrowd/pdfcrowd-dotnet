@@ -65,7 +65,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "6.2.0";
+        public static readonly string CLIENT_VERSION = "6.2.1";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -76,7 +76,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/6.2.0 (https://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/6.2.1 (https://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -898,13 +898,13 @@ namespace pdfcrowd
         /**
         * Set the viewport width for formatting the HTML content when generating a PDF. By specifying a viewport width, you can control how the content is rendered, ensuring it mimics the appearance on various devices or matches specific design requirements.
         *
-        * @param width The width of the viewport. The value must be "balanced", "small", "medium", "large", "extra-large", or a number in the range 96-65000.
+        * @param width The width of the viewport. The value must be "balanced", "small", "medium", "large", "extra-large", or a number in the range 96-65000px.
         * @return The converter object.
         */
         public HtmlToPdfClient setContentViewportWidth(string width)
         {
-            if (!Regex.Match(width, "(?i)^(balanced|small|medium|large|extra-large|[0-9]+)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setContentViewportWidth", "html-to-pdf", "The value must be \"balanced\", \"small\", \"medium\", \"large\", \"extra-large\", or a number in the range 96-65000.", "set_content_viewport_width"), 470);
+            if (!Regex.Match(width, "(?i)^(balanced|small|medium|large|extra-large|[0-9]+(px)?)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setContentViewportWidth", "html-to-pdf", "The value must be \"balanced\", \"small\", \"medium\", \"large\", \"extra-large\", or a number in the range 96-65000px.", "set_content_viewport_width"), 470);
             
             fields["content_viewport_width"] = width;
             return this;
@@ -918,7 +918,7 @@ namespace pdfcrowd
         */
         public HtmlToPdfClient setContentViewportHeight(string height)
         {
-            if (!Regex.Match(height, "(?i)^(auto|large|[0-9]+)$").Success)
+            if (!Regex.Match(height, "(?i)^(auto|large|[0-9]+(px)?)$").Success)
                 throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setContentViewportHeight", "html-to-pdf", "The value must be \"auto\", \"large\", or a number.", "set_content_viewport_height"), 470);
             
             fields["content_viewport_height"] = height;
