@@ -65,7 +65,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "6.2.1";
+        public static readonly string CLIENT_VERSION = "6.3.0";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -76,7 +76,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/6.2.1 (https://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/6.3.0 (https://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -6738,6 +6738,21 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         }
 
         /**
+        * Add a specified prefix to all id and class attributes in the HTML content, creating a namespace for safe integration into another HTML document. This process ensures unique identifiers, preventing conflicts when merging with other HTML.
+        *
+        * @param prefix The prefix to add before each id and class attribute name. Start with a letter or underscore, and use only letters, numbers, hyphens, underscores, or colons.
+        * @return The converter object.
+        */
+        public PdfToHtmlClient setHtmlNamespace(string prefix)
+        {
+            if (!Regex.Match(prefix, "(?i)^[a-z_][a-z0-9_:-]*$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(prefix, "setHtmlNamespace", "pdf-to-html", "Start with a letter or underscore, and use only letters, numbers, hyphens, underscores, or colons.", "set_html_namespace"), 470);
+            
+            fields["html_namespace"] = prefix;
+            return this;
+        }
+
+        /**
         * A helper method to determine if the output file is a zip archive. The output of the conversion may be either an HTML file or a zip file containing the HTML and its external assets.
         * @return <span class='field-value'>True</span> if the conversion output is a zip file, otherwise <span class='field-value'>False</span>.
         */
@@ -6923,6 +6938,21 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
                 throw new Error(ConnectionHelper.createInvalidValueMessage(proxy, "setHttpsProxy", "pdf-to-html", "The value must have format DOMAIN_OR_IP_ADDRESS:PORT.", "set_https_proxy"), 470);
             
             fields["https_proxy"] = proxy;
+            return this;
+        }
+
+        /**
+        * Set the converter version. Different versions may produce different output. Choose which one provides the best output for your case.
+        *
+        * @param version The version identifier. Allowed values are 24.04, 20.10, 18.10, latest.
+        * @return The converter object.
+        */
+        public PdfToHtmlClient setConverterVersion(string version)
+        {
+            if (!Regex.Match(version, "(?i)^(24.04|20.10|18.10|latest)$").Success)
+                throw new Error(ConnectionHelper.createInvalidValueMessage(version, "setConverterVersion", "pdf-to-html", "Allowed values are 24.04, 20.10, 18.10, latest.", "set_converter_version"), 470);
+            
+            helper.setConverterVersion(version);
             return this;
         }
 
