@@ -65,7 +65,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "6.4.0";
+        public static readonly string CLIENT_VERSION = "6.5.0";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -76,7 +76,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/6.4.0 (https://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/6.5.0 (https://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -189,7 +189,7 @@ namespace pdfcrowd
                 }
                 catch(Error err)
                 {
-                    if((err.getCode() == 502 || err.getCode() == 503) &&
+                    if((err.getStatusCode() == 502 || err.getStatusCode() == 503) &&
                         retryCount > retry) {
                         retry++;
                         Thread.Sleep(retry * 100);
@@ -266,10 +266,10 @@ namespace pdfcrowd
             {
                 if(IsSslException(why))
                 {
-                   throw new Error("There was a problem connecting to Pdfcrowd servers over HTTPS:\n" +
+                   throw new Error("400.356 - There was a problem connecting to PDFCrowd servers over HTTPS:\n" +
                                    why.Message +
-                                   "\nYou can still use the API over HTTP, you just need to add the following line right after Pdfcrowd client initialization:\nclient.setUseHttp(true);",
-                                   481);
+                                   "\nYou can still use the API over HTTP, you just need to add the following line right after PDFCrowd client initialization:\nclient.setUseHttp(true);",
+                                   0);
                 }
 
                 if (why.Response != null && why.Status == WebExceptionStatus.ProtocolError)
@@ -452,12 +452,12 @@ namespace pdfcrowd
 
         internal static string createInvalidValueMessage(object value, string field, string converter, string hint, string id)
         {
-            string message = string.Format("Invalid value '{0}' for {1}.", value, field);
+            string message = string.Format("400.311 - Invalid value '{0}' for the '{1}' option.", value, field);
             if(hint != null)
             {
                 message += " " + hint;
             }
-            return message + " " + string.Format("Details: https://www.pdfcrowd.com/api/{0}-dotnet/ref/#{1}", converter, id);
+            return message + " " + string.Format("Documentation link: https://www.pdfcrowd.com/api/{0}-dotnet/ref/#{1}", converter, id);
         }
     }
 
@@ -493,13 +493,13 @@ namespace pdfcrowd
         /**
         * Convert a web page.
         *
-        * @param url The address of the web page to convert. The supported protocols are http:// and https://.
+        * @param url The address of the web page to convert. Supported protocols are http:// and https://.
         * @return Byte array containing the conversion output.
         */
         public byte[] convertUrl(string url)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrl", "html-to-pdf", "The supported protocols are http:// and https://.", "convert_url"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrl", "html-to-pdf", "Supported protocols are http:// and https://.", "convert_url"), 470);
             
             fields["url"] = url;
             return helper.post(fields, files, rawData, null);
@@ -508,13 +508,13 @@ namespace pdfcrowd
         /**
         * Convert a web page and write the result to an output stream.
         *
-        * @param url The address of the web page to convert. The supported protocols are http:// and https://.
+        * @param url The address of the web page to convert. Supported protocols are http:// and https://.
         * @param outStream The output stream that will contain the conversion output.
         */
         public void convertUrlToStream(string url, Stream outStream)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrlToStream::url", "html-to-pdf", "The supported protocols are http:// and https://.", "convert_url_to_stream"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrlToStream::url", "html-to-pdf", "Supported protocols are http:// and https://.", "convert_url_to_stream"), 470);
             
             fields["url"] = url;
             helper.post(fields, files, rawData, outStream);
@@ -523,7 +523,7 @@ namespace pdfcrowd
         /**
         * Convert a web page and write the result to a local file.
         *
-        * @param url The address of the web page to convert. The supported protocols are http:// and https://.
+        * @param url The address of the web page to convert. Supported protocols are http:// and https://.
         * @param filePath The output file path. The string must not be empty.
         */
         public void convertUrlToFile(string url, string filePath)
@@ -734,13 +734,13 @@ namespace pdfcrowd
         /**
         * Set the output page width. The safe maximum is <span class='field-value'>200in</span> otherwise some PDF viewers may be unable to open the PDF.
         *
-        * @param width The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param width The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public HtmlToPdfClient setPageWidth(string width)
         {
             if (!Regex.Match(width, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setPageWidth", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_page_width"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setPageWidth", "html-to-pdf", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_page_width"), 470);
             
             fields["page_width"] = width;
             return this;
@@ -749,13 +749,13 @@ namespace pdfcrowd
         /**
         * Set the output page height. Use <span class='field-value'>-1</span> for a single page PDF. The safe maximum is <span class='field-value'>200in</span> otherwise some PDF viewers may be unable to open the PDF.
         *
-        * @param height The value must be -1 or specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param height The value must be -1 or specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public HtmlToPdfClient setPageHeight(string height)
         {
             if (!Regex.Match(height, "(?i)^0$|^\\-1$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setPageHeight", "html-to-pdf", "The value must be -1 or specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_page_height"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setPageHeight", "html-to-pdf", "The value must be -1 or specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_page_height"), 470);
             
             fields["page_height"] = height;
             return this;
@@ -764,8 +764,8 @@ namespace pdfcrowd
         /**
         * Set the output page dimensions.
         *
-        * @param width Set the output page width. The safe maximum is <span class='field-value'>200in</span> otherwise some PDF viewers may be unable to open the PDF. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
-        * @param height Set the output page height. Use <span class='field-value'>-1</span> for a single page PDF. The safe maximum is <span class='field-value'>200in</span> otherwise some PDF viewers may be unable to open the PDF. The value must be -1 or specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param width Set the output page width. The safe maximum is <span class='field-value'>200in</span> otherwise some PDF viewers may be unable to open the PDF. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
+        * @param height Set the output page height. Use <span class='field-value'>-1</span> for a single page PDF. The safe maximum is <span class='field-value'>200in</span> otherwise some PDF viewers may be unable to open the PDF. The value must be -1 or specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public HtmlToPdfClient setPageDimensions(string width, string height)
@@ -793,13 +793,13 @@ namespace pdfcrowd
         /**
         * Set the output page top margin.
         *
-        * @param top The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param top The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public HtmlToPdfClient setMarginTop(string top)
         {
             if (!Regex.Match(top, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(top, "setMarginTop", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_top"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(top, "setMarginTop", "html-to-pdf", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_margin_top"), 470);
             
             fields["margin_top"] = top;
             return this;
@@ -808,13 +808,13 @@ namespace pdfcrowd
         /**
         * Set the output page right margin.
         *
-        * @param right The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param right The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public HtmlToPdfClient setMarginRight(string right)
         {
             if (!Regex.Match(right, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(right, "setMarginRight", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_right"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(right, "setMarginRight", "html-to-pdf", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_margin_right"), 470);
             
             fields["margin_right"] = right;
             return this;
@@ -823,13 +823,13 @@ namespace pdfcrowd
         /**
         * Set the output page bottom margin.
         *
-        * @param bottom The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param bottom The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public HtmlToPdfClient setMarginBottom(string bottom)
         {
             if (!Regex.Match(bottom, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(bottom, "setMarginBottom", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_bottom"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(bottom, "setMarginBottom", "html-to-pdf", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_margin_bottom"), 470);
             
             fields["margin_bottom"] = bottom;
             return this;
@@ -838,13 +838,13 @@ namespace pdfcrowd
         /**
         * Set the output page left margin.
         *
-        * @param left The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param left The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public HtmlToPdfClient setMarginLeft(string left)
         {
             if (!Regex.Match(left, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(left, "setMarginLeft", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_left"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(left, "setMarginLeft", "html-to-pdf", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_margin_left"), 470);
             
             fields["margin_left"] = left;
             return this;
@@ -865,10 +865,10 @@ namespace pdfcrowd
         /**
         * Set the output page margins.
         *
-        * @param top Set the output page top margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
-        * @param right Set the output page right margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
-        * @param bottom Set the output page bottom margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
-        * @param left Set the output page left margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param top Set the output page top margin. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
+        * @param right Set the output page right margin. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
+        * @param bottom Set the output page bottom margin. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
+        * @param left Set the output page left margin. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public HtmlToPdfClient setPageMargins(string top, string right, string bottom, string left)
@@ -883,13 +883,13 @@ namespace pdfcrowd
         /**
         * Set the page range to print.
         *
-        * @param pages A comma separated list of page numbers or ranges. Special strings may be used, such as `odd`, `even` and `last`.
+        * @param pages A comma separated list of page numbers or ranges. Special strings may be used, such as 'odd', 'even' and 'last'.
         * @return The converter object.
         */
         public HtmlToPdfClient setPrintPageRange(string pages)
         {
             if (!Regex.Match(pages, "^(?:\\s*(?:\\d+|(?:\\d*\\s*\\-\\s*\\d+)|(?:\\d+\\s*\\-\\s*\\d*)|odd|even|last)\\s*,\\s*)*\\s*(?:\\d+|(?:\\d*\\s*\\-\\s*\\d+)|(?:\\d+\\s*\\-\\s*\\d*)|odd|even|last)\\s*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(pages, "setPrintPageRange", "html-to-pdf", "A comma separated list of page numbers or ranges. Special strings may be used, such as `odd`, `even` and `last`.", "set_print_page_range"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(pages, "setPrintPageRange", "html-to-pdf", "A comma separated list of page numbers or ranges. Special strings may be used, such as 'odd', 'even' and 'last'.", "set_print_page_range"), 470);
             
             fields["print_page_range"] = pages;
             return this;
@@ -898,13 +898,13 @@ namespace pdfcrowd
         /**
         * Set the viewport width for formatting the HTML content when generating a PDF. By specifying a viewport width, you can control how the content is rendered, ensuring it mimics the appearance on various devices or matches specific design requirements.
         *
-        * @param width The width of the viewport. The value must be "balanced", "small", "medium", "large", "extra-large", or a number in the range 96-65000px.
+        * @param width The width of the viewport. The value must be 'balanced', 'small', 'medium', 'large', 'extra-large', or a number in the range 96-65000px.
         * @return The converter object.
         */
         public HtmlToPdfClient setContentViewportWidth(string width)
         {
             if (!Regex.Match(width, "(?i)^(balanced|small|medium|large|extra-large|[0-9]+(px)?)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setContentViewportWidth", "html-to-pdf", "The value must be \"balanced\", \"small\", \"medium\", \"large\", \"extra-large\", or a number in the range 96-65000px.", "set_content_viewport_width"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setContentViewportWidth", "html-to-pdf", "The value must be 'balanced', 'small', 'medium', 'large', 'extra-large', or a number in the range 96-65000px.", "set_content_viewport_width"), 470);
             
             fields["content_viewport_width"] = width;
             return this;
@@ -913,13 +913,13 @@ namespace pdfcrowd
         /**
         * Set the viewport height for formatting the HTML content when generating a PDF. By specifying a viewport height, you can enforce loading of lazy-loaded images and also affect vertical positioning of absolutely positioned elements within the content.
         *
-        * @param height The viewport height. The value must be "auto", "large", or a number.
+        * @param height The viewport height. The value must be 'auto', 'large', or a number.
         * @return The converter object.
         */
         public HtmlToPdfClient setContentViewportHeight(string height)
         {
             if (!Regex.Match(height, "(?i)^(auto|large|[0-9]+(px)?)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setContentViewportHeight", "html-to-pdf", "The value must be \"auto\", \"large\", or a number.", "set_content_viewport_height"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setContentViewportHeight", "html-to-pdf", "The value must be 'auto', 'large', or a number.", "set_content_viewport_height"), 470);
             
             fields["content_viewport_height"] = height;
             return this;
@@ -958,13 +958,13 @@ namespace pdfcrowd
         /**
         * Load an HTML code from the specified URL and use it as the page header. The following classes can be used in the HTML. The content of the respective elements will be expanded as follows: <ul> <li><span class='field-value'>pdfcrowd-page-count</span> - the total page count of printed pages</li> <li><span class='field-value'>pdfcrowd-page-number</span> - the current page number</li> <li><span class='field-value'>pdfcrowd-source-url</span> - the source URL of the converted document</li> <li><span class='field-value'>pdfcrowd-source-title</span> - the title of the converted document</li> </ul> The following attributes can be used: <ul> <li><span class='field-value'>data-pdfcrowd-number-format</span> - specifies the type of the used numerals. Allowed values: <ul> <li><span class='field-value'>arabic</span> - Arabic numerals, they are used by default</li> <li><span class='field-value'>roman</span> - Roman numerals</li> <li><span class='field-value'>eastern-arabic</span> - Eastern Arabic numerals</li> <li><span class='field-value'>bengali</span> - Bengali numerals</li> <li><span class='field-value'>devanagari</span> - Devanagari numerals</li> <li><span class='field-value'>thai</span> - Thai numerals</li> <li><span class='field-value'>east-asia</span> - Chinese, Vietnamese, Japanese and Korean numerals</li> <li><span class='field-value'>chinese-formal</span> - Chinese formal numerals</li> </ul> Please contact us if you need another type of numerals.<br> Example:<br> &lt;span class='pdfcrowd-page-number' data-pdfcrowd-number-format='roman'&gt;&lt;/span&gt; </li> <li><span class='field-value'>data-pdfcrowd-placement</span> - specifies where to place the source URL. Allowed values: <ul> <li>The URL is inserted to the content <ul> <li> Example: &lt;span class='pdfcrowd-source-url'&gt;&lt;/span&gt;<br> will produce &lt;span&gt;http://example.com&lt;/span&gt; </li> </ul> </li> <li><span class='field-value'>href</span> - the URL is set to the href attribute <ul> <li> Example: &lt;a class='pdfcrowd-source-url' data-pdfcrowd-placement='href'&gt;Link to source&lt;/a&gt;<br> will produce &lt;a href='http://example.com'&gt;Link to source&lt;/a&gt; </li> </ul> </li> <li><span class='field-value'>href-and-content</span> - the URL is set to the href attribute and to the content <ul> <li> Example: &lt;a class='pdfcrowd-source-url' data-pdfcrowd-placement='href-and-content'&gt;&lt;/a&gt;<br> will produce &lt;a href='http://example.com'&gt;http://example.com&lt;/a&gt; </li> </ul> </li> </ul> </li> </ul>
         *
-        * @param url The supported protocols are http:// and https://.
+        * @param url Supported protocols are http:// and https://.
         * @return The converter object.
         */
         public HtmlToPdfClient setHeaderUrl(string url)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setHeaderUrl", "html-to-pdf", "The supported protocols are http:// and https://.", "set_header_url"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setHeaderUrl", "html-to-pdf", "Supported protocols are http:// and https://.", "set_header_url"), 470);
             
             fields["header_url"] = url;
             return this;
@@ -988,13 +988,13 @@ namespace pdfcrowd
         /**
         * Set the header height.
         *
-        * @param height The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param height The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public HtmlToPdfClient setHeaderHeight(string height)
         {
             if (!Regex.Match(height, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setHeaderHeight", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_header_height"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setHeaderHeight", "html-to-pdf", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_header_height"), 470);
             
             fields["header_height"] = height;
             return this;
@@ -1015,13 +1015,13 @@ namespace pdfcrowd
         /**
         * Load an HTML code from the specified URL and use it as the page footer. The following classes can be used in the HTML. The content of the respective elements will be expanded as follows: <ul> <li><span class='field-value'>pdfcrowd-page-count</span> - the total page count of printed pages</li> <li><span class='field-value'>pdfcrowd-page-number</span> - the current page number</li> <li><span class='field-value'>pdfcrowd-source-url</span> - the source URL of the converted document</li> <li><span class='field-value'>pdfcrowd-source-title</span> - the title of the converted document</li> </ul> The following attributes can be used: <ul> <li><span class='field-value'>data-pdfcrowd-number-format</span> - specifies the type of the used numerals. Allowed values: <ul> <li><span class='field-value'>arabic</span> - Arabic numerals, they are used by default</li> <li><span class='field-value'>roman</span> - Roman numerals</li> <li><span class='field-value'>eastern-arabic</span> - Eastern Arabic numerals</li> <li><span class='field-value'>bengali</span> - Bengali numerals</li> <li><span class='field-value'>devanagari</span> - Devanagari numerals</li> <li><span class='field-value'>thai</span> - Thai numerals</li> <li><span class='field-value'>east-asia</span> - Chinese, Vietnamese, Japanese and Korean numerals</li> <li><span class='field-value'>chinese-formal</span> - Chinese formal numerals</li> </ul> Please contact us if you need another type of numerals.<br> Example:<br> &lt;span class='pdfcrowd-page-number' data-pdfcrowd-number-format='roman'&gt;&lt;/span&gt; </li> <li><span class='field-value'>data-pdfcrowd-placement</span> - specifies where to place the source URL. Allowed values: <ul> <li>The URL is inserted to the content <ul> <li> Example: &lt;span class='pdfcrowd-source-url'&gt;&lt;/span&gt;<br> will produce &lt;span&gt;http://example.com&lt;/span&gt; </li> </ul> </li> <li><span class='field-value'>href</span> - the URL is set to the href attribute <ul> <li> Example: &lt;a class='pdfcrowd-source-url' data-pdfcrowd-placement='href'&gt;Link to source&lt;/a&gt;<br> will produce &lt;a href='http://example.com'&gt;Link to source&lt;/a&gt; </li> </ul> </li> <li><span class='field-value'>href-and-content</span> - the URL is set to the href attribute and to the content <ul> <li> Example: &lt;a class='pdfcrowd-source-url' data-pdfcrowd-placement='href-and-content'&gt;&lt;/a&gt;<br> will produce &lt;a href='http://example.com'&gt;http://example.com&lt;/a&gt; </li> </ul> </li> </ul> </li> </ul>
         *
-        * @param url The supported protocols are http:// and https://.
+        * @param url Supported protocols are http:// and https://.
         * @return The converter object.
         */
         public HtmlToPdfClient setFooterUrl(string url)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setFooterUrl", "html-to-pdf", "The supported protocols are http:// and https://.", "set_footer_url"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setFooterUrl", "html-to-pdf", "Supported protocols are http:// and https://.", "set_footer_url"), 470);
             
             fields["footer_url"] = url;
             return this;
@@ -1045,13 +1045,13 @@ namespace pdfcrowd
         /**
         * Set the footer height.
         *
-        * @param height The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param height The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public HtmlToPdfClient setFooterHeight(string height)
         {
             if (!Regex.Match(height, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setFooterHeight", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_footer_height"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setFooterHeight", "html-to-pdf", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_footer_height"), 470);
             
             fields["footer_height"] = height;
             return this;
@@ -1114,13 +1114,13 @@ namespace pdfcrowd
         /**
         * Set the scaling factor (zoom) for the header and footer.
         *
-        * @param factor The percentage value. The value must be in the range 10-500.
+        * @param factor The percentage value. The accepted range is 10-500.
         * @return The converter object.
         */
         public HtmlToPdfClient setHeaderFooterScaleFactor(int factor)
         {
             if (!(factor >= 10 && factor <= 500))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(factor, "setHeaderFooterScaleFactor", "html-to-pdf", "The value must be in the range 10-500.", "set_header_footer_scale_factor"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(factor, "setHeaderFooterScaleFactor", "html-to-pdf", "The accepted range is 10-500.", "set_header_footer_scale_factor"), 470);
             
             fields["header_footer_scale_factor"] = ConnectionHelper.intToString(factor);
             return this;
@@ -1156,13 +1156,13 @@ namespace pdfcrowd
         /**
         * Load a file from the specified URL and apply the file as a watermark to each page of the output PDF. A watermark can be either a PDF or an image. If a multi-page file (PDF or TIFF) is used, the first page is used as the watermark.
         *
-        * @param url The supported protocols are http:// and https://.
+        * @param url Supported protocols are http:// and https://.
         * @return The converter object.
         */
         public HtmlToPdfClient setPageWatermarkUrl(string url)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setPageWatermarkUrl", "html-to-pdf", "The supported protocols are http:// and https://.", "set_page_watermark_url"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setPageWatermarkUrl", "html-to-pdf", "Supported protocols are http:// and https://.", "set_page_watermark_url"), 470);
             
             fields["page_watermark_url"] = url;
             return this;
@@ -1186,13 +1186,13 @@ namespace pdfcrowd
         /**
         * Load a file from the specified URL and apply each page of the file as a watermark to the corresponding page of the output PDF. A watermark can be either a PDF or an image.
         *
-        * @param url The supported protocols are http:// and https://.
+        * @param url Supported protocols are http:// and https://.
         * @return The converter object.
         */
         public HtmlToPdfClient setMultipageWatermarkUrl(string url)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setMultipageWatermarkUrl", "html-to-pdf", "The supported protocols are http:// and https://.", "set_multipage_watermark_url"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setMultipageWatermarkUrl", "html-to-pdf", "Supported protocols are http:// and https://.", "set_multipage_watermark_url"), 470);
             
             fields["multipage_watermark_url"] = url;
             return this;
@@ -1216,13 +1216,13 @@ namespace pdfcrowd
         /**
         * Load a file from the specified URL and apply the file as a background to each page of the output PDF. A background can be either a PDF or an image. If a multi-page file (PDF or TIFF) is used, the first page is used as the background.
         *
-        * @param url The supported protocols are http:// and https://.
+        * @param url Supported protocols are http:// and https://.
         * @return The converter object.
         */
         public HtmlToPdfClient setPageBackgroundUrl(string url)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setPageBackgroundUrl", "html-to-pdf", "The supported protocols are http:// and https://.", "set_page_background_url"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setPageBackgroundUrl", "html-to-pdf", "Supported protocols are http:// and https://.", "set_page_background_url"), 470);
             
             fields["page_background_url"] = url;
             return this;
@@ -1246,13 +1246,13 @@ namespace pdfcrowd
         /**
         * Load a file from the specified URL and apply each page of the file as a background to the corresponding page of the output PDF. A background can be either a PDF or an image.
         *
-        * @param url The supported protocols are http:// and https://.
+        * @param url Supported protocols are http:// and https://.
         * @return The converter object.
         */
         public HtmlToPdfClient setMultipageBackgroundUrl(string url)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setMultipageBackgroundUrl", "html-to-pdf", "The supported protocols are http:// and https://.", "set_multipage_background_url"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setMultipageBackgroundUrl", "html-to-pdf", "Supported protocols are http:// and https://.", "set_multipage_background_url"), 470);
             
             fields["multipage_background_url"] = url;
             return this;
@@ -1562,13 +1562,13 @@ namespace pdfcrowd
         /**
         * Wait the specified number of milliseconds to finish all JavaScript after the document is loaded. Your API license defines the maximum wait time by "Max Delay" parameter.
         *
-        * @param delay The number of milliseconds to wait. Must be a positive integer number or 0.
+        * @param delay The number of milliseconds to wait. Must be a positive integer or 0.
         * @return The converter object.
         */
         public HtmlToPdfClient setJavascriptDelay(int delay)
         {
             if (!(delay >= 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(delay, "setJavascriptDelay", "html-to-pdf", "Must be a positive integer number or 0.", "set_javascript_delay"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(delay, "setJavascriptDelay", "html-to-pdf", "Must be a positive integer or 0.", "set_javascript_delay"), 470);
             
             fields["javascript_delay"] = ConnectionHelper.intToString(delay);
             return this;
@@ -1649,13 +1649,13 @@ namespace pdfcrowd
         /**
         * Set the viewport width in pixels. The viewport is the user's visible area of the page.
         *
-        * @param width The value must be in the range 96-65000.
+        * @param width The accepted range is 96-65000.
         * @return The converter object.
         */
         public HtmlToPdfClient setViewportWidth(int width)
         {
             if (!(width >= 96 && width <= 65000))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setViewportWidth", "html-to-pdf", "The value must be in the range 96-65000.", "set_viewport_width"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setViewportWidth", "html-to-pdf", "The accepted range is 96-65000.", "set_viewport_width"), 470);
             
             fields["viewport_width"] = ConnectionHelper.intToString(width);
             return this;
@@ -1664,13 +1664,13 @@ namespace pdfcrowd
         /**
         * Set the viewport height in pixels. The viewport is the user's visible area of the page. If the input HTML uses lazily loaded images, try using a large value that covers the entire height of the HTML, e.g. 100000.
         *
-        * @param height Must be a positive integer number.
+        * @param height Must be a positive integer.
         * @return The converter object.
         */
         public HtmlToPdfClient setViewportHeight(int height)
         {
             if (!(height > 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setViewportHeight", "html-to-pdf", "Must be a positive integer number.", "set_viewport_height"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setViewportHeight", "html-to-pdf", "Must be a positive integer.", "set_viewport_height"), 470);
             
             fields["viewport_height"] = ConnectionHelper.intToString(height);
             return this;
@@ -1679,8 +1679,8 @@ namespace pdfcrowd
         /**
         * Set the viewport size. The viewport is the user's visible area of the page.
         *
-        * @param width Set the viewport width in pixels. The viewport is the user's visible area of the page. The value must be in the range 96-65000.
-        * @param height Set the viewport height in pixels. The viewport is the user's visible area of the page. If the input HTML uses lazily loaded images, try using a large value that covers the entire height of the HTML, e.g. 100000. Must be a positive integer number.
+        * @param width Set the viewport width in pixels. The viewport is the user's visible area of the page. The accepted range is 96-65000.
+        * @param height Set the viewport height in pixels. The viewport is the user's visible area of the page. If the input HTML uses lazily loaded images, try using a large value that covers the entire height of the HTML, e.g. 100000. Must be a positive integer.
         * @return The converter object.
         */
         public HtmlToPdfClient setViewport(int width, int height)
@@ -1723,13 +1723,13 @@ namespace pdfcrowd
         /**
         * Set the scaling factor (zoom) for the main page area.
         *
-        * @param factor The percentage value. The value must be in the range 10-500.
+        * @param factor The percentage value. The accepted range is 10-500.
         * @return The converter object.
         */
         public HtmlToPdfClient setScaleFactor(int factor)
         {
             if (!(factor >= 10 && factor <= 500))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(factor, "setScaleFactor", "html-to-pdf", "The value must be in the range 10-500.", "set_scale_factor"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(factor, "setScaleFactor", "html-to-pdf", "The accepted range is 10-500.", "set_scale_factor"), 470);
             
             fields["scale_factor"] = ConnectionHelper.intToString(factor);
             return this;
@@ -1738,13 +1738,13 @@ namespace pdfcrowd
         /**
         * Set the quality of embedded JPEG images. A lower quality results in a smaller PDF file but can lead to compression artifacts.
         *
-        * @param quality The percentage value. The value must be in the range 1-100.
+        * @param quality The percentage value. The accepted range is 1-100.
         * @return The converter object.
         */
         public HtmlToPdfClient setJpegQuality(int quality)
         {
             if (!(quality >= 1 && quality <= 100))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(quality, "setJpegQuality", "html-to-pdf", "The value must be in the range 1-100.", "set_jpeg_quality"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(quality, "setJpegQuality", "html-to-pdf", "The accepted range is 1-100.", "set_jpeg_quality"), 470);
             
             fields["jpeg_quality"] = ConnectionHelper.intToString(quality);
             return this;
@@ -1768,13 +1768,13 @@ namespace pdfcrowd
         /**
         * Set the DPI of images in PDF. A lower DPI may result in a smaller PDF file.  If the specified DPI is higher than the actual image DPI, the original image DPI is retained (no upscaling is performed). Use <span class='field-value'>0</span> to leave the images unaltered.
         *
-        * @param dpi The DPI value. Must be a positive integer number or 0.
+        * @param dpi The DPI value. Must be a positive integer or 0.
         * @return The converter object.
         */
         public HtmlToPdfClient setImageDpi(int dpi)
         {
             if (!(dpi >= 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(dpi, "setImageDpi", "html-to-pdf", "Must be a positive integer number or 0.", "set_image_dpi"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(dpi, "setImageDpi", "html-to-pdf", "Must be a positive integer or 0.", "set_image_dpi"), 470);
             
             fields["image_dpi"] = ConnectionHelper.intToString(dpi);
             return this;
@@ -1984,13 +1984,13 @@ namespace pdfcrowd
         /**
         * Display the specified page when the document is opened.
         *
-        * @param page Must be a positive integer number.
+        * @param page Must be a positive integer.
         * @return The converter object.
         */
         public HtmlToPdfClient setInitialPage(int page)
         {
             if (!(page > 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(page, "setInitialPage", "html-to-pdf", "Must be a positive integer number.", "set_initial_page"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(page, "setInitialPage", "html-to-pdf", "Must be a positive integer.", "set_initial_page"), 470);
             
             fields["initial_page"] = ConnectionHelper.intToString(page);
             return this;
@@ -1999,13 +1999,13 @@ namespace pdfcrowd
         /**
         * Specify the initial page zoom in percents when the document is opened.
         *
-        * @param zoom Must be a positive integer number.
+        * @param zoom Must be a positive integer.
         * @return The converter object.
         */
         public HtmlToPdfClient setInitialZoom(int zoom)
         {
             if (!(zoom > 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(zoom, "setInitialZoom", "html-to-pdf", "Must be a positive integer number.", "set_initial_zoom"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(zoom, "setInitialZoom", "html-to-pdf", "Must be a positive integer.", "set_initial_zoom"), 470);
             
             fields["initial_zoom"] = ConnectionHelper.intToString(zoom);
             return this;
@@ -2353,13 +2353,13 @@ namespace pdfcrowd
         /**
         * Set the internal DPI resolution used for positioning of PDF contents. It can help in situations when there are small inaccuracies in the PDF. It is recommended to use values that are a multiple of 72, such as 288 or 360.
         *
-        * @param dpi The DPI value. The value must be in the range of 72-600.
+        * @param dpi The DPI value. The accepted range is 72-600.
         * @return The converter object.
         */
         public HtmlToPdfClient setLayoutDpi(int dpi)
         {
             if (!(dpi >= 72 && dpi <= 600))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(dpi, "setLayoutDpi", "html-to-pdf", "The value must be in the range of 72-600.", "set_layout_dpi"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(dpi, "setLayoutDpi", "html-to-pdf", "The accepted range is 72-600.", "set_layout_dpi"), 470);
             
             fields["layout_dpi"] = ConnectionHelper.intToString(dpi);
             return this;
@@ -2368,13 +2368,13 @@ namespace pdfcrowd
         /**
         * Set the top left X coordinate of the content area. It is relative to the top left X coordinate of the print area.
         *
-        * @param x The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt". It may contain a negative value.
+        * @param x The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'. It may contain a negative value.
         * @return The converter object.
         */
         public HtmlToPdfClient setContentAreaX(string x)
         {
             if (!Regex.Match(x, "(?i)^0$|^\\-?[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(x, "setContentAreaX", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\". It may contain a negative value.", "set_content_area_x"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(x, "setContentAreaX", "html-to-pdf", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'. It may contain a negative value.", "set_content_area_x"), 470);
             
             fields["content_area_x"] = x;
             return this;
@@ -2383,13 +2383,13 @@ namespace pdfcrowd
         /**
         * Set the top left Y coordinate of the content area. It is relative to the top left Y coordinate of the print area.
         *
-        * @param y The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt". It may contain a negative value.
+        * @param y The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'. It may contain a negative value.
         * @return The converter object.
         */
         public HtmlToPdfClient setContentAreaY(string y)
         {
             if (!Regex.Match(y, "(?i)^0$|^\\-?[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(y, "setContentAreaY", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\". It may contain a negative value.", "set_content_area_y"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(y, "setContentAreaY", "html-to-pdf", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'. It may contain a negative value.", "set_content_area_y"), 470);
             
             fields["content_area_y"] = y;
             return this;
@@ -2398,13 +2398,13 @@ namespace pdfcrowd
         /**
         * Set the width of the content area. It should be at least 1 inch.
         *
-        * @param width The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param width The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public HtmlToPdfClient setContentAreaWidth(string width)
         {
             if (!Regex.Match(width, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setContentAreaWidth", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_content_area_width"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setContentAreaWidth", "html-to-pdf", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_content_area_width"), 470);
             
             fields["content_area_width"] = width;
             return this;
@@ -2413,13 +2413,13 @@ namespace pdfcrowd
         /**
         * Set the height of the content area. It should be at least 1 inch.
         *
-        * @param height The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param height The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public HtmlToPdfClient setContentAreaHeight(string height)
         {
             if (!Regex.Match(height, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setContentAreaHeight", "html-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_content_area_height"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setContentAreaHeight", "html-to-pdf", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_content_area_height"), 470);
             
             fields["content_area_height"] = height;
             return this;
@@ -2428,10 +2428,10 @@ namespace pdfcrowd
         /**
         * Set the content area position and size. The content area enables to specify a web page area to be converted.
         *
-        * @param x Set the top left X coordinate of the content area. It is relative to the top left X coordinate of the print area. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt". It may contain a negative value.
-        * @param y Set the top left Y coordinate of the content area. It is relative to the top left Y coordinate of the print area. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt". It may contain a negative value.
-        * @param width Set the width of the content area. It should be at least 1 inch. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
-        * @param height Set the height of the content area. It should be at least 1 inch. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param x Set the top left X coordinate of the content area. It is relative to the top left X coordinate of the print area. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'. It may contain a negative value.
+        * @param y Set the top left Y coordinate of the content area. It is relative to the top left Y coordinate of the print area. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'. It may contain a negative value.
+        * @param width Set the width of the content area. It should be at least 1 inch. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
+        * @param height Set the height of the content area. It should be at least 1 inch. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public HtmlToPdfClient setContentArea(string x, string y, string width, string height)
@@ -2532,13 +2532,13 @@ namespace pdfcrowd
         /**
         * Set the maximum time to load the page and its resources. After this time, all requests will be considered successful. This can be useful to ensure that the conversion does not timeout. Use this method if there is no other way to fix page loading.
         *
-        * @param maxTime The number of seconds to wait. The value must be in the range 10-30.
+        * @param maxTime The number of seconds to wait. The accepted range is 10-30.
         * @return The converter object.
         */
         public HtmlToPdfClient setMaxLoadingTime(int maxTime)
         {
             if (!(maxTime >= 10 && maxTime <= 30))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(maxTime, "setMaxLoadingTime", "html-to-pdf", "The value must be in the range 10-30.", "set_max_loading_time"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(maxTime, "setMaxLoadingTime", "html-to-pdf", "The accepted range is 10-30.", "set_max_loading_time"), 470);
             
             fields["max_loading_time"] = ConnectionHelper.intToString(maxTime);
             return this;
@@ -2602,7 +2602,7 @@ The structure of the JSON must be:
 </ul>
 
 <p>
-Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
 </p>
         *
         * @param jsonString The JSON string.
@@ -2774,13 +2774,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Convert a web page.
         *
-        * @param url The address of the web page to convert. The supported protocols are http:// and https://.
+        * @param url The address of the web page to convert. Supported protocols are http:// and https://.
         * @return Byte array containing the conversion output.
         */
         public byte[] convertUrl(string url)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrl", "html-to-image", "The supported protocols are http:// and https://.", "convert_url"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrl", "html-to-image", "Supported protocols are http:// and https://.", "convert_url"), 470);
             
             fields["url"] = url;
             return helper.post(fields, files, rawData, null);
@@ -2789,13 +2789,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Convert a web page and write the result to an output stream.
         *
-        * @param url The address of the web page to convert. The supported protocols are http:// and https://.
+        * @param url The address of the web page to convert. Supported protocols are http:// and https://.
         * @param outStream The output stream that will contain the conversion output.
         */
         public void convertUrlToStream(string url, Stream outStream)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrlToStream::url", "html-to-image", "The supported protocols are http:// and https://.", "convert_url_to_stream"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrlToStream::url", "html-to-image", "Supported protocols are http:// and https://.", "convert_url_to_stream"), 470);
             
             fields["url"] = url;
             helper.post(fields, files, rawData, outStream);
@@ -2804,7 +2804,7 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Convert a web page and write the result to a local file.
         *
-        * @param url The address of the web page to convert. The supported protocols are http:// and https://.
+        * @param url The address of the web page to convert. Supported protocols are http:// and https://.
         * @param filePath The output file path. The string must not be empty.
         */
         public void convertUrlToFile(string url, string filePath)
@@ -3000,13 +3000,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the output image width in pixels.
         *
-        * @param width The value must be in the range 96-65000.
+        * @param width The accepted range is 96-65000.
         * @return The converter object.
         */
         public HtmlToImageClient setScreenshotWidth(int width)
         {
             if (!(width >= 96 && width <= 65000))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setScreenshotWidth", "html-to-image", "The value must be in the range 96-65000.", "set_screenshot_width"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setScreenshotWidth", "html-to-image", "The accepted range is 96-65000.", "set_screenshot_width"), 470);
             
             fields["screenshot_width"] = ConnectionHelper.intToString(width);
             return this;
@@ -3015,13 +3015,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the output image height in pixels. If it is not specified, actual document height is used.
         *
-        * @param height Must be a positive integer number.
+        * @param height Must be a positive integer.
         * @return The converter object.
         */
         public HtmlToImageClient setScreenshotHeight(int height)
         {
             if (!(height > 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setScreenshotHeight", "html-to-image", "Must be a positive integer number.", "set_screenshot_height"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setScreenshotHeight", "html-to-image", "Must be a positive integer.", "set_screenshot_height"), 470);
             
             fields["screenshot_height"] = ConnectionHelper.intToString(height);
             return this;
@@ -3030,13 +3030,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the scaling factor (zoom) for the output image.
         *
-        * @param factor The percentage value. Must be a positive integer number.
+        * @param factor The percentage value. Must be a positive integer.
         * @return The converter object.
         */
         public HtmlToImageClient setScaleFactor(int factor)
         {
             if (!(factor > 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(factor, "setScaleFactor", "html-to-image", "Must be a positive integer number.", "set_scale_factor"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(factor, "setScaleFactor", "html-to-image", "Must be a positive integer.", "set_scale_factor"), 470);
             
             fields["scale_factor"] = ConnectionHelper.intToString(factor);
             return this;
@@ -3331,13 +3331,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Wait the specified number of milliseconds to finish all JavaScript after the document is loaded. Your API license defines the maximum wait time by "Max Delay" parameter.
         *
-        * @param delay The number of milliseconds to wait. Must be a positive integer number or 0.
+        * @param delay The number of milliseconds to wait. Must be a positive integer or 0.
         * @return The converter object.
         */
         public HtmlToImageClient setJavascriptDelay(int delay)
         {
             if (!(delay >= 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(delay, "setJavascriptDelay", "html-to-image", "Must be a positive integer number or 0.", "set_javascript_delay"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(delay, "setJavascriptDelay", "html-to-image", "Must be a positive integer or 0.", "set_javascript_delay"), 470);
             
             fields["javascript_delay"] = ConnectionHelper.intToString(delay);
             return this;
@@ -3655,13 +3655,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the maximum time to load the page and its resources. After this time, all requests will be considered successful. This can be useful to ensure that the conversion does not timeout. Use this method if there is no other way to fix page loading.
         *
-        * @param maxTime The number of seconds to wait. The value must be in the range 10-30.
+        * @param maxTime The number of seconds to wait. The accepted range is 10-30.
         * @return The converter object.
         */
         public HtmlToImageClient setMaxLoadingTime(int maxTime)
         {
             if (!(maxTime >= 10 && maxTime <= 30))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(maxTime, "setMaxLoadingTime", "html-to-image", "The value must be in the range 10-30.", "set_max_loading_time"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(maxTime, "setMaxLoadingTime", "html-to-image", "The accepted range is 10-30.", "set_max_loading_time"), 470);
             
             fields["max_loading_time"] = ConnectionHelper.intToString(maxTime);
             return this;
@@ -3797,13 +3797,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Convert an image.
         *
-        * @param url The address of the image to convert. The supported protocols are http:// and https://.
+        * @param url The address of the image to convert. Supported protocols are http:// and https://.
         * @return Byte array containing the conversion output.
         */
         public byte[] convertUrl(string url)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrl", "image-to-image", "The supported protocols are http:// and https://.", "convert_url"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrl", "image-to-image", "Supported protocols are http:// and https://.", "convert_url"), 470);
             
             fields["url"] = url;
             return helper.post(fields, files, rawData, null);
@@ -3812,13 +3812,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Convert an image and write the result to an output stream.
         *
-        * @param url The address of the image to convert. The supported protocols are http:// and https://.
+        * @param url The address of the image to convert. Supported protocols are http:// and https://.
         * @param outStream The output stream that will contain the conversion output.
         */
         public void convertUrlToStream(string url, Stream outStream)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrlToStream::url", "image-to-image", "The supported protocols are http:// and https://.", "convert_url_to_stream"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrlToStream::url", "image-to-image", "Supported protocols are http:// and https://.", "convert_url_to_stream"), 470);
             
             fields["url"] = url;
             helper.post(fields, files, rawData, outStream);
@@ -3827,7 +3827,7 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Convert an image and write the result to a local file.
         *
-        * @param url The address of the image to convert. The supported protocols are http:// and https://.
+        * @param url The address of the image to convert. Supported protocols are http:// and https://.
         * @param filePath The output file path. The string must not be empty.
         */
         public void convertUrlToFile(string url, string filePath)
@@ -4044,13 +4044,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the top left X coordinate of the content area. It is relative to the top left X coordinate of the print area.
         *
-        * @param x The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param x The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToImageClient setCropAreaX(string x)
         {
             if (!Regex.Match(x, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(x, "setCropAreaX", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_crop_area_x"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(x, "setCropAreaX", "image-to-image", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_crop_area_x"), 470);
             
             fields["crop_area_x"] = x;
             return this;
@@ -4059,13 +4059,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the top left Y coordinate of the content area. It is relative to the top left Y coordinate of the print area.
         *
-        * @param y The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param y The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToImageClient setCropAreaY(string y)
         {
             if (!Regex.Match(y, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(y, "setCropAreaY", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_crop_area_y"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(y, "setCropAreaY", "image-to-image", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_crop_area_y"), 470);
             
             fields["crop_area_y"] = y;
             return this;
@@ -4074,13 +4074,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the width of the content area. It should be at least 1 inch.
         *
-        * @param width The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param width The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToImageClient setCropAreaWidth(string width)
         {
             if (!Regex.Match(width, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setCropAreaWidth", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_crop_area_width"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setCropAreaWidth", "image-to-image", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_crop_area_width"), 470);
             
             fields["crop_area_width"] = width;
             return this;
@@ -4089,13 +4089,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the height of the content area. It should be at least 1 inch.
         *
-        * @param height The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param height The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToImageClient setCropAreaHeight(string height)
         {
             if (!Regex.Match(height, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setCropAreaHeight", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_crop_area_height"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setCropAreaHeight", "image-to-image", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_crop_area_height"), 470);
             
             fields["crop_area_height"] = height;
             return this;
@@ -4104,10 +4104,10 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the content area position and size. The content area enables to specify the part to be converted.
         *
-        * @param x Set the top left X coordinate of the content area. It is relative to the top left X coordinate of the print area. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
-        * @param y Set the top left Y coordinate of the content area. It is relative to the top left Y coordinate of the print area. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
-        * @param width Set the width of the content area. It should be at least 1 inch. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
-        * @param height Set the height of the content area. It should be at least 1 inch. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param x Set the top left X coordinate of the content area. It is relative to the top left X coordinate of the print area. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
+        * @param y Set the top left Y coordinate of the content area. It is relative to the top left Y coordinate of the print area. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
+        * @param width Set the width of the content area. It should be at least 1 inch. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
+        * @param height Set the height of the content area. It should be at least 1 inch. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToImageClient setCropArea(string x, string y, string width, string height)
@@ -4149,13 +4149,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the output canvas width.
         *
-        * @param width The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param width The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToImageClient setCanvasWidth(string width)
         {
             if (!Regex.Match(width, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setCanvasWidth", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_canvas_width"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setCanvasWidth", "image-to-image", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_canvas_width"), 470);
             
             fields["canvas_width"] = width;
             return this;
@@ -4164,13 +4164,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the output canvas height.
         *
-        * @param height The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param height The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToImageClient setCanvasHeight(string height)
         {
             if (!Regex.Match(height, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setCanvasHeight", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_canvas_height"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setCanvasHeight", "image-to-image", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_canvas_height"), 470);
             
             fields["canvas_height"] = height;
             return this;
@@ -4179,8 +4179,8 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the output canvas dimensions. If no canvas size is specified, margins are applied as a border around the image.
         *
-        * @param width Set the output canvas width. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
-        * @param height Set the output canvas height. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param width Set the output canvas width. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
+        * @param height Set the output canvas height. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToImageClient setCanvasDimensions(string width, string height)
@@ -4238,13 +4238,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the output canvas top margin.
         *
-        * @param top The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param top The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToImageClient setMarginTop(string top)
         {
             if (!Regex.Match(top, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(top, "setMarginTop", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_top"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(top, "setMarginTop", "image-to-image", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_margin_top"), 470);
             
             fields["margin_top"] = top;
             return this;
@@ -4253,13 +4253,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the output canvas right margin.
         *
-        * @param right The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param right The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToImageClient setMarginRight(string right)
         {
             if (!Regex.Match(right, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(right, "setMarginRight", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_right"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(right, "setMarginRight", "image-to-image", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_margin_right"), 470);
             
             fields["margin_right"] = right;
             return this;
@@ -4268,13 +4268,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the output canvas bottom margin.
         *
-        * @param bottom The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param bottom The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToImageClient setMarginBottom(string bottom)
         {
             if (!Regex.Match(bottom, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(bottom, "setMarginBottom", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_bottom"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(bottom, "setMarginBottom", "image-to-image", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_margin_bottom"), 470);
             
             fields["margin_bottom"] = bottom;
             return this;
@@ -4283,13 +4283,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the output canvas left margin.
         *
-        * @param left The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param left The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToImageClient setMarginLeft(string left)
         {
             if (!Regex.Match(left, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(left, "setMarginLeft", "image-to-image", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_left"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(left, "setMarginLeft", "image-to-image", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_margin_left"), 470);
             
             fields["margin_left"] = left;
             return this;
@@ -4298,10 +4298,10 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the output canvas margins.
         *
-        * @param top Set the output canvas top margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
-        * @param right Set the output canvas right margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
-        * @param bottom Set the output canvas bottom margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
-        * @param left Set the output canvas left margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param top Set the output canvas top margin. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
+        * @param right Set the output canvas right margin. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
+        * @param bottom Set the output canvas bottom margin. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
+        * @param left Set the output canvas left margin. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToImageClient setMargins(string top, string right, string bottom, string left)
@@ -4685,13 +4685,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Load a file from the specified URL and apply the file as a watermark to each page of the output PDF. A watermark can be either a PDF or an image. If a multi-page file (PDF or TIFF) is used, the first page is used as the watermark.
         *
-        * @param url The supported protocols are http:// and https://.
+        * @param url Supported protocols are http:// and https://.
         * @return The converter object.
         */
         public PdfToPdfClient setPageWatermarkUrl(string url)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setPageWatermarkUrl", "pdf-to-pdf", "The supported protocols are http:// and https://.", "set_page_watermark_url"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setPageWatermarkUrl", "pdf-to-pdf", "Supported protocols are http:// and https://.", "set_page_watermark_url"), 470);
             
             fields["page_watermark_url"] = url;
             return this;
@@ -4715,13 +4715,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Load a file from the specified URL and apply each page of the file as a watermark to the corresponding page of the output PDF. A watermark can be either a PDF or an image.
         *
-        * @param url The supported protocols are http:// and https://.
+        * @param url Supported protocols are http:// and https://.
         * @return The converter object.
         */
         public PdfToPdfClient setMultipageWatermarkUrl(string url)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setMultipageWatermarkUrl", "pdf-to-pdf", "The supported protocols are http:// and https://.", "set_multipage_watermark_url"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setMultipageWatermarkUrl", "pdf-to-pdf", "Supported protocols are http:// and https://.", "set_multipage_watermark_url"), 470);
             
             fields["multipage_watermark_url"] = url;
             return this;
@@ -4745,13 +4745,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Load a file from the specified URL and apply the file as a background to each page of the output PDF. A background can be either a PDF or an image. If a multi-page file (PDF or TIFF) is used, the first page is used as the background.
         *
-        * @param url The supported protocols are http:// and https://.
+        * @param url Supported protocols are http:// and https://.
         * @return The converter object.
         */
         public PdfToPdfClient setPageBackgroundUrl(string url)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setPageBackgroundUrl", "pdf-to-pdf", "The supported protocols are http:// and https://.", "set_page_background_url"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setPageBackgroundUrl", "pdf-to-pdf", "Supported protocols are http:// and https://.", "set_page_background_url"), 470);
             
             fields["page_background_url"] = url;
             return this;
@@ -4775,13 +4775,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Load a file from the specified URL and apply each page of the file as a background to the corresponding page of the output PDF. A background can be either a PDF or an image.
         *
-        * @param url The supported protocols are http:// and https://.
+        * @param url Supported protocols are http:// and https://.
         * @return The converter object.
         */
         public PdfToPdfClient setMultipageBackgroundUrl(string url)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setMultipageBackgroundUrl", "pdf-to-pdf", "The supported protocols are http:// and https://.", "set_multipage_background_url"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setMultipageBackgroundUrl", "pdf-to-pdf", "Supported protocols are http:// and https://.", "set_multipage_background_url"), 470);
             
             fields["multipage_background_url"] = url;
             return this;
@@ -4922,13 +4922,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Use metadata (title, subject, author and keywords) from the n-th input PDF.
         *
-        * @param index Set the index of the input PDF file from which to use the metadata. 0 means no metadata. Must be a positive integer number or 0.
+        * @param index Set the index of the input PDF file from which to use the metadata. 0 means no metadata. Must be a positive integer or 0.
         * @return The converter object.
         */
         public PdfToPdfClient setUseMetadataFrom(int index)
         {
             if (!(index >= 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(index, "setUseMetadataFrom", "pdf-to-pdf", "Must be a positive integer number or 0.", "set_use_metadata_from"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(index, "setUseMetadataFrom", "pdf-to-pdf", "Must be a positive integer or 0.", "set_use_metadata_from"), 470);
             
             fields["use_metadata_from"] = ConnectionHelper.intToString(index);
             return this;
@@ -4982,13 +4982,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Display the specified page when the document is opened.
         *
-        * @param page Must be a positive integer number.
+        * @param page Must be a positive integer.
         * @return The converter object.
         */
         public PdfToPdfClient setInitialPage(int page)
         {
             if (!(page > 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(page, "setInitialPage", "pdf-to-pdf", "Must be a positive integer number.", "set_initial_page"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(page, "setInitialPage", "pdf-to-pdf", "Must be a positive integer.", "set_initial_page"), 470);
             
             fields["initial_page"] = ConnectionHelper.intToString(page);
             return this;
@@ -4997,13 +4997,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Specify the initial page zoom in percents when the document is opened.
         *
-        * @param zoom Must be a positive integer number.
+        * @param zoom Must be a positive integer.
         * @return The converter object.
         */
         public PdfToPdfClient setInitialZoom(int zoom)
         {
             if (!(zoom > 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(zoom, "setInitialZoom", "pdf-to-pdf", "Must be a positive integer number.", "set_initial_zoom"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(zoom, "setInitialZoom", "pdf-to-pdf", "Must be a positive integer.", "set_initial_zoom"), 470);
             
             fields["initial_zoom"] = ConnectionHelper.intToString(zoom);
             return this;
@@ -5294,13 +5294,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Convert an image.
         *
-        * @param url The address of the image to convert. The supported protocols are http:// and https://.
+        * @param url The address of the image to convert. Supported protocols are http:// and https://.
         * @return Byte array containing the conversion output.
         */
         public byte[] convertUrl(string url)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrl", "image-to-pdf", "The supported protocols are http:// and https://.", "convert_url"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrl", "image-to-pdf", "Supported protocols are http:// and https://.", "convert_url"), 470);
             
             fields["url"] = url;
             return helper.post(fields, files, rawData, null);
@@ -5309,13 +5309,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Convert an image and write the result to an output stream.
         *
-        * @param url The address of the image to convert. The supported protocols are http:// and https://.
+        * @param url The address of the image to convert. Supported protocols are http:// and https://.
         * @param outStream The output stream that will contain the conversion output.
         */
         public void convertUrlToStream(string url, Stream outStream)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrlToStream::url", "image-to-pdf", "The supported protocols are http:// and https://.", "convert_url_to_stream"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrlToStream::url", "image-to-pdf", "Supported protocols are http:// and https://.", "convert_url_to_stream"), 470);
             
             fields["url"] = url;
             helper.post(fields, files, rawData, outStream);
@@ -5324,7 +5324,7 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Convert an image and write the result to a local file.
         *
-        * @param url The address of the image to convert. The supported protocols are http:// and https://.
+        * @param url The address of the image to convert. Supported protocols are http:// and https://.
         * @param filePath The output file path. The string must not be empty.
         */
         public void convertUrlToFile(string url, string filePath)
@@ -5526,13 +5526,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the top left X coordinate of the content area. It is relative to the top left X coordinate of the print area.
         *
-        * @param x The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param x The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToPdfClient setCropAreaX(string x)
         {
             if (!Regex.Match(x, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(x, "setCropAreaX", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_crop_area_x"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(x, "setCropAreaX", "image-to-pdf", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_crop_area_x"), 470);
             
             fields["crop_area_x"] = x;
             return this;
@@ -5541,13 +5541,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the top left Y coordinate of the content area. It is relative to the top left Y coordinate of the print area.
         *
-        * @param y The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param y The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToPdfClient setCropAreaY(string y)
         {
             if (!Regex.Match(y, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(y, "setCropAreaY", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_crop_area_y"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(y, "setCropAreaY", "image-to-pdf", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_crop_area_y"), 470);
             
             fields["crop_area_y"] = y;
             return this;
@@ -5556,13 +5556,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the width of the content area. It should be at least 1 inch.
         *
-        * @param width The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param width The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToPdfClient setCropAreaWidth(string width)
         {
             if (!Regex.Match(width, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setCropAreaWidth", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_crop_area_width"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setCropAreaWidth", "image-to-pdf", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_crop_area_width"), 470);
             
             fields["crop_area_width"] = width;
             return this;
@@ -5571,13 +5571,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the height of the content area. It should be at least 1 inch.
         *
-        * @param height The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param height The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToPdfClient setCropAreaHeight(string height)
         {
             if (!Regex.Match(height, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setCropAreaHeight", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_crop_area_height"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setCropAreaHeight", "image-to-pdf", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_crop_area_height"), 470);
             
             fields["crop_area_height"] = height;
             return this;
@@ -5586,10 +5586,10 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the content area position and size. The content area enables to specify the part to be converted.
         *
-        * @param x Set the top left X coordinate of the content area. It is relative to the top left X coordinate of the print area. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
-        * @param y Set the top left Y coordinate of the content area. It is relative to the top left Y coordinate of the print area. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
-        * @param width Set the width of the content area. It should be at least 1 inch. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
-        * @param height Set the height of the content area. It should be at least 1 inch. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param x Set the top left X coordinate of the content area. It is relative to the top left X coordinate of the print area. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
+        * @param y Set the top left Y coordinate of the content area. It is relative to the top left Y coordinate of the print area. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
+        * @param width Set the width of the content area. It should be at least 1 inch. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
+        * @param height Set the height of the content area. It should be at least 1 inch. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToPdfClient setCropArea(string x, string y, string width, string height)
@@ -5631,13 +5631,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the output page width.
         *
-        * @param width The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param width The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToPdfClient setPageWidth(string width)
         {
             if (!Regex.Match(width, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setPageWidth", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_page_width"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setPageWidth", "image-to-pdf", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_page_width"), 470);
             
             fields["page_width"] = width;
             return this;
@@ -5646,13 +5646,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the output page height.
         *
-        * @param height The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param height The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToPdfClient setPageHeight(string height)
         {
             if (!Regex.Match(height, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setPageHeight", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_page_height"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setPageHeight", "image-to-pdf", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_page_height"), 470);
             
             fields["page_height"] = height;
             return this;
@@ -5661,8 +5661,8 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the output page dimensions. If no page size is specified, margins are applied as a border around the image.
         *
-        * @param width Set the output page width. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
-        * @param height Set the output page height. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param width Set the output page width. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
+        * @param height Set the output page height. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToPdfClient setPageDimensions(string width, string height)
@@ -5720,13 +5720,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the output page top margin.
         *
-        * @param top The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param top The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToPdfClient setMarginTop(string top)
         {
             if (!Regex.Match(top, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(top, "setMarginTop", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_top"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(top, "setMarginTop", "image-to-pdf", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_margin_top"), 470);
             
             fields["margin_top"] = top;
             return this;
@@ -5735,13 +5735,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the output page right margin.
         *
-        * @param right The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param right The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToPdfClient setMarginRight(string right)
         {
             if (!Regex.Match(right, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(right, "setMarginRight", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_right"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(right, "setMarginRight", "image-to-pdf", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_margin_right"), 470);
             
             fields["margin_right"] = right;
             return this;
@@ -5750,13 +5750,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the output page bottom margin.
         *
-        * @param bottom The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param bottom The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToPdfClient setMarginBottom(string bottom)
         {
             if (!Regex.Match(bottom, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(bottom, "setMarginBottom", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_bottom"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(bottom, "setMarginBottom", "image-to-pdf", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_margin_bottom"), 470);
             
             fields["margin_bottom"] = bottom;
             return this;
@@ -5765,13 +5765,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the output page left margin.
         *
-        * @param left The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param left The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToPdfClient setMarginLeft(string left)
         {
             if (!Regex.Match(left, "(?i)^0$|^[0-9]*\\.?[0-9]+(pt|px|mm|cm|in)$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(left, "setMarginLeft", "image-to-pdf", "The value must be specified in inches \"in\", millimeters \"mm\", centimeters \"cm\", pixels \"px\", or points \"pt\".", "set_margin_left"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(left, "setMarginLeft", "image-to-pdf", "The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.", "set_margin_left"), 470);
             
             fields["margin_left"] = left;
             return this;
@@ -5780,10 +5780,10 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the output page margins.
         *
-        * @param top Set the output page top margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
-        * @param right Set the output page right margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
-        * @param bottom Set the output page bottom margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
-        * @param left Set the output page left margin. The value must be specified in inches "in", millimeters "mm", centimeters "cm", pixels "px", or points "pt".
+        * @param top Set the output page top margin. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
+        * @param right Set the output page right margin. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
+        * @param bottom Set the output page bottom margin. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
+        * @param left Set the output page left margin. The value must be specified in inches 'in', millimeters 'mm', centimeters 'cm', pixels 'px', or points 'pt'.
         * @return The converter object.
         */
         public ImageToPdfClient setPageMargins(string top, string right, string bottom, string left)
@@ -5840,13 +5840,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Load a file from the specified URL and apply the file as a watermark to each page of the output PDF. A watermark can be either a PDF or an image. If a multi-page file (PDF or TIFF) is used, the first page is used as the watermark.
         *
-        * @param url The supported protocols are http:// and https://.
+        * @param url Supported protocols are http:// and https://.
         * @return The converter object.
         */
         public ImageToPdfClient setPageWatermarkUrl(string url)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setPageWatermarkUrl", "image-to-pdf", "The supported protocols are http:// and https://.", "set_page_watermark_url"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setPageWatermarkUrl", "image-to-pdf", "Supported protocols are http:// and https://.", "set_page_watermark_url"), 470);
             
             fields["page_watermark_url"] = url;
             return this;
@@ -5870,13 +5870,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Load a file from the specified URL and apply each page of the file as a watermark to the corresponding page of the output PDF. A watermark can be either a PDF or an image.
         *
-        * @param url The supported protocols are http:// and https://.
+        * @param url Supported protocols are http:// and https://.
         * @return The converter object.
         */
         public ImageToPdfClient setMultipageWatermarkUrl(string url)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setMultipageWatermarkUrl", "image-to-pdf", "The supported protocols are http:// and https://.", "set_multipage_watermark_url"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setMultipageWatermarkUrl", "image-to-pdf", "Supported protocols are http:// and https://.", "set_multipage_watermark_url"), 470);
             
             fields["multipage_watermark_url"] = url;
             return this;
@@ -5900,13 +5900,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Load a file from the specified URL and apply the file as a background to each page of the output PDF. A background can be either a PDF or an image. If a multi-page file (PDF or TIFF) is used, the first page is used as the background.
         *
-        * @param url The supported protocols are http:// and https://.
+        * @param url Supported protocols are http:// and https://.
         * @return The converter object.
         */
         public ImageToPdfClient setPageBackgroundUrl(string url)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setPageBackgroundUrl", "image-to-pdf", "The supported protocols are http:// and https://.", "set_page_background_url"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setPageBackgroundUrl", "image-to-pdf", "Supported protocols are http:// and https://.", "set_page_background_url"), 470);
             
             fields["page_background_url"] = url;
             return this;
@@ -5930,13 +5930,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Load a file from the specified URL and apply each page of the file as a background to the corresponding page of the output PDF. A background can be either a PDF or an image.
         *
-        * @param url The supported protocols are http:// and https://.
+        * @param url Supported protocols are http:// and https://.
         * @return The converter object.
         */
         public ImageToPdfClient setMultipageBackgroundUrl(string url)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setMultipageBackgroundUrl", "image-to-pdf", "The supported protocols are http:// and https://.", "set_multipage_background_url"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "setMultipageBackgroundUrl", "image-to-pdf", "Supported protocols are http:// and https://.", "set_multipage_background_url"), 470);
             
             fields["multipage_background_url"] = url;
             return this;
@@ -6122,13 +6122,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Display the specified page when the document is opened.
         *
-        * @param page Must be a positive integer number.
+        * @param page Must be a positive integer.
         * @return The converter object.
         */
         public ImageToPdfClient setInitialPage(int page)
         {
             if (!(page > 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(page, "setInitialPage", "image-to-pdf", "Must be a positive integer number.", "set_initial_page"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(page, "setInitialPage", "image-to-pdf", "Must be a positive integer.", "set_initial_page"), 470);
             
             fields["initial_page"] = ConnectionHelper.intToString(page);
             return this;
@@ -6137,13 +6137,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Specify the initial page zoom in percents when the document is opened.
         *
-        * @param zoom Must be a positive integer number.
+        * @param zoom Must be a positive integer.
         * @return The converter object.
         */
         public ImageToPdfClient setInitialZoom(int zoom)
         {
             if (!(zoom > 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(zoom, "setInitialZoom", "image-to-pdf", "Must be a positive integer number.", "set_initial_zoom"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(zoom, "setInitialZoom", "image-to-pdf", "Must be a positive integer.", "set_initial_zoom"), 470);
             
             fields["initial_zoom"] = ConnectionHelper.intToString(zoom);
             return this;
@@ -6443,13 +6443,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Convert a PDF.
         *
-        * @param url The address of the PDF to convert. The supported protocols are http:// and https://.
+        * @param url The address of the PDF to convert. Supported protocols are http:// and https://.
         * @return Byte array containing the conversion output.
         */
         public byte[] convertUrl(string url)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrl", "pdf-to-html", "The supported protocols are http:// and https://.", "convert_url"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrl", "pdf-to-html", "Supported protocols are http:// and https://.", "convert_url"), 470);
             
             fields["url"] = url;
             return helper.post(fields, files, rawData, null);
@@ -6458,13 +6458,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Convert a PDF and write the result to an output stream.
         *
-        * @param url The address of the PDF to convert. The supported protocols are http:// and https://.
+        * @param url The address of the PDF to convert. Supported protocols are http:// and https://.
         * @param outStream The output stream that will contain the conversion output.
         */
         public void convertUrlToStream(string url, Stream outStream)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrlToStream::url", "pdf-to-html", "The supported protocols are http:// and https://.", "convert_url_to_stream"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrlToStream::url", "pdf-to-html", "Supported protocols are http:// and https://.", "convert_url_to_stream"), 470);
             
             fields["url"] = url;
             helper.post(fields, files, rawData, outStream);
@@ -6473,7 +6473,7 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Convert a PDF and write the result to a local file.
         *
-        * @param url The address of the PDF to convert. The supported protocols are http:// and https://.
+        * @param url The address of the PDF to convert. Supported protocols are http:// and https://.
         * @param filePath The output file path. The string must not be empty. The converter generates an HTML or ZIP file. If ZIP file is generated, the file path must have a ZIP or zip extension.
         */
         public void convertUrlToFile(string url, string filePath)
@@ -6675,13 +6675,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the scaling factor (zoom) for the main page area.
         *
-        * @param factor The percentage value. Must be a positive integer number.
+        * @param factor The percentage value. Must be a positive integer.
         * @return The converter object.
         */
         public PdfToHtmlClient setScaleFactor(int factor)
         {
             if (!(factor > 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(factor, "setScaleFactor", "pdf-to-html", "Must be a positive integer number.", "set_scale_factor"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(factor, "setScaleFactor", "pdf-to-html", "Must be a positive integer.", "set_scale_factor"), 470);
             
             fields["scale_factor"] = ConnectionHelper.intToString(factor);
             return this;
@@ -7135,13 +7135,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Convert a PDF.
         *
-        * @param url The address of the PDF to convert. The supported protocols are http:// and https://.
+        * @param url The address of the PDF to convert. Supported protocols are http:// and https://.
         * @return Byte array containing the conversion output.
         */
         public byte[] convertUrl(string url)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrl", "pdf-to-text", "The supported protocols are http:// and https://.", "convert_url"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrl", "pdf-to-text", "Supported protocols are http:// and https://.", "convert_url"), 470);
             
             fields["url"] = url;
             return helper.post(fields, files, rawData, null);
@@ -7150,13 +7150,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Convert a PDF and write the result to an output stream.
         *
-        * @param url The address of the PDF to convert. The supported protocols are http:// and https://.
+        * @param url The address of the PDF to convert. Supported protocols are http:// and https://.
         * @param outStream The output stream that will contain the conversion output.
         */
         public void convertUrlToStream(string url, Stream outStream)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrlToStream::url", "pdf-to-text", "The supported protocols are http:// and https://.", "convert_url_to_stream"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrlToStream::url", "pdf-to-text", "Supported protocols are http:// and https://.", "convert_url_to_stream"), 470);
             
             fields["url"] = url;
             helper.post(fields, files, rawData, outStream);
@@ -7165,7 +7165,7 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Convert a PDF and write the result to a local file.
         *
-        * @param url The address of the PDF to convert. The supported protocols are http:// and https://.
+        * @param url The address of the PDF to convert. Supported protocols are http:// and https://.
         * @param filePath The output file path. The string must not be empty.
         */
         public void convertUrlToFile(string url, string filePath)
@@ -7478,13 +7478,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the top left X coordinate of the crop area in points.
         *
-        * @param x Must be a positive integer number or 0.
+        * @param x Must be a positive integer or 0.
         * @return The converter object.
         */
         public PdfToTextClient setCropAreaX(int x)
         {
             if (!(x >= 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(x, "setCropAreaX", "pdf-to-text", "Must be a positive integer number or 0.", "set_crop_area_x"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(x, "setCropAreaX", "pdf-to-text", "Must be a positive integer or 0.", "set_crop_area_x"), 470);
             
             fields["crop_area_x"] = ConnectionHelper.intToString(x);
             return this;
@@ -7493,13 +7493,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the top left Y coordinate of the crop area in points.
         *
-        * @param y Must be a positive integer number or 0.
+        * @param y Must be a positive integer or 0.
         * @return The converter object.
         */
         public PdfToTextClient setCropAreaY(int y)
         {
             if (!(y >= 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(y, "setCropAreaY", "pdf-to-text", "Must be a positive integer number or 0.", "set_crop_area_y"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(y, "setCropAreaY", "pdf-to-text", "Must be a positive integer or 0.", "set_crop_area_y"), 470);
             
             fields["crop_area_y"] = ConnectionHelper.intToString(y);
             return this;
@@ -7508,13 +7508,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the width of the crop area in points.
         *
-        * @param width Must be a positive integer number or 0.
+        * @param width Must be a positive integer or 0.
         * @return The converter object.
         */
         public PdfToTextClient setCropAreaWidth(int width)
         {
             if (!(width >= 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setCropAreaWidth", "pdf-to-text", "Must be a positive integer number or 0.", "set_crop_area_width"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setCropAreaWidth", "pdf-to-text", "Must be a positive integer or 0.", "set_crop_area_width"), 470);
             
             fields["crop_area_width"] = ConnectionHelper.intToString(width);
             return this;
@@ -7523,13 +7523,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the height of the crop area in points.
         *
-        * @param height Must be a positive integer number or 0.
+        * @param height Must be a positive integer or 0.
         * @return The converter object.
         */
         public PdfToTextClient setCropAreaHeight(int height)
         {
             if (!(height >= 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setCropAreaHeight", "pdf-to-text", "Must be a positive integer number or 0.", "set_crop_area_height"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setCropAreaHeight", "pdf-to-text", "Must be a positive integer or 0.", "set_crop_area_height"), 470);
             
             fields["crop_area_height"] = ConnectionHelper.intToString(height);
             return this;
@@ -7538,10 +7538,10 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the crop area. It allows to extract just a part of a PDF page.
         *
-        * @param x Set the top left X coordinate of the crop area in points. Must be a positive integer number or 0.
-        * @param y Set the top left Y coordinate of the crop area in points. Must be a positive integer number or 0.
-        * @param width Set the width of the crop area in points. Must be a positive integer number or 0.
-        * @param height Set the height of the crop area in points. Must be a positive integer number or 0.
+        * @param x Set the top left X coordinate of the crop area in points. Must be a positive integer or 0.
+        * @param y Set the top left Y coordinate of the crop area in points. Must be a positive integer or 0.
+        * @param width Set the width of the crop area in points. Must be a positive integer or 0.
+        * @param height Set the height of the crop area in points. Must be a positive integer or 0.
         * @return The converter object.
         */
         public PdfToTextClient setCropArea(int x, int y, int width, int height)
@@ -7769,13 +7769,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Convert an image.
         *
-        * @param url The address of the image to convert. The supported protocols are http:// and https://.
+        * @param url The address of the image to convert. Supported protocols are http:// and https://.
         * @return Byte array containing the conversion output.
         */
         public byte[] convertUrl(string url)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrl", "pdf-to-image", "The supported protocols are http:// and https://.", "convert_url"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrl", "pdf-to-image", "Supported protocols are http:// and https://.", "convert_url"), 470);
             
             fields["url"] = url;
             return helper.post(fields, files, rawData, null);
@@ -7784,13 +7784,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Convert an image and write the result to an output stream.
         *
-        * @param url The address of the image to convert. The supported protocols are http:// and https://.
+        * @param url The address of the image to convert. Supported protocols are http:// and https://.
         * @param outStream The output stream that will contain the conversion output.
         */
         public void convertUrlToStream(string url, Stream outStream)
         {
             if (!Regex.Match(url, "(?i)^https?://.*$").Success)
-                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrlToStream::url", "pdf-to-image", "The supported protocols are http:// and https://.", "convert_url_to_stream"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(url, "convertUrlToStream::url", "pdf-to-image", "Supported protocols are http:// and https://.", "convert_url_to_stream"), 470);
             
             fields["url"] = url;
             helper.post(fields, files, rawData, outStream);
@@ -7799,7 +7799,7 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Convert an image and write the result to a local file.
         *
-        * @param url The address of the image to convert. The supported protocols are http:// and https://.
+        * @param url The address of the image to convert. Supported protocols are http:// and https://.
         * @param filePath The output file path. The string must not be empty.
         */
         public void convertUrlToFile(string url, string filePath)
@@ -8064,13 +8064,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the top left X coordinate of the crop area in points.
         *
-        * @param x Must be a positive integer number or 0.
+        * @param x Must be a positive integer or 0.
         * @return The converter object.
         */
         public PdfToImageClient setCropAreaX(int x)
         {
             if (!(x >= 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(x, "setCropAreaX", "pdf-to-image", "Must be a positive integer number or 0.", "set_crop_area_x"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(x, "setCropAreaX", "pdf-to-image", "Must be a positive integer or 0.", "set_crop_area_x"), 470);
             
             fields["crop_area_x"] = ConnectionHelper.intToString(x);
             return this;
@@ -8079,13 +8079,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the top left Y coordinate of the crop area in points.
         *
-        * @param y Must be a positive integer number or 0.
+        * @param y Must be a positive integer or 0.
         * @return The converter object.
         */
         public PdfToImageClient setCropAreaY(int y)
         {
             if (!(y >= 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(y, "setCropAreaY", "pdf-to-image", "Must be a positive integer number or 0.", "set_crop_area_y"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(y, "setCropAreaY", "pdf-to-image", "Must be a positive integer or 0.", "set_crop_area_y"), 470);
             
             fields["crop_area_y"] = ConnectionHelper.intToString(y);
             return this;
@@ -8094,13 +8094,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the width of the crop area in points.
         *
-        * @param width Must be a positive integer number or 0.
+        * @param width Must be a positive integer or 0.
         * @return The converter object.
         */
         public PdfToImageClient setCropAreaWidth(int width)
         {
             if (!(width >= 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setCropAreaWidth", "pdf-to-image", "Must be a positive integer number or 0.", "set_crop_area_width"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(width, "setCropAreaWidth", "pdf-to-image", "Must be a positive integer or 0.", "set_crop_area_width"), 470);
             
             fields["crop_area_width"] = ConnectionHelper.intToString(width);
             return this;
@@ -8109,13 +8109,13 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the height of the crop area in points.
         *
-        * @param height Must be a positive integer number or 0.
+        * @param height Must be a positive integer or 0.
         * @return The converter object.
         */
         public PdfToImageClient setCropAreaHeight(int height)
         {
             if (!(height >= 0))
-                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setCropAreaHeight", "pdf-to-image", "Must be a positive integer number or 0.", "set_crop_area_height"), 470);
+                throw new Error(ConnectionHelper.createInvalidValueMessage(height, "setCropAreaHeight", "pdf-to-image", "Must be a positive integer or 0.", "set_crop_area_height"), 470);
             
             fields["crop_area_height"] = ConnectionHelper.intToString(height);
             return this;
@@ -8124,10 +8124,10 @@ Dimensions may be empty, 0 or specified in inches "in", millimeters "mm", centim
         /**
         * Set the crop area. It allows to extract just a part of a PDF page.
         *
-        * @param x Set the top left X coordinate of the crop area in points. Must be a positive integer number or 0.
-        * @param y Set the top left Y coordinate of the crop area in points. Must be a positive integer number or 0.
-        * @param width Set the width of the crop area in points. Must be a positive integer number or 0.
-        * @param height Set the height of the crop area in points. Must be a positive integer number or 0.
+        * @param x Set the top left X coordinate of the crop area in points. Must be a positive integer or 0.
+        * @param y Set the top left Y coordinate of the crop area in points. Must be a positive integer or 0.
+        * @param width Set the width of the crop area in points. Must be a positive integer or 0.
+        * @param height Set the height of the crop area in points. Must be a positive integer or 0.
         * @return The converter object.
         */
         public PdfToImageClient setCropArea(int x, int y, int width, int height)

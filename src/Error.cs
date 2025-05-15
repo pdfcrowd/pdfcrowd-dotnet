@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Net;
 
 namespace pdfcrowd
@@ -32,16 +33,42 @@ namespace pdfcrowd
     {
         string error = "";
         int http_code = 0;
+        int reason_code = -1;
+        string message = "";
+        string doc_link = "";
 
         public Error(string _error)
         {
             error = _error;
         }
-        
+
         public Error(string _error, int _http_code)
         {
             error = _error;
-            http_code = (int) _http_code;
+
+            var error_match = Regex.Match(
+                error,
+                @"^(\d+)\.(\d+)\s+-\s+(.*?)(?:\s+Documentation link:\s+(.*))?$",
+            RegexOptions.Singleline);
+
+            if (error_match.Success)
+            {
+                http_code = Int32.Parse(error_match.Groups[1].Value);
+                reason_code = Int32.Parse(error_match.Groups[2].Value);
+                message = error_match.Groups[3].Value;
+                if(error_match.Groups[4].Success) {
+                    doc_link = error_match.Groups[4].Value;
+                }
+            }
+            else
+            {
+                http_code = _http_code;
+                message = error;
+                if(http_code != 0)
+                {
+                    error = $"{http_code} - {error}";
+                }
+            }
         }
 
         public Error(string _error, HttpStatusCode _http_code)
@@ -51,21 +78,33 @@ namespace pdfcrowd
 
         public override string ToString()
         {
-            if( http_code != 0 )
-            {
-                return String.Format( "{0} - {1}", http_code, error );
-            }
             return error;
         }
 
+        [Obsolete("Use getStatusCode instead.")]
         public int getCode()
         {
             return http_code;
         }
 
+        public int getStatusCode()
+        {
+            return http_code;
+        }
+
+        public int getReasonCode()
+        {
+            return reason_code;
+        }
+
         public string getMessage()
         {
-            return error;
+            return message;
+        }
+
+        public string getDocumentationLink()
+        {
+            return doc_link;
         }
     }
 }
