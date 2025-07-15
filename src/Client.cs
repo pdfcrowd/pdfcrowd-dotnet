@@ -35,14 +35,14 @@ using System.Net.Security;
 namespace pdfcrowd
 {
   //
-  // Pdfcrowd API client.
+  // PDFCrowd API client.
   // 
   public class Client
   {
     //
     // Client constructor.
     // 
-    // username - your username at Pdfcrowd
+    // username - your username at PDFCrowd
     // api_key  - your API key
     // 
     public Client(string username, string api_key)
@@ -57,7 +57,7 @@ namespace pdfcrowd
     //
     // Client constructor.
     // 
-    // username - your username at Pdfcrowd
+    // username - your username at PDFCrowd
     // api_key  - your API key
     // 
     // 

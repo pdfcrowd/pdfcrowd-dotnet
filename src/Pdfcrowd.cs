@@ -65,7 +65,7 @@ namespace pdfcrowd
             ? Environment.GetEnvironmentVariable("PDFCROWD_HOST")
             : "api.pdfcrowd.com";
         private static readonly string MULTIPART_BOUNDARY = "----------ThIs_Is_tHe_bOUnDary_$";
-        public static readonly string CLIENT_VERSION = "6.5.0";
+        public static readonly string CLIENT_VERSION = "6.5.2";
         private static readonly string newLine = "\r\n";
         private static readonly CultureInfo numericInfo = CultureInfo.GetCultureInfo("en-US");
 
@@ -76,7 +76,7 @@ namespace pdfcrowd
             resetResponseData();
             setProxy(null, 0, null, null);
             setUseHttp(false);
-            setUserAgent("pdfcrowd_dotnet_client/6.5.0 (https://pdfcrowd.com)");
+            setUserAgent("pdfcrowd_dotnet_client/6.5.2 (https://pdfcrowd.com)");
 
             if( HOST != "api.pdfcrowd.com")
             {
@@ -478,9 +478,9 @@ namespace pdfcrowd
         #pragma warning restore CS0414
 
         /**
-        * Constructor for the Pdfcrowd API client.
+        * Constructor for the PDFCrowd API client.
         *
-        * @param userName Your username at Pdfcrowd.
+        * @param userName Your username at PDFCrowd.
         * @param apiKey Your API key.
         */
         public HtmlToPdfClient(string userName, string apiKey)
@@ -1425,7 +1425,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Set cookies that are sent in Pdfcrowd HTTP requests.
+        * Set HTTP cookies to be included in all requests made by the converter.
         *
         * @param cookies The cookie string.
         * @return The converter object.
@@ -1473,7 +1473,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Do not send the X-Pdfcrowd HTTP header in Pdfcrowd HTTP requests.
+        * Do not send the X-Pdfcrowd HTTP header in PDFCrowd HTTP requests.
         *
         * @param value Set to <span class='field-value'>true</span> to disable sending X-Pdfcrowd HTTP header.
         * @return The converter object.
@@ -1545,7 +1545,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Set a custom HTTP header that is sent in Pdfcrowd HTTP requests.
+        * Set a custom HTTP header to be included in all requests made by the converter.
         *
         * @param header A string containing the header name and value separated by a colon.
         * @return The converter object.
@@ -1560,7 +1560,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Wait the specified number of milliseconds to finish all JavaScript after the document is loaded. Your API license defines the maximum wait time by "Max Delay" parameter.
+        * Wait the specified number of milliseconds to finish all JavaScript after the document is loaded. Your license defines the maximum wait time by "Max Delay" parameter.
         *
         * @param delay The number of milliseconds to wait. Must be a positive integer or 0.
         * @return The converter object.
@@ -1605,7 +1605,7 @@ namespace pdfcrowd
         }
 
         /**
-        * Wait for the specified element in a source document. The element is specified by one or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a>. The element is searched for in the main document and all iframes. If the element is not found, the conversion fails. Your API license defines the maximum wait time by "Max Delay" parameter.
+        * Wait for the specified element in a source document. The element is specified by one or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a>. The element is searched for in the main document and all iframes. If the element is not found, the conversion fails. Your license defines the maximum wait time by "Max Delay" parameter.
         *
         * @param selectors One or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a> separated by commas. The string must not be empty.
         * @return The converter object.
@@ -2294,7 +2294,7 @@ namespace pdfcrowd
         }
 
         /**
-        * A proxy server used by Pdfcrowd conversion process for accessing the source URLs with HTTP scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
+        * A proxy server used by the conversion process for accessing the source URLs with HTTP scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
         *
         * @param proxy The value must have format DOMAIN_OR_IP_ADDRESS:PORT.
         * @return The converter object.
@@ -2309,7 +2309,7 @@ namespace pdfcrowd
         }
 
         /**
-        * A proxy server used by Pdfcrowd conversion process for accessing the source URLs with HTTPS scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
+        * A proxy server used by the conversion process for accessing the source URLs with HTTPS scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
         *
         * @param proxy The value must have format DOMAIN_OR_IP_ADDRESS:PORT.
         * @return The converter object.
@@ -2324,7 +2324,7 @@ namespace pdfcrowd
         }
 
         /**
-        * A client certificate to authenticate Pdfcrowd converter on your web server. The certificate is used for two-way SSL/TLS authentication and adds extra security.
+        * A client certificate to authenticate the converter on your web server. The certificate is used for two-way SSL/TLS authentication and adds extra security.
         *
         * @param certificate The file must be in PKCS12 format. The file must exist and not be empty.
         * @return The converter object.
@@ -2664,7 +2664,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * Specifies if the client communicates over HTTP or HTTPS with Pdfcrowd API.
+        * Specify whether to use HTTP or HTTPS when connecting to the PDFCrowd API.
         * Warning: Using HTTP is insecure as data sent over HTTP is not encrypted. Enable this option only if you know what you are doing.
         *
         * @param value Set to <span class='field-value'>true</span> to use HTTP.
@@ -2744,9 +2744,9 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         #pragma warning restore CS0414
 
         /**
-        * Constructor for the Pdfcrowd API client.
+        * Constructor for the PDFCrowd API client.
         *
-        * @param userName Your username at Pdfcrowd.
+        * @param userName Your username at PDFCrowd.
         * @param apiKey Your API key.
         */
         public HtmlToImageClient(string userName, string apiKey)
@@ -3209,7 +3209,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * Set cookies that are sent in Pdfcrowd HTTP requests.
+        * Set HTTP cookies to be included in all requests made by the converter.
         *
         * @param cookies The cookie string.
         * @return The converter object.
@@ -3257,7 +3257,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * Do not send the X-Pdfcrowd HTTP header in Pdfcrowd HTTP requests.
+        * Do not send the X-Pdfcrowd HTTP header in PDFCrowd HTTP requests.
         *
         * @param value Set to <span class='field-value'>true</span> to disable sending X-Pdfcrowd HTTP header.
         * @return The converter object.
@@ -3314,7 +3314,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * Set a custom HTTP header that is sent in Pdfcrowd HTTP requests.
+        * Set a custom HTTP header to be included in all requests made by the converter.
         *
         * @param header A string containing the header name and value separated by a colon.
         * @return The converter object.
@@ -3329,7 +3329,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * Wait the specified number of milliseconds to finish all JavaScript after the document is loaded. Your API license defines the maximum wait time by "Max Delay" parameter.
+        * Wait the specified number of milliseconds to finish all JavaScript after the document is loaded. Your license defines the maximum wait time by "Max Delay" parameter.
         *
         * @param delay The number of milliseconds to wait. Must be a positive integer or 0.
         * @return The converter object.
@@ -3374,7 +3374,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * Wait for the specified element in a source document. The element is specified by one or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a>. The element is searched for in the main document and all iframes. If the element is not found, the conversion fails. Your API license defines the maximum wait time by "Max Delay" parameter.
+        * Wait for the specified element in a source document. The element is specified by one or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a>. The element is searched for in the main document and all iframes. If the element is not found, the conversion fails. Your license defines the maximum wait time by "Max Delay" parameter.
         *
         * @param selectors One or more <a href='https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors'>CSS selectors</a> separated by commas. The string must not be empty.
         * @return The converter object.
@@ -3596,7 +3596,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * A proxy server used by Pdfcrowd conversion process for accessing the source URLs with HTTP scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
+        * A proxy server used by the conversion process for accessing the source URLs with HTTP scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
         *
         * @param proxy The value must have format DOMAIN_OR_IP_ADDRESS:PORT.
         * @return The converter object.
@@ -3611,7 +3611,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * A proxy server used by Pdfcrowd conversion process for accessing the source URLs with HTTPS scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
+        * A proxy server used by the conversion process for accessing the source URLs with HTTPS scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
         *
         * @param proxy The value must have format DOMAIN_OR_IP_ADDRESS:PORT.
         * @return The converter object.
@@ -3626,7 +3626,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * A client certificate to authenticate Pdfcrowd converter on your web server. The certificate is used for two-way SSL/TLS authentication and adds extra security.
+        * A client certificate to authenticate the converter on your web server. The certificate is used for two-way SSL/TLS authentication and adds extra security.
         *
         * @param certificate The file must be in PKCS12 format. The file must exist and not be empty.
         * @return The converter object.
@@ -3702,7 +3702,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * Specifies if the client communicates over HTTP or HTTPS with Pdfcrowd API.
+        * Specify whether to use HTTP or HTTPS when connecting to the PDFCrowd API.
         * Warning: Using HTTP is insecure as data sent over HTTP is not encrypted. Enable this option only if you know what you are doing.
         *
         * @param value Set to <span class='field-value'>true</span> to use HTTP.
@@ -3782,9 +3782,9 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         #pragma warning restore CS0414
 
         /**
-        * Constructor for the Pdfcrowd API client.
+        * Constructor for the PDFCrowd API client.
         *
-        * @param userName Your username at Pdfcrowd.
+        * @param userName Your username at PDFCrowd.
         * @param apiKey Your API key.
         */
         public ImageToImageClient(string userName, string apiKey)
@@ -4422,7 +4422,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * A proxy server used by Pdfcrowd conversion process for accessing the source URLs with HTTP scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
+        * A proxy server used by the conversion process for accessing the source URLs with HTTP scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
         *
         * @param proxy The value must have format DOMAIN_OR_IP_ADDRESS:PORT.
         * @return The converter object.
@@ -4437,7 +4437,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * A proxy server used by Pdfcrowd conversion process for accessing the source URLs with HTTPS scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
+        * A proxy server used by the conversion process for accessing the source URLs with HTTPS scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
         *
         * @param proxy The value must have format DOMAIN_OR_IP_ADDRESS:PORT.
         * @return The converter object.
@@ -4467,7 +4467,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * Specifies if the client communicates over HTTP or HTTPS with Pdfcrowd API.
+        * Specify whether to use HTTP or HTTPS when connecting to the PDFCrowd API.
         * Warning: Using HTTP is insecure as data sent over HTTP is not encrypted. Enable this option only if you know what you are doing.
         *
         * @param value Set to <span class='field-value'>true</span> to use HTTP.
@@ -4547,9 +4547,9 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         #pragma warning restore CS0414
 
         /**
-        * Constructor for the Pdfcrowd API client.
+        * Constructor for the PDFCrowd API client.
         *
-        * @param userName Your username at Pdfcrowd.
+        * @param userName Your username at PDFCrowd.
         * @param apiKey Your API key.
         */
         public PdfToPdfClient(string userName, string apiKey)
@@ -4625,7 +4625,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * Add in-memory raw PDF data to the list of the input PDFs.<br>Typical usage is for adding PDF created by another Pdfcrowd converter.<br><br> Example in PHP:<br> <b>$clientPdf2Pdf</b>-&gt;addPdfRawData(<b>$clientHtml2Pdf</b>-&gt;convertUrl('http://www.example.com'));
+        * Add in-memory raw PDF data to the list of the input PDFs.<br>Typical usage is for adding PDF created by another PDFCrowd converter.<br><br> Example in PHP:<br> <b>$clientPdf2Pdf</b>-&gt;addPdfRawData(<b>$clientHtml2Pdf</b>-&gt;convertUrl('http://www.example.com'));
         *
         * @param data The raw PDF data. The input data must be PDF content.
         * @return The converter object.
@@ -5199,7 +5199,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * Specifies if the client communicates over HTTP or HTTPS with Pdfcrowd API.
+        * Specify whether to use HTTP or HTTPS when connecting to the PDFCrowd API.
         * Warning: Using HTTP is insecure as data sent over HTTP is not encrypted. Enable this option only if you know what you are doing.
         *
         * @param value Set to <span class='field-value'>true</span> to use HTTP.
@@ -5279,9 +5279,9 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         #pragma warning restore CS0414
 
         /**
-        * Constructor for the Pdfcrowd API client.
+        * Constructor for the PDFCrowd API client.
         *
-        * @param userName Your username at Pdfcrowd.
+        * @param userName Your username at PDFCrowd.
         * @param apiKey Your API key.
         */
         public ImageToPdfClient(string userName, string apiKey)
@@ -6303,7 +6303,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * A proxy server used by Pdfcrowd conversion process for accessing the source URLs with HTTP scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
+        * A proxy server used by the conversion process for accessing the source URLs with HTTP scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
         *
         * @param proxy The value must have format DOMAIN_OR_IP_ADDRESS:PORT.
         * @return The converter object.
@@ -6318,7 +6318,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * A proxy server used by Pdfcrowd conversion process for accessing the source URLs with HTTPS scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
+        * A proxy server used by the conversion process for accessing the source URLs with HTTPS scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
         *
         * @param proxy The value must have format DOMAIN_OR_IP_ADDRESS:PORT.
         * @return The converter object.
@@ -6348,7 +6348,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * Specifies if the client communicates over HTTP or HTTPS with Pdfcrowd API.
+        * Specify whether to use HTTP or HTTPS when connecting to the PDFCrowd API.
         * Warning: Using HTTP is insecure as data sent over HTTP is not encrypted. Enable this option only if you know what you are doing.
         *
         * @param value Set to <span class='field-value'>true</span> to use HTTP.
@@ -6428,9 +6428,9 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         #pragma warning restore CS0414
 
         /**
-        * Constructor for the Pdfcrowd API client.
+        * Constructor for the PDFCrowd API client.
         *
-        * @param userName Your username at Pdfcrowd.
+        * @param userName Your username at PDFCrowd.
         * @param apiKey Your API key.
         */
         public PdfToHtmlClient(string userName, string apiKey)
@@ -6991,7 +6991,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * A proxy server used by Pdfcrowd conversion process for accessing the source URLs with HTTP scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
+        * A proxy server used by the conversion process for accessing the source URLs with HTTP scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
         *
         * @param proxy The value must have format DOMAIN_OR_IP_ADDRESS:PORT.
         * @return The converter object.
@@ -7006,7 +7006,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * A proxy server used by Pdfcrowd conversion process for accessing the source URLs with HTTPS scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
+        * A proxy server used by the conversion process for accessing the source URLs with HTTPS scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
         *
         * @param proxy The value must have format DOMAIN_OR_IP_ADDRESS:PORT.
         * @return The converter object.
@@ -7036,7 +7036,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * Specifies if the client communicates over HTTP or HTTPS with Pdfcrowd API.
+        * Specify whether to use HTTP or HTTPS when connecting to the PDFCrowd API.
         * Warning: Using HTTP is insecure as data sent over HTTP is not encrypted. Enable this option only if you know what you are doing.
         *
         * @param value Set to <span class='field-value'>true</span> to use HTTP.
@@ -7120,9 +7120,9 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         #pragma warning restore CS0414
 
         /**
-        * Constructor for the Pdfcrowd API client.
+        * Constructor for the PDFCrowd API client.
         *
-        * @param userName Your username at Pdfcrowd.
+        * @param userName Your username at PDFCrowd.
         * @param apiKey Your API key.
         */
         public PdfToTextClient(string userName, string apiKey)
@@ -7644,7 +7644,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * A proxy server used by Pdfcrowd conversion process for accessing the source URLs with HTTP scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
+        * A proxy server used by the conversion process for accessing the source URLs with HTTP scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
         *
         * @param proxy The value must have format DOMAIN_OR_IP_ADDRESS:PORT.
         * @return The converter object.
@@ -7659,7 +7659,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * A proxy server used by Pdfcrowd conversion process for accessing the source URLs with HTTPS scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
+        * A proxy server used by the conversion process for accessing the source URLs with HTTPS scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
         *
         * @param proxy The value must have format DOMAIN_OR_IP_ADDRESS:PORT.
         * @return The converter object.
@@ -7674,7 +7674,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * Specifies if the client communicates over HTTP or HTTPS with Pdfcrowd API.
+        * Specify whether to use HTTP or HTTPS when connecting to the PDFCrowd API.
         * Warning: Using HTTP is insecure as data sent over HTTP is not encrypted. Enable this option only if you know what you are doing.
         *
         * @param value Set to <span class='field-value'>true</span> to use HTTP.
@@ -7754,9 +7754,9 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         #pragma warning restore CS0414
 
         /**
-        * Constructor for the Pdfcrowd API client.
+        * Constructor for the PDFCrowd API client.
         *
-        * @param userName Your username at Pdfcrowd.
+        * @param userName Your username at PDFCrowd.
         * @param apiKey Your API key.
         */
         public PdfToImageClient(string userName, string apiKey)
@@ -8242,7 +8242,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * A proxy server used by Pdfcrowd conversion process for accessing the source URLs with HTTP scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
+        * A proxy server used by the conversion process for accessing the source URLs with HTTP scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
         *
         * @param proxy The value must have format DOMAIN_OR_IP_ADDRESS:PORT.
         * @return The converter object.
@@ -8257,7 +8257,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * A proxy server used by Pdfcrowd conversion process for accessing the source URLs with HTTPS scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
+        * A proxy server used by the conversion process for accessing the source URLs with HTTPS scheme. It can help to circumvent regional restrictions or provide limited access to your intranet.
         *
         * @param proxy The value must have format DOMAIN_OR_IP_ADDRESS:PORT.
         * @return The converter object.
@@ -8272,7 +8272,7 @@ Dimensions may be empty, 0 or specified in inches 'in', millimeters 'mm', centim
         }
 
         /**
-        * Specifies if the client communicates over HTTP or HTTPS with Pdfcrowd API.
+        * Specify whether to use HTTP or HTTPS when connecting to the PDFCrowd API.
         * Warning: Using HTTP is insecure as data sent over HTTP is not encrypted. Enable this option only if you know what you are doing.
         *
         * @param value Set to <span class='field-value'>true</span> to use HTTP.
